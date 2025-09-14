@@ -59,8 +59,6 @@ const LandingPage = ({ user, setUserState }: LandingPageProps) => {
       />
     );
 
-  console.log({ user }, "inside Landing");
-
   return (
     <div className="landing-page">
       <div className="welcome-text">

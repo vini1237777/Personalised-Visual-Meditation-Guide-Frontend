@@ -15,6 +15,7 @@ function App() {
     email: "",
     password: "",
   });
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
   return (
     <div className="App">
@@ -22,7 +23,13 @@ function App() {
 
       <Routes>
         <Route
-          element={<Navbar user={userState} setUserState={setUserState} />}
+          element={
+            <Navbar
+              user={userState}
+              isLoggedIn={isLoggedIn}
+              setUserState={setUserState}
+            />
+          }
         >
           <Route
             path="/"
@@ -34,7 +41,12 @@ function App() {
           <Route
             path="/auth/login"
             element={
-              <UserLogin userState={userState} setUserState={setUserState} />
+              <UserLogin
+                userState={userState}
+                isLoggedIn={isLoggedIn}
+                setIsLoggedIn={setIsLoggedIn}
+                setUserState={setUserState}
+              />
             }
           />
           <Route path="/auth/register" element={<UserSignup />} />
