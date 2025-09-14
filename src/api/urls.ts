@@ -3,7 +3,6 @@ const url = {
   updateUser: "api/user/update",
   deleteUser: "api/user/delete",
   login: "api/auth/login",
-  logout: "api/auth/logout",
   register: "api/auth/register",
   resetPassword: "api/auth/reset-password",
   changePassword: "api/auth/change-password",

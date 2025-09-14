@@ -1,11 +1,6 @@
 import "./MeditationPage.css";
 
 function MeditationPage(meditationContent: any) {
-  console.log(
-    meditationContent,
-    meditationContent?.meditationContent?.generatedScripts,
-    "meditationContent11"
-  );
   return (
     <div className="meditation-page">
       <h2>Your Relaxing Guide</h2>

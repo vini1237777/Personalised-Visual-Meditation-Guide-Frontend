@@ -7,7 +7,6 @@ export class UserService {
     return makeRequest(url.getUser, "GET", { email });
   }
   static async register(payload: IUser) {
-    // console.log(payload, "payload in register");
     return makeRequest(url.register, "POST", payload);
   }
 
@@ -31,7 +30,6 @@ export class UserService {
     selectedEmojis: any;
     userState: any;
   }) {
-    // console.log(selectedFeelings, selectedEmojis, userState.email);
     const payload = {
       selectedFeelings,
       selectedEmojis,

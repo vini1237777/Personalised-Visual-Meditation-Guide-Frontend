@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   noMemberText,
   signupButtonText,
@@ -16,15 +16,21 @@ const userConstants = [
   { type: "password", id: "password", name: "password", label: "Password" },
 ];
 
-type UserLoginProps = {
+interface UserLoginProps {
   setUserState: (updater: (prev: IUser) => IUser) => void;
   userState: IUser;
-};
+  setIsLoggedIn?: any;
+  isLoggedIn?: boolean;
+}
 
-function UserLogin({ setUserState, userState }: UserLoginProps) {
+function UserLogin({
+  setUserState,
+  userState,
+  setIsLoggedIn,
+  isLoggedIn,
+}: UserLoginProps) {
   const navigate = useNavigate();
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [fullName, setFullName] = useState("");
 
   const handleChange = useCallback(
@@ -53,8 +59,9 @@ function UserLogin({ setUserState, userState }: UserLoginProps) {
       })
       .catch(() => {
         toast.error("Failed to log in");
+        navigate("/");
       });
-  }, [setUserState, userState]);
+  }, [navigate, setIsLoggedIn, setUserState, userState]);
 
   return (
     <div className="userLogin">
