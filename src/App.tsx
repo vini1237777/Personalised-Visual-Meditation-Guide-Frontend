@@ -1,24 +1,45 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Route, Routes } from "react-router-dom";
+import "./App.css";
+import Home from "./component/home/Home";
+import About from "./component/about/About";
+import Navbar from "./component/navbar/Navbar";
+import Contact from "./component/contact/Contact";
+import UserLogin from "./component/userCard/login/UserLogin";
+import UserSignup from "./component/userCard/signup/UserSignup";
+import { Toaster } from "react-hot-toast";
+import { useState } from "react";
+import { IUser } from "./helpers/interface";
 
 function App() {
+  const [userState, setUserState] = useState<IUser | any>({
+    email: "",
+    password: "",
+  });
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+      <Toaster />
+
+      <Routes>
+        <Route
+          element={<Navbar user={userState} setUserState={setUserState} />}
         >
-          Learn React
-        </a>
-      </header>
+          <Route
+            path="/"
+            element={<Home userState={userState} setUserState={setUserState} />}
+          />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+
+          <Route
+            path="/auth/login"
+            element={
+              <UserLogin userState={userState} setUserState={setUserState} />
+            }
+          />
+          <Route path="/auth/register" element={<UserSignup />} />
+        </Route>
+      </Routes>
     </div>
   );
 }

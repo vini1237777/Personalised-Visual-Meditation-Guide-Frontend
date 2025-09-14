@@ -1,0 +1,133 @@
+.mood-card {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  background: #fff;
+  text-align: center;
+  font-family: system-ui, sans-serif;
+  position: relative;
+  top: 94px;
+  z-index: 2000;
+}
+
+.close-btn {
+  position: absolute;
+  top: -20px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 10px;
+  cursor: pointer;
+  color: #666;
+  transition: 0.2s;
+}
+
+.close-btn:hover {
+  color: #000;
+  transform: scale(1.1);
+}
+
+.emoji-options {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.emoji-button {
+  width: 50px;
+  height: 50px;
+  font-size: 1.8rem;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  background: #f9f9f9;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.emoji-button.active {
+  border-color: #2563eb;
+  background: #e0ecff;
+  transform: scale(1.1);
+}
+
+.emoji-button.active:hover {
+  border-color: #2563eb;
+  background: #e0ecff;
+  transform: scale(1.1);
+  background-color: gray;
+}
+
+.emotion-wheel {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  margin: 0 auto;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fafafa 70%, transparent 71%);
+}
+
+.feeling-item {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  text-align: center;
+  border-radius: 50%;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: 0.3s;
+  color: #fff;
+}
+
+.feeling-item:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/* ✅ When selected */
+.feeling-item.selected {
+  border: 3px solid #fff;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.8), 0 0 15px rgba(37, 99, 235, 0.6);
+  font-weight: bold;
+}
+
+/* Colors by emotion */
+.Joy {
+  background: linear-gradient(135deg, #ffd93d, #ffb347);
+}
+.Sadness {
+  background: linear-gradient(135deg, #3d9cff, #1c6dd0);
+}
+.Anger {
+  background: linear-gradient(135deg, #ff3d3d, #b71c1c);
+}
+.Fear {
+  background: linear-gradient(135deg, #9b59b6, #5e3370);
+}
+.Love {
+  background: linear-gradient(135deg, #ff6fd8, #ff85a1);
+}
+.Calmness {
+  background: linear-gradient(135deg, #4caf50, #81c784);
+}
+.Tiredness {
+  background: linear-gradient(135deg, #a7a7a7, #707070);
+}
+.Surprise {
+  background: linear-gradient(135deg, #ff9800, #f57c00);
+}
+
+.output-box {
+  margin-top: 3.5rem;
+  padding: 1rem;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  background: gray;
+  font-size: 0.95rem;
+}
