@@ -1,0 +1,131 @@
+.landing-page {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  background-image: url("../../assets/images/buddha.jpg");
+  font-weight: bolder;
+  color: white;
+  align-items: flex-start;
+  background-size: cover;
+  position: fixed;
+}
+
+.welcome-text {
+  font-size: 48px;
+  padding-left: 100px;
+  display: flex;
+  /* flex-direction: column; */
+  align-items: flex-start;
+  /* background-color: red; */
+  width: 100%;
+  /* height: 100%; */
+  margin-top: 100px;
+}
+
+.heading {
+  font-size: 20px;
+  padding-left: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  margin-bottom: 350px;
+}
+
+.landing-page-form {
+  display: "flex";
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 40px;
+}
+
+.landing-page-form-label {
+  margin-right: 20px;
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.landing-page-form-button {
+  background-color: #4caf50;
+  color: white;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: 20px;
+}
+
+.landing-page-form-input {
+  border: 1px solid rgb(249, 249, 249);
+  border-radius: 4px;
+  font-size: 18px;
+  opacity: 0.3;
+}
+
+/* .landing-page-wrapper {
+  margin-right: 10rem;
+  align-items: center;
+  font-size: medium;
+  font-weight: 600;
+  text-align: right;
+} */
+
+.landing-page-root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-weight: 600;
+  margin-right: 40px;
+}
+
+.landing-page-button {
+  background-color: #4caf50;
+  color: white;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: 90px;
+}
+
+.landing-page button {
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-size: 16px;
+  margin-top: 20px;
+  cursor: pointer;
+  border-radius: 10px;
+}
+.landing-page button:hover {
+  background-color: #45a049;
+  transition: ease 0.3s;
+}
+
+.landing-page-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 5px;
+  /* flex-direction: column; */
+}
+
+.mood-selector-section {
+  margin-top: 20px;
+  z-index: 2000;
+}
