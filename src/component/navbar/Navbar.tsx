@@ -5,11 +5,12 @@ import { useState } from "react";
 import { IUser } from "../../helpers/interface";
 
 interface NavbarProps {
-  user: IUser | null;
+  user: any;
+  isLoggedIn: boolean;
   setUserState: (user: IUser | null) => void;
 }
 
-function Navbar({ user, setUserState }: NavbarProps) {
+function Navbar({ isLoggedIn, setUserState, user }: NavbarProps) {
   const navigate = useNavigate();
   const [activeLink, setActiveLink] = useState<string>(
     navbarLinks[0]?.name || ""
@@ -42,7 +43,7 @@ function Navbar({ user, setUserState }: NavbarProps) {
             </li>
           ))}
 
-          {user && (
+          {isLoggedIn && user !== null && (
             <li
               className="navbar__logout"
               onClick={handleLogout}

@@ -2,7 +2,6 @@ export const navbarLinks = [
   { name: "Home", path: "/" },
   { name: "About", path: "/about" },
   { name: "Contact", path: "/contact" },
-  { name: "Logout", path: "/" },
 ];
 
 export const appTitle = "Meditation App";
