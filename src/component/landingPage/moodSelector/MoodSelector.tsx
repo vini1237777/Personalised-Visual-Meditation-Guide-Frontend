@@ -40,7 +40,7 @@ const emojiMap: Record<string, { category: string; feelings: string[] }> = {
 };
 
 export default function MoodSelector({
-  setIsShowMoodSelector,
+  setShowMoodSelector,
   isShowMoodSelector,
   userState,
   setUserState,
@@ -48,7 +48,7 @@ export default function MoodSelector({
   setIsContinueClicked,
   setMeditationContent,
 }: {
-  setIsShowMoodSelector: any;
+  setShowMoodSelector: any;
   isShowMoodSelector: boolean;
   userState: any;
   setUserState: any;
@@ -62,39 +62,67 @@ export default function MoodSelector({
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const handleContinue = async () => {
+    setIsContinueClicked(true);
     setIsLoading(true);
+    setShowMoodSelector(false);
+    try {
+      setIsLoading(true);
 
-    await UserService.getScript({
-      selectedFeelings,
-      selectedEmojis,
-      userState,
-    })
-      .then((res: any) => {
-        if (res.status === 200) {
-          return res?.data;
-        }
-      })
-      .then((res) => {
-        if (res?.generatedScripts?.length > 0 && res?.videoUrl?.length > 0) {
-          toast.success("Successfully generated meditation script");
-          setIsLoading(false);
-          setIsContinueClicked(false);
-          setUserState((prevState: any) => ({
-            ...prevState,
-            ...res?.data,
-          }));
-          setMeditationContent((prevState: any) => ({
-            ...prevState,
-            ...res?.data,
-          }));
-        }
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        toast.error(
-          "Internal Server Error: API Quota exceeded for generating Video."
-        );
+      const response = await UserService.getScript({
+        selectedFeelings,
+        selectedEmojis,
+        userState,
       });
+
+      if (response?.status !== 200) {
+        throw new Error(`Unexpected status: ${response?.status}`);
+      }
+
+      // Your backend sends: { generatedScripts: string, videoUrl: string, ...userInfo }
+      const data = response.data as {
+        generatedScripts?: string;
+        videoUrl?: string;
+        // whatever userInfo fields you spread in the backend:
+        email?: string;
+        name?: string;
+        [k: string]: any;
+      };
+
+      const hasScript =
+        typeof data.generatedScripts === "string" &&
+        data.generatedScripts.trim().length > 0;
+      const hasVideo =
+        typeof data.videoUrl === "string" && data.videoUrl.trim().length > 0;
+
+      if (hasScript && hasVideo) {
+        toast.success("Successfully generated meditation script");
+
+        // res is already the data object, so don't do res?.data
+
+        setUserState((prev: any) => ({
+          ...prev,
+          email: data.email ?? prev.email,
+          name: data.name ?? prev.name,
+        }));
+
+        setMeditationContent((prev: any) => ({
+          ...prev,
+          script: data.generatedScripts,
+          videoUrl: data.videoUrl,
+        }));
+      } else {
+        throw new Error(
+          "Malformed response from server (missing script or videoUrl)."
+        );
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error(
+        "Internal Server Error: API quota exceeded for generating video (or bad response)."
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const toggleEmoji = (emoji: string | null) => {
@@ -118,85 +146,90 @@ export default function MoodSelector({
   const categoryData = activeEmoji ? emojiMap[activeEmoji] : null;
 
   return (
-    <div className="mood-card">
-      {isShowMoodSelector && (
-        <button
-          className="close-btn"
-          onClick={() => {
-            setIsCollapsed(true);
-            setIsShowMoodSelector(false);
-          }}
-        >
-          ✖
-        </button>
-      )}
-      <div className="emoji-options">
-        {Object.keys(emojiMap).map((emoji, index) => (
+    <>
+      <div className="mood-card">
+        {isShowMoodSelector && (
           <button
-            key={index}
-            className={`emoji-button ${
-              selectedEmojis.includes(emoji) ? "active" : ""
-            }`}
-            onClick={() => toggleEmoji(emoji)}
-          >
-            {emoji}
-          </button>
-        ))}
-      </div>
-      {!isCollapsed && categoryData && (
-        <div className="emotion-wheel">
-          {categoryData.feelings.map((feeling: string, index: number) => {
-            const angle = (index / categoryData.feelings.length) * 2 * Math.PI;
-            const radius = 110;
-            const x = 120 + radius * Math.cos(angle);
-            const y = 120 + radius * Math.sin(angle);
-
-            return (
-              <div
-                key={feeling}
-                className={`feeling-item ${categoryData.category} ${
-                  selectedFeelings.includes(feeling) ? "selected" : ""
-                }`}
-                style={{ top: y, left: x }}
-                onClick={() => toggleFeeling(feeling)}
-              >
-                {feeling}
-              </div>
-            );
-          })}
-        </div>
-      )}
-      {!isCollapsed && selectedEmojis?.length >= 0 && (
-        <div className="output-box">
-          <p>
-            <strong>Selected Emojis:</strong>{" "}
-            {selectedEmojis.length > 0 ? selectedEmojis.join(" ") : "None"}
-          </p>
-          <p>
-            <strong>Active Wheel:</strong> {activeEmoji || "None"}
-          </p>
-          <p>
-            <strong>Feelings:</strong>{" "}
-            {selectedFeelings.length > 0 ? selectedFeelings.join(", ") : "None"}
-          </p>
-        </div>
-      )}
-
-      {!isCollapsed && selectedEmojis?.length > 0 && (
-        <div className="userLogin-button-wrapper">
-          <button
-            className="userLogin-button"
+            className="close-btn"
             onClick={() => {
-              handleContinue();
+              setIsCollapsed(true);
+              setShowMoodSelector(false);
             }}
           >
-            Continue
+            ✖
           </button>
-          <div className="arrow-button">
-            <FaArrowRight color="gray" />
-          </div>
+        )}
+        <div className="emoji-options">
+          {Object.keys(emojiMap).map((emoji, index) => (
+            <button
+              key={index}
+              className={`emoji-button ${
+                selectedEmojis.includes(emoji) ? "active" : ""
+              }`}
+              onClick={() => toggleEmoji(emoji)}
+            >
+              {emoji}
+            </button>
+          ))}
         </div>
-      )}
-    </div>
+        {!isCollapsed && categoryData && (
+          <div className="emotion-wheel">
+            {categoryData.feelings.map((feeling: string, index: number) => {
+              const angle =
+                (index / categoryData.feelings.length) * 2 * Math.PI;
+              const radius = 110;
+              const x = 120 + radius * Math.cos(angle);
+              const y = 120 + radius * Math.sin(angle);
+
+              return (
+                <div
+                  key={feeling}
+                  className={`feeling-item ${categoryData.category} ${
+                    selectedFeelings.includes(feeling) ? "selected" : ""
+                  }`}
+                  style={{ top: y, left: x }}
+                  onClick={() => toggleFeeling(feeling)}
+                >
+                  {feeling}
+                </div>
+              );
+            })}
+          </div>
+        )}
+        {!isCollapsed && selectedEmojis?.length >= 0 && (
+          <div className="output-box">
+            <p>
+              <strong>Selected Emojis:</strong>{" "}
+              {selectedEmojis.length > 0 ? selectedEmojis.join(" ") : "None"}
+            </p>
+            <p>
+              <strong>Active Wheel:</strong> {activeEmoji || "None"}
+            </p>
+            <p>
+              <strong>Feelings:</strong>{" "}
+              {selectedFeelings.length > 0
+                ? selectedFeelings.join(", ")
+                : "None"}
+            </p>
+          </div>
+        )}
+
+        {!isCollapsed && selectedEmojis?.length > 0 && (
+          <div className="userLogin-button-wrapper">
+            <button
+              className="userLogin-button"
+              onClick={() => {
+                handleContinue();
+              }}
+            >
+              Continue
+            </button>
+            <div className="arrow-button">
+              <FaArrowRight color="gray" />
+            </div>
+          </div>
+        )}
+      </div>
+    </>
   );
 }

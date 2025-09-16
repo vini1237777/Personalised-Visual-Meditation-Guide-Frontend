@@ -6,7 +6,6 @@ import {
 } from "../../../helpers/constants";
 import { FaArrowRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import { UserService } from "../../../services/userServices";
 import toast from "react-hot-toast";
 
@@ -16,18 +15,20 @@ const userConstants = [
   { type: "password", id: "password", name: "password", label: "Password" },
 ];
 
-function UserSignup() {
+function UserSignup({
+  setIsLoggedIn,
+  setUserState,
+  userState,
+}: {
+  setIsLoggedIn: any;
+  setUserState: any;
+  userState: any;
+}) {
   const navigate = useNavigate();
 
-  const [userState, setUserState] = useState({
-    fullName: "",
-    email: "",
-    password: "",
-  });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: any) => {
     const { name, value } = e.target;
-    setUserState((prevState) => ({
+    setUserState((prevState: any) => ({
       ...prevState,
       [name]: value,
     }));
@@ -42,7 +43,8 @@ function UserSignup() {
         }
       })
       .catch((err) => {
-        toast.error("failed to create user");
+        console.log(err, "what is the message");
+        toast.error(err);
       });
   };
 
@@ -53,7 +55,9 @@ function UserSignup() {
           {memberText}
           <span
             className="userCard-login"
-            onClick={() => navigate("/auth/login")}
+            onClick={() => {
+              navigate("/auth/login");
+            }}
           >
             {loginText}
           </span>
@@ -72,7 +76,7 @@ function UserSignup() {
                     required
                     className="userCard-form-input"
                     onChange={handleChange}
-                    value={userState[constants.name as keyof typeof userState]}
+                    value={userState[constants.name as typeof userState]}
                   />
                 </span>
               </div>
