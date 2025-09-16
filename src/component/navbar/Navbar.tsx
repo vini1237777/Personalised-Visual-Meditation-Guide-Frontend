@@ -18,7 +18,7 @@ function Navbar({ isLoggedIn, setUserState, user }: NavbarProps) {
 
   const handleLogout = () => {
     setUserState(null);
-    navigate("/");
+    window.location.href = "/auth/login";
   };
 
   return (

@@ -11,26 +11,41 @@ interface LandingPageProps {
   setUserState: (state: any) => void;
 }
 
+type TMeditationContent = {
+  videoUrl?: string;
+  script?: string;
+};
+
 const LandingPage = ({ user, setUserState }: LandingPageProps) => {
   const [showMoodSelector, setShowMoodSelector] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isContinueClicked, setIsContinueClicked] = useState(false);
-  const [meditationContent, setMeditationContent] = useState<any>({});
+  const [isContinueClicked, setIsContinueClicked] = useState(false); // keep if used elsewhere
+  const [meditationContent, setMeditationContent] =
+    useState<TMeditationContent>({});
+  const [isMeditateBackButtonClicked, setIsMeditateBackButtonClicked] =
+    useState<boolean>(false);
+
+  console.log(user, "user in landing");
+  const showHeroSection = Object.keys(user)?.length > 0 && !showMoodSelector;
+
+  const hasVideo =
+    meditationContent &&
+    meditationContent?.videoUrl &&
+    meditationContent?.videoUrl?.trim()?.length > 0;
+
+  // When we have a video, stop loading and hide selector
+  useEffect(() => {
+    if (hasVideo) {
+      setIsLoading(false);
+      setShowMoodSelector(false);
+      setIsMeditateBackButtonClicked(false);
+    }
+  }, [hasVideo]);
 
   const handleTitleButton = () => setShowMoodSelector(true);
 
-  useEffect(() => {
-    if (
-      showMoodSelector ||
-      isContinueClicked ||
-      meditationContent?.meditationContent?.videoUrl?.length === 0
-    ) {
-      setIsLoading(false);
-    }
-  }, [showMoodSelector, isContinueClicked, meditationContent]);
-
   const renderHeroSection = () =>
-    herosectionText?.map((data: any, index: number) => (
+    herosectionText.map((data: any, index: number) => (
       <div key={index} className="hero-section">
         <h2>{data.headline}</h2>
         <p>{data.subheadline}</p>
@@ -41,40 +56,67 @@ const LandingPage = ({ user, setUserState }: LandingPageProps) => {
   const renderMoodSelector = () => (
     <div className="mood-selector-section">
       <MoodSelector
-        setIsShowMoodSelector={setShowMoodSelector}
+        setShowMoodSelector={setShowMoodSelector}
         isShowMoodSelector={showMoodSelector}
         userState={{ ...user }}
         setUserState={setUserState}
         setIsLoading={setIsLoading}
         setIsContinueClicked={setIsContinueClicked}
-        setMeditationContent={setMeditationContent}
+        setMeditationContent={(updater: any) => {
+          if (typeof updater === "function") {
+            setMeditationContent((prev) => updater(prev));
+          } else {
+            // Make sure you call setMeditationContent({ videoUrl: "https://..." })
+            setMeditationContent((prev) => ({ ...prev, ...updater }));
+          }
+        }}
       />
     </div>
   );
 
-  const renderMeditationPage = () =>
-    meditationContent?.meditationContent?.videoUrl?.length > 0 && (
-      <MeditationPage
-        meditationContent={meditationContent?.meditationContent?.videoUrl}
-      />
-    );
+  const renderMeditationPage = () => (
+    <MeditationPage
+      meditationContent={meditationContent.videoUrl!}
+      setShowMoodSelector={setShowMoodSelector}
+      setIsMeditateBackButtonClicked={setIsMeditateBackButtonClicked}
+      setIsContinueClicked={setIsContinueClicked}
+    />
+  );
+
+  // Simple, deterministic gates:
+
+  console.log(isMeditateBackButtonClicked, "i", "showMeditation");
+  console.log("i", showHeroSection, "showSelector");
+  console.log("i", showHeroSection, "showHero");
+
+  console.log(
+    { isContinueClicked },
+    { isLoading },
+    { isMeditateBackButtonClicked },
+    { showMoodSelector }
+  );
 
   return (
     <div className="landing-page">
       <div className="welcome-text">
-        {!showMoodSelector
-          ? `Welcome ${user?.fullName}`
-          : "What's on your mind?"}
-        !
+        {showHeroSection && `Welcome ${user?.fullName}`}
       </div>
 
       <div className="heading">
-        {!showMoodSelector && renderHeroSection()}
-        {showMoodSelector && !isLoading
+        {/* {showMeditation
+          ? renderMeditationPage()
+          : showSelector
           ? renderMoodSelector()
-          : renderMeditationPage()}
-        {isLoading && <Loader />}
+          : renderHeroSection()} */}
+
+        {Object.keys(user)?.length > 0 &&
+          !showMoodSelector &&
+          renderHeroSection()}
+        {showMoodSelector && renderMoodSelector()}
+        {isContinueClicked && renderMeditationPage()}
       </div>
+
+      {isLoading && <Loader />}
     </div>
   );
 };

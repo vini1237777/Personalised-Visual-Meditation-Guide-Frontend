@@ -1,14 +1,15 @@
 .meditation-page {
-  margin: 2rem auto;
-  padding: 2rem;
+  margin-top: 300px;
+  margin-bottom: 40px;
   border-radius: 20px;
-  text-align: center;
-  position: relative;
-  top: 94px;
-  color: white;
+  color: white(0, 245, 0, 0.483);
   z-index: 2000;
-  width: 100%;
+  width: 50%;
   height: 100%;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  font-weight: bolder;
+  /* background-color: red; */
 }
