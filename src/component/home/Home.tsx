@@ -4,14 +4,20 @@ import "./Home.css";
 const Home = ({
   setUserState,
   userState,
+  setIsLoggedIn,
 }: {
   setUserState: any;
   userState: any;
+  setIsLoggedIn: any;
 }) => {
   return (
     <div className="home-container">
       <div className="home">
-        <Banner userState={userState} setUserState={setUserState} />
+        <Banner
+          setIsLoggedIn
+          userState={userState}
+          setUserState={setUserState}
+        />
       </div>
     </div>
   );

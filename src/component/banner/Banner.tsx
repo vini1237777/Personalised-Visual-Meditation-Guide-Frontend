@@ -7,9 +7,11 @@ import UserLogin from "../userCard/login/UserLogin";
 function Banner({
   setUserState,
   userState,
+  setIsLoggedIn,
 }: {
   setUserState: any;
   userState: any;
+  setIsLoggedIn: any;
 }) {
   const location = useLocation();
   const isLoginPage = location.pathname === "/auth/login";
@@ -25,7 +27,11 @@ function Banner({
           {isLoginPage ? (
             <UserLogin userState={userState} setUserState={setUserState} />
           ) : (
-            <UserSignup />
+            <UserSignup
+              setIsLoggedIn={setIsLoggedIn}
+              userState={userState}
+              setUserState={setUserState}
+            />
           )}
         </div>
       </div>

@@ -33,23 +33,38 @@ function App() {
         >
           <Route
             path="/"
-            element={<Home userState={userState} setUserState={setUserState} />}
+            element={
+              <Home
+                setIsLoggedIn
+                userState={userState}
+                setUserState={setUserState}
+              />
+            }
           />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
-
           <Route
             path="/auth/login"
             element={
               <UserLogin
                 userState={userState}
+                setUserState={setUserState}
                 isLoggedIn={isLoggedIn}
                 setIsLoggedIn={setIsLoggedIn}
+              />
+            }
+          />
+
+          <Route
+            path="/auth/register"
+            element={
+              <UserSignup
+                setIsLoggedIn={setIsLoggedIn}
+                userState={userState}
                 setUserState={setUserState}
               />
             }
           />
-          <Route path="/auth/register" element={<UserSignup />} />
         </Route>
       </Routes>
     </div>

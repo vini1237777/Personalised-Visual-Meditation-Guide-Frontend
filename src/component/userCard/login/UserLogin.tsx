@@ -94,11 +94,11 @@ function UserLogin({
                     className="userLogin-form-input"
                     onChange={handleChange}
                     value={userState?.[constants.name] || ""}
-                    autoComplete={
-                      constants.type === "password"
-                        ? "current-password"
-                        : "email"
-                    }
+                    // autoComplete={
+                    //   constants.type === "password"
+                    //     ? "current-password"
+                    //     : "email"
+                    // }
                     aria-label={constants.label}
                   />
                 </span>
