@@ -4,7 +4,7 @@ import {
   memberText,
   signupButtonText,
 } from "../../../helpers/constants";
-import { FaArrowRight } from "react-icons/fa";
+// import { FaArrowRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { UserService } from "../../../services/userServices";
 import toast from "react-hot-toast";
@@ -93,7 +93,7 @@ function UserSignup({
             {signupButtonText}
           </button>
           <div className="arrow-button">
-            <FaArrowRight color="white" />
+            {/* <FaArrowRight color="white" /> */}
           </div>
         </div>
       </div>
