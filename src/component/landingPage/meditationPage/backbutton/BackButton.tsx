@@ -1,4 +1,4 @@
-import { FaArrowLeft } from "react-icons/fa";
+// import { FaArrowLeft } from "react-icons/fa";
 import "./BackButton.css";
 
 interface BackButtonProps {
@@ -23,9 +23,7 @@ export default function BackButton({
       }}
       className="back-button"
     >
-      <span>
-        <FaArrowLeft />
-      </span>
+      <span>{/* <FaArrowLeft /> */}</span>
       <span>{label}</span>
     </button>
   );

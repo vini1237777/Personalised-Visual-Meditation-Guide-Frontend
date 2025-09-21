@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./MoodSelector.css";
-import { FaArrowRight } from "react-icons/fa";
+// import { FaArrowRight } from "react-icons/fa";
 import { UserService } from "../../../services/userServices";
 import toast from "react-hot-toast";
 
@@ -225,7 +225,7 @@ export default function MoodSelector({
               Continue
             </button>
             <div className="arrow-button">
-              <FaArrowRight color="gray" />
+              {/* <FaArrowRight color="gray" /> */}
             </div>
           </div>
         )}
