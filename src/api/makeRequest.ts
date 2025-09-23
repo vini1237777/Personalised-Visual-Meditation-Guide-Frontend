@@ -14,20 +14,17 @@ export enum RequestMethods {
   DELETE = "delete",
 }
 
-const BASE = process.env.REACT_APP_API?.trim() || "/api";
-const token = sessionStorage.getItem("auth-Key") || undefined;
 export default async function makeRequest(
   url: string,
   method: Method,
   payload?: any
 ) {
   let requestConfig = {
-    baseURL: BASE,
+    baseURL: `${process.env.REACT_APP_API}`,
     url: url,
     method: method,
     headers: {
-      "Content-Type": "application/json",
-      ...(token ? { Authorization: token } : {}), // keep your existing scheme
+      Authorization: sessionStorage.getItem("auth-Key") || "",
     },
     data: {},
   };
@@ -40,21 +37,12 @@ export default async function makeRequest(
     let response = await axios.request(requestConfig);
     return response;
   } catch (error: any) {
-    const status = error?.response?.status;
-
-    const serverMsg =
-      (typeof error?.response?.data === "string" && error.response.data) ||
-      error?.response?.data?.message ||
-      error?.message;
-
     if (error.response.data) {
       if (error.response.data.message) {
         toast.error(error.response.data.message);
       }
     }
-    axiosHandler(
-      status ? `[${status}] ${serverMsg}` : serverMsg || "Request failed"
-    );
+    axiosHandler(error.message);
     throw error.message;
   }
 }
