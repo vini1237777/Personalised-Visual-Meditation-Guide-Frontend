@@ -37,7 +37,8 @@ export default async function makeRequest(
     let response = await axios.request(requestConfig);
     return response;
   } catch (error: any) {
-    if (error.response.data) {
+    console.log(error, "message:error:::::");
+    if (error?.response?.data) {
       if (error.response.data.message) {
         toast.error(error.response.data.message);
       }
