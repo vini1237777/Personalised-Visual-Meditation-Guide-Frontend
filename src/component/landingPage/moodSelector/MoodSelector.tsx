@@ -102,7 +102,7 @@ export default function MoodSelector({
         setUserState((prev: any) => ({
           ...prev,
           email: data.email ?? prev.email,
-          name: data.name ?? prev.name,
+          fullName: data.fullName ?? prev.fullName,
         }));
 
         setMeditationContent((prev: any) => ({

@@ -14,6 +14,7 @@ function App() {
   const [userState, setUserState] = useState<IUser | any>({
     email: "",
     password: "",
+    fullName: "",
   });
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 

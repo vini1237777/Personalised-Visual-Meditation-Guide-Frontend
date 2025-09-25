@@ -31,7 +31,7 @@ function UserLogin({
 }: UserLoginProps) {
   const navigate = useNavigate();
 
-  const [fullName, setFullName] = useState("");
+  // const [fullName, setFullName] = useState("");
 
   const handleChange = useCallback(
     (e: any) => {
@@ -54,7 +54,7 @@ function UserLogin({
             ...res?.data,
           }));
           setIsLoggedIn(true);
-          setFullName(res?.data?.user?.fullName || "");
+          // setFullName(res?.data?.user?.fullName || "");
         }
       })
       .catch(() => {
@@ -66,10 +66,7 @@ function UserLogin({
   return (
     <div className="userLogin">
       {isLoggedIn ? (
-        <LandingPage
-          user={{ ...userState, fullName }}
-          setUserState={setUserState}
-        />
+        <LandingPage user={{ ...userState }} setUserState={setUserState} />
       ) : (
         <div className="userLogin-wrapper">
           <span className="userLogin-form-title">
