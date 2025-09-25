@@ -25,7 +25,8 @@ const LandingPage = ({ user, setUserState }: LandingPageProps) => {
   const [isMeditateBackButtonClicked, setIsMeditateBackButtonClicked] =
     useState<boolean>(false);
 
-  console.log(user, "user in landing");
+  console.log(user, "user in landing 1");
+
   const showHeroSection = Object.keys(user)?.length > 0 && !showMoodSelector;
 
   const hasVideo =
@@ -66,7 +67,6 @@ const LandingPage = ({ user, setUserState }: LandingPageProps) => {
           if (typeof updater === "function") {
             setMeditationContent((prev) => updater(prev));
           } else {
-            // Make sure you call setMeditationContent({ videoUrl: "https://..." })
             setMeditationContent((prev) => ({ ...prev, ...updater }));
           }
         }}
@@ -93,8 +93,11 @@ const LandingPage = ({ user, setUserState }: LandingPageProps) => {
     { isContinueClicked },
     { isLoading },
     { isMeditateBackButtonClicked },
-    { showMoodSelector }
+    { showMoodSelector },
+    user
   );
+
+  console.log(user, "user in landing 2");
 
   return (
     <div className="landing-page">
@@ -103,15 +106,11 @@ const LandingPage = ({ user, setUserState }: LandingPageProps) => {
       </div>
 
       <div className="heading">
-        {/* {showMeditation
-          ? renderMeditationPage()
-          : showSelector
-          ? renderMoodSelector()
-          : renderHeroSection()} */}
-
-        {Object.keys(user)?.length > 0 &&
-          !showMoodSelector &&
-          renderHeroSection()}
+        {Object.keys(user)?.length > 0 ? (
+          !showMoodSelector && showHeroSection && renderHeroSection()
+        ) : (
+          <></>
+        )}
         {showMoodSelector && renderMoodSelector()}
         {isContinueClicked && renderMeditationPage()}
       </div>
