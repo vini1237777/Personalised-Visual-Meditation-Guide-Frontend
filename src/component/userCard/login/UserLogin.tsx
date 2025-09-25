@@ -7,7 +7,7 @@ import {
 import "./UserLogin.css";
 import { UserService } from "../../../services/userServices";
 import toast from "react-hot-toast";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import LandingPage from "../../landingPage/LandingPage";
 import { IUser } from "../../../helpers/interface";
 
