@@ -8,6 +8,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { UserService } from "../../../services/userServices";
 import toast from "react-hot-toast";
+import { IUser } from "../../../helpers/interface";
+import { useCallback } from "react";
 
 const userConstants = [
   { type: "text", id: "fullName", name: "fullName", label: "Full Name" },
@@ -26,20 +28,28 @@ function UserSignup({
 }) {
   const navigate = useNavigate();
 
-  const handleChange = (e: any) => {
-    const { name, value } = e.target;
-    setUserState((prevState: any) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
+  const handleChange = useCallback(
+    (e: any) => {
+      const { name, value } = e.target;
+      setUserState((prevState: IUser) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    },
+    [setUserState]
+  );
 
   const handleSignUp = async () => {
     await UserService.register({ ...userState })
       .then((res: any) => {
         if (res.status === 201) {
+          setUserState((prev: IUser) => ({
+            ...prev,
+            ...res?.data,
+          }));
           toast.success("Successfully created user");
           navigate("/auth/login");
+          console.log(res?.data, "signup");
         }
       })
       .catch((err) => {
@@ -76,7 +86,7 @@ function UserSignup({
                     required
                     className="userCard-form-input"
                     onChange={handleChange}
-                    value={userState[constants.name as typeof userState]}
+                    value={userState?.[constants.name] || ""}
                   />
                 </span>
               </div>

@@ -6,7 +6,7 @@ export class UserService {
   static async getByEmail(email: string) {
     return makeRequest(url.getUser, "GET", { email });
   }
-  static async register(payload: IUser) {
+  static async register(payload: any) {
     return makeRequest(url.register, "POST", payload);
   }
 
