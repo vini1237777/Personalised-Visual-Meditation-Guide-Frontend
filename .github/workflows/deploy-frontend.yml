@@ -40,17 +40,17 @@ jobs:
           npm cache clean --force
 
       - name: Install frontend dependencies
-        working-directory: src
+        # working-directory: src
         run: npm install -f
 
       - name: Create frontend .env file
-        working-directory: src
+        # working-directory: src
         run: |
           touch .env
           echo "${{ secrets.PROD_FRONTEND_ENV }}" > .env
 
       - name: Build frontend
-        working-directory: src
+        # working-directory: src
         run: npm run build
 
       - name: Deploy frontend to Nginx
