@@ -24,10 +24,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "upload-s3": "aws s3 sync build/ s3://meditation-frontend-prod/",
-    "invalidate-cf-cache": "aws cloudfront create-invalidation --distribution-id E1UNGVFNLEQZ1T --paths '/*'",
-    "deploy-s3": "npm run build && npm run upload-s3 && npm run invalidate-cf-cache"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
