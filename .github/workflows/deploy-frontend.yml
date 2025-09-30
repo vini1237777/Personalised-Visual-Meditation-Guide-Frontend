@@ -1,4 +1,4 @@
-name: Deploy Backend App on EC2
+name: Deploy SPA REACT App
 
 on:
   push:
