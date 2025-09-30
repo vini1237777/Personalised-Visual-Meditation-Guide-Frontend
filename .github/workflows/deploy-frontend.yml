@@ -37,23 +37,23 @@ jobs:
       # # FRONTEND SETUP
       # # ------------------------------
       - name: Clean npm cache & remove existing dependencies
-        working-directory: ./client
+        working-directory: ./src
         run: |
           rm -rf node_modules package-lock.json
           npm cache clean --force
 
       - name: Install frontend dependencies
-        working-directory: ./client
+        working-directory: ./src
         run: npm install
 
       - name: Create frontend .env file
-        working-directory: ./client
+        working-directory: ./src
         run: |
           touch .env
           echo "${{ secrets.PROD_FRONTEND_ENV }}" > .env
 
       - name: Build frontend
-        working-directory: ./client
+        working-directory: ./src
         run: npm run build
 
       - name: Deploy frontend to Nginx
