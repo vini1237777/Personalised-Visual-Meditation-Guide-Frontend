@@ -14,12 +14,10 @@ jobs:
   deploy:
     runs-on: self-hosted
 
-    # Corrected indentation for strategy and matrix
     strategy:
       matrix:
         node-version: [22.x]
 
-    # Corrected indentation for steps
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -29,9 +27,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
-          # cache-dependency-path: |
-          #   ./backend/package-lock.json
-          #   client/package-lock.json
+          cache-dependency-path: |
+            src/package-lock.json
 
       # # ------------------------------
       # # FRONTEND SETUP
