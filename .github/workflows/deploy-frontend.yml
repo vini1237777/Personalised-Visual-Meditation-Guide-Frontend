@@ -44,7 +44,7 @@ jobs:
 
       - name: Install frontend dependencies
         working-directory: src
-        run: npm install
+        run: npm install -f
 
       - name: Create frontend .env file
         working-directory: src
