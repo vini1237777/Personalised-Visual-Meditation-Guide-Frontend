@@ -31,8 +31,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
 
-          #check
-
       - name: Clean npm cache & remove existing dependencies
         run: |
           rm -rf node_modules package-lock.json
