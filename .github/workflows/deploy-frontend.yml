@@ -30,27 +30,14 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
-          # cache-dependency-path: |
-          #   src/package-lock.json
 
-      # # ------------------------------
-      # # FRONTEND SETUP
-      # # ------------------------------
       - name: Clean npm cache & remove existing dependencies
-        # working-directory: src
         run: |
           rm -rf node_modules package-lock.json
           npm cache clean --force
 
       - name: Install frontend dependencies
-        # working-directory: src
         run: npm install -f
-
-      # - name: Create frontend .env file
-      #   # working-directory: src
-      #   run: |
-      #     touch .env
-      #    echo "REACT_APP_API="http://18.60.239.229/" > .env
 
       - name: Create frontend .env file
         run: |
