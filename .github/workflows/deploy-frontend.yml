@@ -50,7 +50,7 @@ jobs:
           echo "${{ secrets.PROD_FRONTEND_ENV }}" > .env
 
       - name: Build frontend
-        # working-directory: src
+        working-directory: ./frontend
         run: npm run build
 
       - name: Deploy frontend to Nginx
