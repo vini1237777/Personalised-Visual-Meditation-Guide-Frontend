@@ -13,6 +13,9 @@ permissions:
 jobs:
   deploy:
     runs-on: self-hosted
+    environment: PROD_FRONTEND_ENV
+    env:
+      REACT_APP_API: ${{secrets.REACT_APP_API}}
 
     strategy:
       matrix:
@@ -43,12 +46,17 @@ jobs:
         # working-directory: src
         run: npm install -f
 
+      # - name: Create frontend .env file
+      #   # working-directory: src
+      #   run: |
+      #     touch .env
+      #    echo "REACT_APP_API="http://18.60.239.229/" > .env
+
       - name: Create frontend .env file
-        # working-directory: src
         run: |
-          touch .env
-          echo "${{ secrets.PROD_FRONTEND_ENV }}" > .env
-          echo "REACT_APP_API="http://18.60.239.229/" > .env
+          echo "REACT_APP_API=${REACT_APP_API}" > .env
+          echo "Created .env with:"
+          cat .env
 
       - name: Build frontend
         # working-directory: src
