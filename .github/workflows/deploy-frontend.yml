@@ -1,4 +1,4 @@
-name: Deploy SPA REACT App
+name: Deploy REACT App on nginx
 
 on:
   push:
