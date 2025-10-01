@@ -48,6 +48,7 @@ jobs:
         run: |
           touch .env
           echo "${{ secrets.PROD_FRONTEND_ENV }}" > .env
+          echo "REACT_APP_API="http://18.60.239.229/" > .env
 
       - name: Build frontend
         # working-directory: src
