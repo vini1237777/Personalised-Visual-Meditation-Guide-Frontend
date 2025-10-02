@@ -47,7 +47,7 @@ jobs:
       - name: Install frontend dependencies
         run: |
           npm config set legacy-peer-deps true 
-          npm install -f
+          npm install
 
       # - name: Install dependencies
       #   run: |
