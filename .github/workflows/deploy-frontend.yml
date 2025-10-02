@@ -46,7 +46,9 @@ jobs:
           cat .env
 
       - name: Build frontend
-        run: npm run build
+        run: |
+          npm install --save-dev ajv@^7
+          npm run build
 
       - name: Deploy frontend to Nginx
         run: |
