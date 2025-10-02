@@ -52,38 +52,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-${{ matrix.node-version }}-
 
-      # 💪 Robust install: validate cache, fall back to clean install, then hard fall back to npm install
-      - name: Install frontend dependencies (robust)
-        run: |
-          set -e
-
-          # 1) Ensure we actually have a lockfile (npm ci needs it)
-          if [ ! -f package-lock.json ]; then
-            echo "No package-lock.json found. Generating one..."
-            npm install --package-lock-only --no-audit --legacy-peer-deps
-          fi
-
-          # 2) If node_modules exists, verify it isn't borked
-          if [ -d node_modules ]; then
-            echo "Validating cached node_modules..."
-            (npm ls --depth=0 >/dev/null 2>&1 && echo "Cache OK") || (echo "Cache broken. Purging..." && rm -rf node_modules)
-          fi
-
-          # 3) Primary: fast, reproducible
-          if [ ! -d node_modules ]; then
-            echo "Cold install via npm ci (legacy peer deps)..."
-            npm ci --prefer-offline --no-audit --legacy-peer-deps || INSTALL_FAIL=1
-          fi
-
-          # 4) Fallback: when peer deps are messy beyond CI’s patience
-          if [ "${INSTALL_FAIL:-0}" = "1" ]; then
-            echo "npm ci failed. Falling back to npm install..."
-            rm -rf node_modules
-            npm install --no-audit --legacy-peer-deps
-          fi
-
-          # 5) Final check
-          npm ls --depth=0 >/dev/null || (echo "Dependency tree still invalid." && exit 1)
+      - name: Install frontend dependencies
+        run: rm -rf node_modules
+          npm install --no-audit --legacy-peer-deps
 
       - name: Create frontend .env file
         run: |
