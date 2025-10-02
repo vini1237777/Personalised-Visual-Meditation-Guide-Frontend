@@ -1,83 +1,54 @@
-name: Deploy React to Nginx (self-hosted)
+name: Deploy REACT App on nginx
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 
 permissions:
-  contents: read
   id-token: write
+  contents: read
+  issues: write
 
 jobs:
-  build_deploy:
+  deploy:
     runs-on: self-hosted
     environment: PROD_FRONTEND_ENV
-    timeout-minutes: 45
-
     env:
-      REACT_APP_API: ${{ secrets.REACT_APP_API }}
-      CI: true
-      NPM_CONFIG_AUDIT: false
-      NPM_CONFIG_FUND: false
-      GENERATE_SOURCEMAP: false
-      NODE_OPTIONS: --max_old_space_size=2048
+      REACT_APP_API: ${{secrets.REACT_APP_API}}
+
+    strategy:
+      matrix:
+        node-version: [22.x]
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: ${{ matrix.node-version }}
           cache: "npm"
-          cache-dependency-path: package-lock.json
 
-      - name: Prep npm (fast + loud)
+      - name: Clean npm cache & remove existing dependencies
         run: |
-          npm config set fund false
-          npm config set audit false
-          npm config set progress false
-          npm config set fetch-retry-maxtimeout 60000
-          npm config set fetch-retry-mintimeout 5000
-          npm config set fetch-retries 5
-          npm config set registry "https://registry.npmjs.org/"
-          npm ping || true
-          node --version
-          npm --version
-          curl -I https://registry.npmjs.org || true
+          rm -rf node_modules package-lock.json
+          npm cache clean --force
 
-      - name: Install dependencies (instrumented)
-        run: |
-          set -euo pipefail
-          ( while true; do echo "[keep-alive] installing @ $(date)"; sleep 60; done ) &
-          KPID=$!
-          if [ -f package-lock.json ]; then
-            timeout 12m npm ci --loglevel=verbose --prefer-offline --no-audit --fund=false || (kill $KPID; exit 1)
-          else
-            timeout 12m npm install --loglevel=verbose --prefer-offline --no-audit --fund=false || (kill $KPID; exit 1)
-          fi
-          kill $KPID
+      - name: Install frontend dependencies
+        run: npm install -f
 
-      - name: Build (instrumented)
+      - name: Create frontend .env file
         run: |
-          set -euo pipefail
-          ( while true; do echo "[keep-alive] building @ $(date)"; sleep 60; done ) &
-          KPID=$!
-          timeout 15m npm run build || (kill $KPID; exit 1)
-          kill $KPID
-        env:
-          NODE_OPTIONS: --max_old_space_size=2048
-          CI: true
+          echo "REACT_APP_API=${REACT_APP_API}" > .env
+          echo "Created .env with:"
+          cat .env
 
-      - name: Deploy to Nginx
+      # - name: Build frontend
+      #   run: npm run build
+
+      - name: Deploy frontend to Nginx
         run: |
-          sudo mkdir -p /var/www/html
           sudo rm -rf /var/www/html/*
           sudo cp -r build/* /var/www/html/
-          sudo chown -R www-data:www-data /var/www/html
-          sudo systemctl reload nginx || sudo systemctl restart nginx
-
-      - name: Smoke test
-        run: |
-          curl -I http://localhost | head -n 1 || true
