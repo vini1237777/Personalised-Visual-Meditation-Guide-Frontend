@@ -45,8 +45,8 @@ jobs:
           echo "Created .env with:"
           cat .env
 
-      # - name: Build frontend
-      #   run: npm run build
+      - name: Build frontend
+        run: npm run build
 
       - name: Deploy frontend to Nginx
         run: |
