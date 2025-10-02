@@ -45,7 +45,9 @@ jobs:
           cache-dependency-path: package-lock.json
 
       - name: Install frontend dependencies
-        run: npm install -f
+        run: |
+          npm config set legacy-peer-deps true 
+          npm install -f
 
       # - name: Install dependencies
       #   run: |
