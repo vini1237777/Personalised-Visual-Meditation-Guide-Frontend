@@ -2,20 +2,32 @@ name: Deploy REACT App on nginx
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 permissions:
   id-token: write
   contents: read
   issues: write
 
+concurrency:
+  group: frontend-deploy
+  cancel-in-progress: true
+
 jobs:
   deploy:
     runs-on: self-hosted
     environment: PROD_FRONTEND_ENV
     env:
-      REACT_APP_API: ${{secrets.REACT_APP_API}}
+      REACT_APP_API: ${{ secrets.REACT_APP_API }}
+      CI: true
+      NPM_CONFIG_AUDIT: false
+      NPM_CONFIG_FUND: false
+      # Temporary guard until your deps are aligned:
+      NPM_CONFIG_LEGACY_PEER_DEPS: true
+      # CRA-only: speeds build & smaller output. Harmless if unused.
+      GENERATE_SOURCEMAP: "false"
+      # If memory is tight during minify:
+      NODE_OPTIONS: --max_old_space_size=2048
 
     strategy:
       matrix:
@@ -23,37 +35,69 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "npm"
-          cache-dependency-path: |
-            package-lock.json
+          cache: npm
+          cache-dependency-path: package-lock.json
 
-      - name: Clean npm cache & remove existing dependencies
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ matrix.node-version }}-
+
+      # 💪 Robust install: validate cache, fall back to clean install, then hard fall back to npm install
+      - name: Install frontend dependencies (robust)
         run: |
-          rm -rf node_modules package-lock.json
-          npm cache clean --force
+          set -e
 
-      - name: Install frontend dependencies
-        run: npm install -f
+          # 1) Ensure we actually have a lockfile (npm ci needs it)
+          if [ ! -f package-lock.json ]; then
+            echo "No package-lock.json found. Generating one..."
+            npm install --package-lock-only --no-audit --legacy-peer-deps
+          fi
+
+          # 2) If node_modules exists, verify it isn't borked
+          if [ -d node_modules ]; then
+            echo "Validating cached node_modules..."
+            (npm ls --depth=0 >/dev/null 2>&1 && echo "Cache OK") || (echo "Cache broken. Purging..." && rm -rf node_modules)
+          fi
+
+          # 3) Primary: fast, reproducible
+          if [ ! -d node_modules ]; then
+            echo "Cold install via npm ci (legacy peer deps)..."
+            npm ci --prefer-offline --no-audit --legacy-peer-deps || INSTALL_FAIL=1
+          fi
+
+          # 4) Fallback: when peer deps are messy beyond CI’s patience
+          if [ "${INSTALL_FAIL:-0}" = "1" ]; then
+            echo "npm ci failed. Falling back to npm install..."
+            rm -rf node_modules
+            npm install --no-audit --legacy-peer-deps
+          fi
+
+          # 5) Final check
+          npm ls --depth=0 >/dev/null || (echo "Dependency tree still invalid." && exit 1)
 
       - name: Create frontend .env file
         run: |
           echo "REACT_APP_API=${REACT_APP_API}" > .env
-          echo "Created .env with:"
+          echo "Created .env:"
           cat .env
 
       - name: Build frontend
-        run: npm run build
+        run: |
+          echo "Starting build..."
+          npm run build
+          echo "Build done."
 
       - name: Deploy frontend to Nginx
         run: |
           sudo rm -rf /var/www/html/*
           sudo cp -r build/* /var/www/html/
-
-
-          #done
