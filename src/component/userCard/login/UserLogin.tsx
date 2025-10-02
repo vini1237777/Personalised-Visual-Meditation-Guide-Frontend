@@ -31,8 +31,6 @@ function UserLogin({
 }: UserLoginProps) {
   const navigate = useNavigate();
 
-  // const [fullName, setFullName] = useState("");
-
   const handleChange = useCallback(
     (e: any) => {
       const { name, value } = e.target;
