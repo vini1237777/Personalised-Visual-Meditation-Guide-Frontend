@@ -52,18 +52,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-${{ matrix.node-version }}-
 
-      # - name: Install frontend dependencies
-      #   run: rm -rf node_modules
-      #     npm install -f
+      - name: Install frontend dependencies
+        run: npm install -f
 
-      - name: Install dependencies
-        run: |
-          rm -rf node_modules
-          if [ -f package-lock.json ]; then
-            npm ci
-          else
-            npm install -f
-          fi
+      # - name: Install dependencies
+      #   run: |
+      #     rm -rf node_modules
+      #     if [ -f package-lock.json ]; then
+      #       npm ci
+      #     else
+      #       npm install -f
+      #     fi
 
       - name: Create frontend .env file
         run: |
