@@ -11,6 +11,7 @@ permissions:
 jobs:
   build_deploy:
     runs-on: self-hosted
+    environment: PROD_FRONTEND_ENV
     timeout-minutes: 45
 
     env:
