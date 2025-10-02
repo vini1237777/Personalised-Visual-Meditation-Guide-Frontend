@@ -25,8 +25,6 @@ const LandingPage = ({ user, setUserState }: LandingPageProps) => {
   const [isMeditateBackButtonClicked, setIsMeditateBackButtonClicked] =
     useState<boolean>(false);
 
-  console.log(user, "user in landing 1");
-
   const showHeroSection = Object.keys(user)?.length > 0 && !showMoodSelector;
 
   const hasVideo =
