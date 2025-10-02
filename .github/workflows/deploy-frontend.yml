@@ -10,12 +10,19 @@ permissions:
   contents: read
   issues: write
 
+concurrency:
+  group: frontend-deploy
+  cancel-in-progress: true
+
 jobs:
   deploy:
     runs-on: self-hosted
     environment: PROD_FRONTEND_ENV
     env:
-      REACT_APP_API: ${{secrets.REACT_APP_API}}
+      REACT_APP_API: ${{ secrets.REACT_APP_API }}
+      CI: true
+      NPM_CONFIG_AUDIT: false
+      NPM_CONFIG_FUND: false
 
     strategy:
       matrix:
@@ -23,21 +30,35 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "npm"
+          cache: npm
 
-      - name: Clean npm cache & remove existing dependencies
+      # Cache node_modules to avoid full reinstalls
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+          key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ matrix.node-version }}-
+
+      # DO NOT wipe caches; that defeats the whole point
+      # If you really need a clean slate, delete the cache key once — not every run
+
+      - name: Install frontend dependencies (fast)
         run: |
-          rm -rf node_modules package-lock.json
-          npm cache clean --force
-
-      - name: Install frontend dependencies
-        run: npm install -f
+          if [ -d node_modules ]; then
+            echo "Using cached node_modules"
+          else
+            echo "Cold install: using npm ci"
+            npm ci --no-audit --prefer-offline
+          fi
 
       - name: Create frontend .env file
         run: |
@@ -52,6 +73,3 @@ jobs:
         run: |
           sudo rm -rf /var/www/html/*
           sudo cp -r build/* /var/www/html/
-
-
-          #done
