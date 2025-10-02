@@ -31,7 +31,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [22.x]
+        node-version: [18.x]
 
     steps:
       - name: Checkout code
@@ -44,10 +44,18 @@ jobs:
           cache: npm
           cache-dependency-path: package-lock.json
 
-      - name: Install frontend dependencies
+      # - name: Install frontend dependencies
+      #   run: |
+      #     npm config set legacy-peer-deps true
+      #     npm install
+
+      - name: Install dependencies
         run: |
-          npm config set legacy-peer-deps true 
-          npm install
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
 
       # - name: Install dependencies
       #   run: |
