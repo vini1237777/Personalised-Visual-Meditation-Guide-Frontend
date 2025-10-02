@@ -1,15 +1,15 @@
 const url = {
-  getUser: "/user/get",
-  updateUser: "/user/update",
-  deleteUser: "/user/delete",
-  login: "/auth/login",
-  logout: "/auth/logout",
-  register: "/auth/register",
-  resetPassword: "/auth/reset-password",
-  changePassword: "/auth/change-password",
-  verifyEmail: "/auth/verify-email",
-  sendVerificationEmail: "/auth/send-verification-email",
-  getScript: "/script/post",
+  getUser: "/api/user/get",
+  updateUser: "/api/user/update",
+  deleteUser: "/api/user/delete",
+  login: "/api/auth/login",
+  logout: "/api/auth/logout",
+  register: "/api/auth/register",
+  resetPassword: "/api/auth/reset-password",
+  changePassword: "/api/auth/change-password",
+  verifyEmail: "/api/auth/verify-email",
+  sendVerificationEmail: "/api/auth/send-verification-email",
+  getScript: "/api/script/post",
 };
 
 export default url;
