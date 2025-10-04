@@ -1,4 +1,3 @@
-// import { FaArrowLeft } from "react-icons/fa";
 import "./BackButton.css";
 
 interface BackButtonProps {
@@ -6,6 +5,8 @@ interface BackButtonProps {
   setShowMoodSelector: any;
   setIsMeditateBackButtonClicked: any;
   setIsContinueClicked: any;
+  setIsDemoMode?: any;
+  setVideoUrl?: any;
 }
 
 export default function BackButton({
@@ -13,6 +14,8 @@ export default function BackButton({
   setShowMoodSelector,
   setIsMeditateBackButtonClicked,
   setIsContinueClicked,
+  setIsDemoMode,
+  setVideoUrl,
 }: BackButtonProps) {
   return (
     <button
@@ -20,10 +23,11 @@ export default function BackButton({
         setShowMoodSelector(true);
         setIsMeditateBackButtonClicked(true);
         setIsContinueClicked(false);
+        setIsDemoMode(false);
+        setVideoUrl && setVideoUrl("");
       }}
       className="back-button"
     >
-      <span>{/* <FaArrowLeft /> */}</span>
       <span>{label}</span>
     </button>
   );

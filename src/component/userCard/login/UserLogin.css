@@ -41,12 +41,13 @@
   align-items: center;
   gap: 20px;
   margin-top: 10px;
+  /* background-color: red; */
 }
 
 .userLogin-form-label {
   font-size: 18px;
   font-weight: 600;
-  width: 100%;
+  width: 200px;
   text-align: left;
 }
 
@@ -145,3 +146,45 @@
   transition: ease 0.3s;
   cursor: pointer;
 } */
+
+/* ✅ Error message text */
+.userLogin-error {
+  display: flex;
+  margin-top: 4px;
+  font-size: 0.85rem;
+  color: #d93025; /* Google-style red */
+  font-weight: 500;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+/* ✅ Error border */
+.userLogin-form-input[aria-invalid="true"] {
+  border: 2px solid #d93025;
+  box-shadow: 0 0 4px rgba(217, 48, 37, 0.3);
+  outline: none;
+}
+
+/* ✅ Valid border */
+.userLogin-form-input.valid {
+  border: 2px solid #4caf50;
+  box-shadow: 0 0 4px rgba(76, 175, 80, 0.3);
+}
+
+/* ✅ Focus highlight (even before validation) */
+.userLogin-form-input:focus {
+  border: 2px solid #4caf50; /* your theme green */
+  box-shadow: 0 0 6px rgba(76, 175, 80, 0.4);
+  outline: none;
+  background-color: #ffffff;
+}
+
+/* ✅ Disabled button look */
+.userLogin-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: #999; /* make it obvious it's inactive */
+}
+
+.userLogin-form-input[aria-invalid="true"] {
+  animation: shake 0.3s ease-in-out;
+}

@@ -24,16 +24,16 @@ export class UserService {
   static async getScript({
     selectedFeelings,
     selectedEmojis,
-    userState,
+    email,
   }: {
     selectedFeelings: string[];
     selectedEmojis: any;
-    userState: any;
+    email: any;
   }) {
     const payload = {
       selectedFeelings,
       selectedEmojis,
-      userState,
+      email,
     };
     return makeRequest(url.getScript, "POST", payload);
   }

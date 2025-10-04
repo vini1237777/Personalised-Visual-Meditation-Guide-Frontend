@@ -14,7 +14,7 @@ const Loader = () => {
               display: "flex",
             }}
           >
-            <p>
+            <div>
               🌸 While we generate your personalized video, try this:
               <br />
               <br />
@@ -25,7 +25,7 @@ const Loader = () => {
               <br />
               <br />
               Loading...
-            </p>
+            </div>
           </span>
         </p>
       }

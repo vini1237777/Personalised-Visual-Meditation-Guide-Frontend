@@ -18,7 +18,8 @@
   display: "flex";
   align-items: center;
   flex-direction: column;
-  width: 100%;
+  width: 400px;
+  /* background-color: red; */
   margin-top: 20px;
 }
 
@@ -100,6 +101,16 @@
   align-items: center;
   gap: 10px;
   margin-left: 80px;
+
+  /* margin-top: 40px; */
+}
+
+.userSignup-button-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-left: 150px;
   /* margin-top: 40px; */
 }
 
@@ -122,4 +133,43 @@
   cursor: pointer;
   margin-left: 10px;
   color: rgb(23, 23, 138);
+}
+
+/* ✅ Error text */
+.userCard-error {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.85rem;
+  color: #d93025;
+  font-weight: 500;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+/* ✅ Error border */
+.userCard-form-input[aria-invalid="true"] {
+  border: 2px solid #d93025;
+  box-shadow: 0 0 4px rgba(217, 48, 37, 0.3);
+  outline: none;
+  animation: shake 0.25s ease-in-out;
+}
+
+/* ✅ Valid (green) border */
+.userCard-form-input.valid {
+  border: 2px solid #4caf50;
+  box-shadow: 0 0 4px rgba(76, 175, 80, 0.3);
+}
+
+/* ✅ Focus state */
+.userCard-form-input:focus {
+  border: 2px solid #4caf50;
+  box-shadow: 0 0 6px rgba(76, 175, 80, 0.4);
+  outline: none;
+  background-color: #fff;
+}
+
+/* ✅ Disabled submit */
+.userCard-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  background: #999;
 }
