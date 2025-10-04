@@ -3,7 +3,6 @@ import "./BackButton.css";
 interface BackButtonProps {
   label?: string;
   setShowMoodSelector: any;
-  setIsMeditateBackButtonClicked: any;
   setIsContinueClicked: any;
   setIsDemoMode?: any;
   setVideoUrl?: any;
@@ -12,7 +11,6 @@ interface BackButtonProps {
 export default function BackButton({
   label = "Back",
   setShowMoodSelector,
-  setIsMeditateBackButtonClicked,
   setIsContinueClicked,
   setIsDemoMode,
   setVideoUrl,
@@ -21,7 +19,7 @@ export default function BackButton({
     <button
       onClick={() => {
         setShowMoodSelector(true);
-        setIsMeditateBackButtonClicked(true);
+        // setIsMeditateBackButtonClicked(true);
         setIsContinueClicked(false);
         setIsDemoMode(false);
         setVideoUrl && setVideoUrl("");
