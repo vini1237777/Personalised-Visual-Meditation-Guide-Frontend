@@ -7,14 +7,14 @@ import DemoMeditation from "./demoMeditation/DemoMeditation";
 const renderDemoMeditationPage = (
   category: any,
   setShowMoodSelector: any,
-  setIsMeditateBackButtonClicked: any,
+  // setIsMeditateBackButtonClicked: any,
   setIsContinueClicked: any,
   setIsDemoMode: any
 ) => (
   <DemoMeditation
     category={category}
     setShowMoodSelector={setShowMoodSelector}
-    setIsMeditateBackButtonClicked={setIsMeditateBackButtonClicked}
+    // setIsMeditateBackButtonClicked={setIsMeditateBackButtonClicked}
     setIsContinueClicked={setIsContinueClicked}
     setIsDemoMode={setIsDemoMode}
   />
@@ -23,7 +23,7 @@ const renderDemoMeditationPage = (
 function MeditationPage({
   meditationContent,
   setShowMoodSelector,
-  setIsMeditateBackButtonClicked,
+  // setIsMeditateBackButtonClicked,
   setIsContinueClicked,
   showAnimation,
   setIsDemoMode,
@@ -44,7 +44,7 @@ function MeditationPage({
         <BackButton
           label=" Back to Mood Selector"
           setShowMoodSelector={setShowMoodSelector}
-          setIsMeditateBackButtonClicked={setIsMeditateBackButtonClicked}
+          // setIsMeditateBackButtonClicked={setIsMeditateBackButtonClicked}
           setIsContinueClicked={setIsContinueClicked}
           setIsDemoMode={setIsDemoMode}
         />
@@ -52,7 +52,7 @@ function MeditationPage({
         {renderDemoMeditationPage(
           category,
           setShowMoodSelector,
-          setIsMeditateBackButtonClicked,
+          // setIsMeditateBackButtonClicked,
           setIsContinueClicked,
           setIsDemoMode
         )}
@@ -65,7 +65,7 @@ function MeditationPage({
       <BackButton
         label="Back to Mood Selector"
         setShowMoodSelector={setShowMoodSelector}
-        setIsMeditateBackButtonClicked={setIsMeditateBackButtonClicked}
+        // setIsMeditateBackButtonClicked={setIsMeditateBackButtonClicked}
         setIsContinueClicked={setIsContinueClicked}
         setIsDemoMode={setIsDemoMode}
         setVideoUrl={setVideoUrl}
@@ -75,7 +75,7 @@ function MeditationPage({
         <h2
           onClick={() => {
             setShowMoodSelector(true);
-            setIsMeditateBackButtonClicked(true);
+            // setIsMeditateBackButtonClicked(true);
             setIsContinueClicked(false);
             setIsDemoMode(true);
           }}

@@ -15,7 +15,7 @@ export default function DemoMeditation({
   height = 360,
   className,
   setShowMoodSelector,
-  setIsMeditateBackButtonClicked,
+  // setIsMeditateBackButtonClicked,
   setIsContinueClicked,
   setIsDemoMode,
 }: DemoMeditationProps) {
@@ -53,7 +53,7 @@ export default function DemoMeditation({
           <BackButton
             label=" Back to Mood Selector"
             setShowMoodSelector={setShowMoodSelector}
-            setIsMeditateBackButtonClicked={setIsMeditateBackButtonClicked}
+            // setIsMeditateBackButtonClicked={setIsMeditateBackButtonClicked}
             setIsContinueClicked={setIsContinueClicked}
             setIsDemoMode={setIsDemoMode}
           />
