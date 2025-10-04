@@ -1,6 +1,5 @@
 import { useState } from "react";
 import "./MoodSelector.css";
-// import { FaArrowRight } from "react-icons/fa";
 import { UserService } from "../../../services/userServices";
 import toast from "react-hot-toast";
 
@@ -47,6 +46,8 @@ export default function MoodSelector({
   setIsLoading,
   setIsContinueClicked,
   setMeditationContent,
+  setShowAnimation,
+  isdemoMode,
 }: {
   setShowMoodSelector: any;
   isShowMoodSelector: boolean;
@@ -55,9 +56,14 @@ export default function MoodSelector({
   setIsLoading: any;
   setIsContinueClicked: any;
   setMeditationContent: any;
+  setShowAnimation: any;
+  setIsDemoMode: any;
+  showAnimation: boolean;
+  meditationContent: any;
+  isdemoMode: boolean;
 }) {
-  const [selectedEmojis, setSelectedEmojis] = useState<any[]>([]); // multi-select
-  const [activeEmoji, setActiveEmoji] = useState<string | null>(null); // only one wheel
+  const [selectedEmojis, setSelectedEmojis] = useState<any[]>([]);
+  const [activeEmoji, setActiveEmoji] = useState<string | null>(null);
   const [selectedFeelings, setSelectedFeelings] = useState<any[]>([]);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -65,24 +71,29 @@ export default function MoodSelector({
     setIsContinueClicked(true);
     setIsLoading(true);
     setShowMoodSelector(false);
+
+    if (isdemoMode) {
+      setIsLoading(false);
+      setShowAnimation(false);
+      return;
+    }
+
     try {
       setIsLoading(true);
 
       const response = await UserService.getScript({
         selectedFeelings,
         selectedEmojis,
-        userState,
+        email: userState?.email,
       });
 
       if (response?.status !== 200) {
         throw new Error(`Unexpected status: ${response?.status}`);
       }
 
-      // Your backend sends: { generatedScripts: string, videoUrl: string, ...userInfo }
       const data = response.data as {
         generatedScripts?: string;
         videoUrl?: string;
-        // whatever userInfo fields you spread in the backend:
         email?: string;
         name?: string;
         [k: string]: any;
@@ -96,8 +107,6 @@ export default function MoodSelector({
 
       if (hasScript && hasVideo) {
         toast.success("Successfully generated meditation script");
-
-        // res is already the data object, so don't do res?.data
 
         setUserState((prev: any) => ({
           ...prev,
@@ -118,10 +127,11 @@ export default function MoodSelector({
     } catch (err) {
       console.error(err);
       toast.error(
-        "Internal Server Error: API quota exceeded for generating video (or bad response)."
+        "Internal Server Error: API quota exceeded for generating video "
       );
     } finally {
       setIsLoading(false);
+      setTimeout(() => setShowAnimation(true), 0);
     }
   };
 
@@ -147,89 +157,89 @@ export default function MoodSelector({
 
   return (
     <>
-      <div className="mood-card">
-        {isShowMoodSelector && (
-          <button
-            className="close-btn"
-            onClick={() => {
-              setIsCollapsed(true);
-              setShowMoodSelector(false);
-            }}
-          >
-            ✖
-          </button>
-        )}
-        <div className="emoji-options">
-          {Object.keys(emojiMap).map((emoji, index) => (
+      <>
+        <div className="mood-card">
+          {isShowMoodSelector && (
             <button
-              key={index}
-              className={`emoji-button ${
-                selectedEmojis.includes(emoji) ? "active" : ""
-              }`}
-              onClick={() => toggleEmoji(emoji)}
-            >
-              {emoji}
-            </button>
-          ))}
-        </div>
-        {!isCollapsed && categoryData && (
-          <div className="emotion-wheel">
-            {categoryData.feelings.map((feeling: string, index: number) => {
-              const angle =
-                (index / categoryData.feelings.length) * 2 * Math.PI;
-              const radius = 110;
-              const x = 120 + radius * Math.cos(angle);
-              const y = 120 + radius * Math.sin(angle);
-
-              return (
-                <div
-                  key={feeling}
-                  className={`feeling-item ${categoryData.category} ${
-                    selectedFeelings.includes(feeling) ? "selected" : ""
-                  }`}
-                  style={{ top: y, left: x }}
-                  onClick={() => toggleFeeling(feeling)}
-                >
-                  {feeling}
-                </div>
-              );
-            })}
-          </div>
-        )}
-        {!isCollapsed && selectedEmojis?.length >= 0 && (
-          <div className="output-box">
-            <p>
-              <strong>Selected Emojis:</strong>{" "}
-              {selectedEmojis.length > 0 ? selectedEmojis.join(" ") : "None"}
-            </p>
-            <p>
-              <strong>Active Wheel:</strong> {activeEmoji || "None"}
-            </p>
-            <p>
-              <strong>Feelings:</strong>{" "}
-              {selectedFeelings.length > 0
-                ? selectedFeelings.join(", ")
-                : "None"}
-            </p>
-          </div>
-        )}
-
-        {!isCollapsed && selectedEmojis?.length > 0 && (
-          <div className="userLogin-button-wrapper">
-            <button
-              className="userLogin-button"
+              className="close-btn"
               onClick={() => {
-                handleContinue();
+                setIsCollapsed(true);
+                setShowMoodSelector(false);
               }}
             >
-              Continue
+              ✖
             </button>
-            <div className="arrow-button">
-              {/* <FaArrowRight color="gray" /> */}
-            </div>
+          )}
+          <div className="emoji-options">
+            {Object.keys(emojiMap).map((emoji, index) => (
+              <button
+                key={index}
+                className={`emoji-button ${
+                  selectedEmojis.includes(emoji) ? "active" : ""
+                }`}
+                onClick={() => toggleEmoji(emoji)}
+              >
+                {emoji}
+              </button>
+            ))}
           </div>
-        )}
-      </div>
+          {!isCollapsed && categoryData && (
+            <div className="emotion-wheel">
+              {categoryData.feelings.map((feeling: string, index: number) => {
+                const angle =
+                  (index / categoryData.feelings.length) * 2 * Math.PI;
+                const radius = 110;
+                const x = 120 + radius * Math.cos(angle);
+                const y = 120 + radius * Math.sin(angle);
+
+                return (
+                  <div
+                    key={feeling}
+                    className={`feeling-item ${categoryData.category} ${
+                      selectedFeelings.includes(feeling) ? "selected" : ""
+                    }`}
+                    style={{ top: y, left: x }}
+                    onClick={() => toggleFeeling(feeling)}
+                  >
+                    {feeling}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+          {!isCollapsed && selectedEmojis?.length >= 0 && (
+            <div className="output-box">
+              <p>
+                <strong>Selected Emojis:</strong>{" "}
+                {selectedEmojis.length > 0 ? selectedEmojis.join(" ") : "None"}
+              </p>
+              <p>
+                <strong>Active Wheel:</strong> {activeEmoji || "None"}
+              </p>
+              <p>
+                <strong>Feelings:</strong>{" "}
+                {selectedFeelings.length > 0
+                  ? selectedFeelings.join(", ")
+                  : "None"}
+              </p>
+            </div>
+          )}
+
+          {!isCollapsed && selectedEmojis?.length > 0 && (
+            <div className="userLogin-button-wrapper">
+              <button
+                className="userLogin-button"
+                onClick={() => {
+                  handleContinue();
+                }}
+              >
+                Continue
+              </button>
+              <div className="arrow-button"></div>
+            </div>
+          )}
+        </div>
+      </>
     </>
   );
 }

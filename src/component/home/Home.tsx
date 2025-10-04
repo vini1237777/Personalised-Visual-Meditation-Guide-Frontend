@@ -14,7 +14,7 @@ const Home = ({
     <div className="home-container">
       <div className="home">
         <Banner
-          setIsLoggedIn
+          setIsLoggedIn={setIsLoggedIn}
           userState={userState}
           setUserState={setUserState}
         />

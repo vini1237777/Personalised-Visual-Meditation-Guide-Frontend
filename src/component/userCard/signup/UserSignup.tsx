@@ -4,12 +4,11 @@ import {
   memberText,
   signupButtonText,
 } from "../../../helpers/constants";
-// import { FaArrowRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { UserService } from "../../../services/userServices";
 import toast from "react-hot-toast";
 import { IUser } from "../../../helpers/interface";
-import { useCallback } from "react";
+import { useEffect, useState } from "react"; // ✅ NEW
 
 const userConstants = [
   { type: "text", id: "fullName", name: "fullName", label: "Full Name" },
@@ -28,18 +27,86 @@ function UserSignup({
 }) {
   const navigate = useNavigate();
 
-  const handleChange = useCallback(
-    (e: any) => {
-      const { name, value } = e.target;
-      setUserState((prevState: IUser) => ({
-        ...prevState,
-        [name]: value,
-      }));
-    },
-    [setUserState]
-  );
+  const [errors, setErrors] = useState<{
+    fullName: string | null;
+    email: string | null;
+    password: string | null;
+  }>({
+    fullName: null,
+    email: null,
+    password: null,
+  });
+
+  const validateFullName = (fullName: string): string | null => {
+    if (!fullName || fullName.trim() === "") return "Full name is required.";
+    if (fullName.trim().length < 2) return "Please enter a valid name.";
+    return null;
+  };
+
+  const validateEmail = (email: string): string | null => {
+    const re = /^[\w-.]+@([\w-]+\.)+[\w-]{2,}$/;
+    if (!email || email.trim() === "") return "Email is required.";
+    if (!re.test(String(email).toLowerCase())) return "Invalid email format.";
+    return null;
+  };
+
+  const validatePassword = (password: string): string | null => {
+    if (!password || password.trim() === "") return "Password is required.";
+    if (password.length < 8) return "Password must be at least 8 characters.";
+    if (!/[A-Za-z]/.test(password) || !/\d/.test(password))
+      return "Use letters and numbers in your password.";
+    return null;
+  };
+
+  const validators: Record<string, (v: string) => string | null> = {
+    fullName: validateFullName,
+    email: validateEmail,
+    password: validatePassword,
+  };
+
+  const validateField = (name: keyof typeof errors, value: string) => {
+    const err = validators[name](value);
+    setErrors((prev) => ({ ...prev, [name]: err }));
+    return err;
+  };
+
+  const validateAll = () => {
+    const next = {
+      fullName: validateFullName(userState?.fullName || ""),
+      email: validateEmail(userState?.email || ""),
+      password: validatePassword(userState?.password || ""),
+    };
+    setErrors(next);
+    return next;
+  };
+
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    setUserState((prevState: IUser) => ({
+      ...prevState,
+      [name]: value,
+    }));
+    if (validators[name]) validateField(name as keyof typeof errors, value);
+  };
+
+  useEffect(() => {
+    setUserState((prev: any) => ({
+      ...prev,
+      email: "",
+      password: "",
+      fullName: "",
+    }));
+    setErrors({ fullName: null, email: null, password: null }); // ✅ NEW
+  }, [setUserState]);
 
   const handleSignUp = async () => {
+    const current = validateAll();
+    const hasErrors = Object.values(current).some(Boolean);
+    if (hasErrors) {
+      toast.error("Please fix the highlighted fields.");
+      return;
+    }
+
     await UserService.register({ ...userState })
       .then((res: any) => {
         if (res.status === 201) {
@@ -49,14 +116,20 @@ function UserSignup({
           }));
           toast.success("Successfully created user");
           navigate("/auth/login");
-          console.log(res?.data, "signup");
         }
       })
       .catch((err) => {
-        console.log(err, "what is the message");
-        toast.error(err);
+        toast.error(err?.message || "Failed to sign up");
       });
   };
+
+  const isSubmitDisabled =
+    !!errors.fullName ||
+    !!errors.email ||
+    !!errors.password ||
+    !userState?.fullName ||
+    !userState?.email ||
+    !userState?.password;
 
   return (
     <div className="userCard">
@@ -74,8 +147,13 @@ function UserSignup({
         </span>
 
         {userConstants?.map((constants) => {
+          const fieldName = constants.name as keyof typeof errors;
+          const errMsg = errors[fieldName];
+          const value = userState?.[constants.name] || "";
+
           return (
-            <div className="userCard-button-wrapper">
+            <div className="userCard-button-wrapper" key={constants.id}>
+              {/* ^ added key only, rendering structure unchanged */}
               <div className="userCard-form">
                 <span className="userCard-form-label">{constants.label}</span>
                 <span>
@@ -84,27 +162,41 @@ function UserSignup({
                     id={constants.id}
                     name={constants.name}
                     required
-                    className="userCard-form-input"
+                    className={`userCard-form-input ${
+                      !errMsg && value ? "valid" : ""
+                    }`}
                     onChange={handleChange}
-                    value={userState?.[constants.name] || ""}
+                    value={value}
+                    aria-invalid={errMsg ? "true" : "false"}
+                    aria-describedby={`${constants.id}-error`}
                   />
                 </span>
+
+                {errMsg && (
+                  <span
+                    id={`${constants.id}-error`}
+                    role="alert"
+                    className="userCard-error"
+                  >
+                    {errMsg}
+                  </span>
+                )}
               </div>
             </div>
           );
         })}
-        <div className="userCard-button-wrapper">
+
+        <div className="userSignup-button-wrapper">
           <button
             className="userCard-button"
             onClick={() => {
               handleSignUp();
             }}
+            disabled={isSubmitDisabled}
           >
             {signupButtonText}
           </button>
-          <div className="arrow-button">
-            {/* <FaArrowRight color="white" /> */}
-          </div>
+          <div className="arrow-button"></div>
         </div>
       </div>
     </div>

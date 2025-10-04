@@ -19,11 +19,12 @@ type TMeditationContent = {
 const LandingPage = ({ user, setUserState }: LandingPageProps) => {
   const [showMoodSelector, setShowMoodSelector] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isContinueClicked, setIsContinueClicked] = useState(false); // keep if used elsewhere
+  const [isContinueClicked, setIsContinueClicked] = useState(false);
   const [meditationContent, setMeditationContent] =
     useState<TMeditationContent>({});
-  const [isMeditateBackButtonClicked, setIsMeditateBackButtonClicked] =
-    useState<boolean>(false);
+
+  const [showAnimation, setShowAnimation] = useState(true);
+  const [isdemoMode, setIsDemoMode] = useState(false);
 
   const showHeroSection = Object.keys(user)?.length > 0 && !showMoodSelector;
 
@@ -32,12 +33,10 @@ const LandingPage = ({ user, setUserState }: LandingPageProps) => {
     meditationContent?.videoUrl &&
     meditationContent?.videoUrl?.trim()?.length > 0;
 
-  // When we have a video, stop loading and hide selector
   useEffect(() => {
     if (hasVideo) {
       setIsLoading(false);
       setShowMoodSelector(false);
-      setIsMeditateBackButtonClicked(false);
     }
   }, [hasVideo]);
 
@@ -61,6 +60,7 @@ const LandingPage = ({ user, setUserState }: LandingPageProps) => {
         setUserState={setUserState}
         setIsLoading={setIsLoading}
         setIsContinueClicked={setIsContinueClicked}
+        setShowAnimation={setShowAnimation}
         setMeditationContent={(updater: any) => {
           if (typeof updater === "function") {
             setMeditationContent((prev) => updater(prev));
@@ -68,6 +68,10 @@ const LandingPage = ({ user, setUserState }: LandingPageProps) => {
             setMeditationContent((prev) => ({ ...prev, ...updater }));
           }
         }}
+        setIsDemoMode={setIsDemoMode}
+        showAnimation={showAnimation}
+        meditationContent={meditationContent}
+        isdemoMode={isdemoMode}
       />
     </div>
   );
@@ -76,26 +80,13 @@ const LandingPage = ({ user, setUserState }: LandingPageProps) => {
     <MeditationPage
       meditationContent={meditationContent.videoUrl!}
       setShowMoodSelector={setShowMoodSelector}
-      setIsMeditateBackButtonClicked={setIsMeditateBackButtonClicked}
       setIsContinueClicked={setIsContinueClicked}
+      showAnimation={showAnimation}
+      setIsDemoMode={setIsDemoMode}
+      category={user?.category}
+      isdemoMode={isdemoMode}
     />
   );
-
-  // Simple, deterministic gates:
-
-  console.log(isMeditateBackButtonClicked, "i", "showMeditation");
-  console.log("i", showHeroSection, "showSelector");
-  console.log("i", showHeroSection, "showHero");
-
-  console.log(
-    { isContinueClicked },
-    { isLoading },
-    { isMeditateBackButtonClicked },
-    { showMoodSelector },
-    user
-  );
-
-  console.log(user, "user in landing 2");
 
   return (
     <div className="landing-page">

@@ -63,3 +63,13 @@
   font-weight: 600;
   margin-right: 40px;
 }
+
+.contact-form-input.invalid {
+  border-color: red;
+}
+
+.contact-error {
+  color: red;
+  font-size: 14px;
+  margin-top: 4px;
+}
