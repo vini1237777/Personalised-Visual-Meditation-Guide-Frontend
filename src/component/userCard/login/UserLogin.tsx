@@ -91,7 +91,7 @@ function UserLogin({
       password: "",
     }));
     setErrors({ email: null, password: null });
-  }, [setUserState]);
+  }, []);
 
   const handleLogin = useCallback(async () => {
     const current = validateAll();
