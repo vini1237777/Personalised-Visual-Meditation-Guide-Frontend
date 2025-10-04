@@ -2,6 +2,7 @@ export const navbarLinks = [
   { name: "Home", path: "/" },
   { name: "About", path: "/about" },
   { name: "Contact", path: "/contact" },
+  { name: "Github", path: "" },
 ];
 
 export const appTitle = "Meditation App";
@@ -97,14 +98,6 @@ export const defaultMeditationVideoUrls: string[] = [
   "https://generativelanguage.googleapis.com/download/v1beta/files/tiebtjrkou6m:download?alt=media&key=AIzaSyBrsnbKgJLhEBRFKq0sC0ezVuap4SCuIqc",
   "https://generativelanguage.googleapis.com/download/v1beta/files/ve35tz082w2w:download?alt=media&key=AIzaSyBrsnbKgJLhEBRFKq0sC0ezVuap4SCuIqc",
   "https://generativelanguage.googleapis.com/download/v1beta/files/98r5v9ejh5kj:download?alt=media&key=AIzaSyBrsnbKgJLhEBRFKq0sC0ezVuap4SCuIqc",
-  "https://generativelanguage.googleapis.com/download/v1beta/files/ve35tz082w2w:download?alt=media&key=AIzaSyBrsnbKgJLhEBRFKq0sC0ezVuap4SCuIqc",
-  "https://generativelanguage.googleapis.com/download/v1beta/files/y99bhu1xyg2a:download?alt=media&key=AIzaSyBrsnbKgJLhEBRFKq0sC0ezVuap4SCuIqc",
-  "https://generativelanguage.googleapis.com/download/v1beta/files/y99bhu1xyg2a:download?alt=media&key=AIzaSyBrsnbKgJLhEBRFKq0sC0ezVuap4SCuIqc",
-  "https://generativelanguage.googleapis.com/download/v1beta/files/y99bhu1xyg2a:download?alt=media&key=AIzaSyBrsnbKgJLhEBRFKq0sC0ezVuap4SCuIqc",
-  "https://generativelanguage.googleapis.com/download/v1beta/files/y99bhu1xyg2a:download?alt=media&key=AIzaSyBrsnbKgJLhEBRFKq0sC0ezVuap4SCuIqc",
-  "https://generativelanguage.googleapis.com/download/v1beta/files/y99bhu1xyg2a:download?alt=media&key=AIzaSyBrsnbKgJLhEBRFKq0sC0ezVuap4SCuIqc",
-  "https://generativelanguage.googleapis.com/download/v1beta/files/y99bhu1xyg2a:download?alt=media&key=AIzaSyBrsnbKgJLhEBRFKq0sC0ezVuap4SCuIqc",
-  "https://generativelanguage.googleapis.com/download/v1beta/files/y99bhu1xyg2a:download?alt=media&key=AIzaSyBrsnbKgJLhEBRFKq0sC0ezVuap4SCuIqc",
   "https://generativelanguage.googleapis.com/download/v1beta/files/y99bhu1xyg2a:download?alt=media&key=AIzaSyBrsnbKgJLhEBRFKq0sC0ezVuap4SCuIqc",
 ];
 

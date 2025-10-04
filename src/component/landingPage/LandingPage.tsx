@@ -9,29 +9,38 @@ import MeditationPage from "./meditationPage/MeditationPage";
 interface LandingPageProps {
   user: IUser;
   setUserState: (state: any) => void;
+  isLoggedIn: boolean;
 }
 
-type TMeditationContent = {
+type IMeditationContent = {
   videoUrl?: string;
   script?: string;
 };
 
-const LandingPage = ({ user, setUserState }: LandingPageProps) => {
+const LandingPage = ({ user, setUserState, isLoggedIn }: LandingPageProps) => {
   const [showMoodSelector, setShowMoodSelector] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isContinueClicked, setIsContinueClicked] = useState(false);
   const [meditationContent, setMeditationContent] =
-    useState<TMeditationContent>({});
+    useState<IMeditationContent>({});
 
   const [showAnimation, setShowAnimation] = useState(true);
   const [isdemoMode, setIsDemoMode] = useState(false);
 
-  const showHeroSection = Object.keys(user)?.length > 0 && !showMoodSelector;
+  const showHeroSection =
+    isLoggedIn && Object.values(user)?.length > 0 && !showMoodSelector;
 
   const hasVideo =
     meditationContent &&
     meditationContent?.videoUrl &&
     meditationContent?.videoUrl?.trim()?.length > 0;
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem("user");
+    if (savedUser) {
+      setUserState(JSON.parse(savedUser));
+    }
+  }, [setUserState]);
 
   useEffect(() => {
     if (hasVideo) {
@@ -88,14 +97,16 @@ const LandingPage = ({ user, setUserState }: LandingPageProps) => {
     />
   );
 
+  const savedUser = JSON.parse(localStorage.getItem("user") || "{}");
+
   return (
     <div className="landing-page">
       <div className="welcome-text">
-        {showHeroSection && `Welcome ${user?.fullName}`}
+        {showHeroSection && `Welcome ${savedUser?.fullName}`}
       </div>
 
       <div className="heading">
-        {Object.keys(user)?.length > 0 ? (
+        {savedUser && Object.values(user)?.length > 0 ? (
           !showMoodSelector && showHeroSection && renderHeroSection()
         ) : (
           <></>
