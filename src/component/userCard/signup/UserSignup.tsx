@@ -96,8 +96,8 @@ function UserSignup({
       password: "",
       fullName: "",
     }));
-    setErrors({ fullName: null, email: null, password: null }); // ✅ NEW
-  }, [setUserState]);
+    setErrors({ fullName: null, email: null, password: null });
+  }, []);
 
   const handleSignUp = async () => {
     const current = validateAll();
