@@ -15,7 +15,8 @@ const Loader = () => {
             }}
           >
             <div>
-              🌸 While we generate your personalized video, try this:
+              🌸 While we generate your personalized video using Generative API,
+              try this:
               <br />
               <br />
               Take a slow deep breath in… and gently exhale.

@@ -116,6 +116,7 @@ function UserLogin({
             ...prev,
             ...res?.data,
           }));
+
           setIsLoggedIn(true);
         }
       })
@@ -133,12 +134,22 @@ function UserLogin({
   return (
     <div className="userLogin">
       {isLoggedIn ? (
-        <LandingPage user={{ ...userState }} setUserState={setUserState} />
+        <LandingPage
+          user={{ ...userState }}
+          setUserState={setUserState}
+          isLoggedIn={isLoggedIn}
+        />
       ) : (
         <div className="userLogin-wrapper">
           <span className="userLogin-form-title">
             {noMemberText}
-            <span className="userLoginText" onClick={() => navigate("/")}>
+            <span
+              className="userLoginText"
+              onClick={() => {
+                localStorage.removeItem("user");
+                navigate("/");
+              }}
+            >
               {signupButtonText}
             </span>
           </span>
@@ -154,7 +165,6 @@ function UserLogin({
                     type={constants.type}
                     id={constants.id}
                     name={constants.name}
-                    required
                     className={`userLogin-form-input ${
                       !errors[constants.name as keyof typeof errors] &&
                       userState[constants.name]

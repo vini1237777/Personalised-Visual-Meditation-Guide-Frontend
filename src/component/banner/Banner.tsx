@@ -8,10 +8,12 @@ function Banner({
   setUserState,
   userState,
   setIsLoggedIn,
+  isLoggedIn,
 }: {
   setUserState: any;
   userState: any;
   setIsLoggedIn: any;
+  isLoggedIn: boolean;
 }) {
   const location = useLocation();
   const isLoginPage = location.pathname === "/auth/login";
@@ -29,12 +31,14 @@ function Banner({
               userState={userState}
               setUserState={setUserState}
               setIsLoggedIn={setIsLoggedIn}
+              isLoggedIn={isLoggedIn}
             />
           ) : (
             <UserSignup
               setIsLoggedIn={setIsLoggedIn}
               userState={userState}
               setUserState={setUserState}
+              isLoggedIn={isLoggedIn}
             />
           )}
         </div>

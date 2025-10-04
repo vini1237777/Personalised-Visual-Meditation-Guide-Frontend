@@ -20,10 +20,12 @@ function UserSignup({
   setIsLoggedIn,
   setUserState,
   userState,
+  isLoggedIn,
 }: {
   setIsLoggedIn: any;
   setUserState: any;
   userState: any;
+  isLoggedIn: boolean;
 }) {
   const navigate = useNavigate();
 
@@ -63,6 +65,13 @@ function UserSignup({
     email: validateEmail,
     password: validatePassword,
   };
+
+  // useEffect(() => {
+  //   const savedUser = JSON.parse(localStorage.getItem("user") || "{}");
+  //   if (savedUser && Object.values(userState || {}).length > 0) {
+  //     navigate("/auth/login");
+  //   }
+  // }, [navigate, setIsLoggedIn, userState]);
 
   const validateField = (name: keyof typeof errors, value: string) => {
     const err = validators[name](value);
@@ -136,6 +145,10 @@ function UserSignup({
     !userState?.email ||
     !userState?.password;
 
+  useEffect(() => {
+    localStorage.setItem("user", JSON.stringify(userState));
+  }, [userState]);
+
   return (
     <div className="userCard">
       <div className="userCard-wrapper">
@@ -166,7 +179,6 @@ function UserSignup({
                     type={constants.type}
                     id={constants.id}
                     name={constants.name}
-                    required
                     className={`userCard-form-input ${
                       !errMsg && value ? "valid" : ""
                     }`}
