@@ -7,7 +7,7 @@ import {
 import "./UserLogin.css";
 import { UserService } from "../../../services/userServices";
 import toast from "react-hot-toast";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import LandingPage from "../../landingPage/LandingPage";
 import { IUser } from "../../../helpers/interface";
 
@@ -83,15 +83,19 @@ function UserLogin({
       validateField(name as keyof typeof validators, value);
     }
   };
+  const didInit = useRef(false);
 
   useEffect(() => {
+    if (didInit.current) return;
     setUserState((prev: any) => ({
       ...prev,
       email: "",
       password: "",
     }));
+    didInit.current = true;
+
     setErrors({ email: null, password: null });
-  }, []);
+  }, [setUserState]);
 
   const handleLogin = useCallback(async () => {
     const current = validateAll();

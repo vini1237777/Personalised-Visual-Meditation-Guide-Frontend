@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { UserService } from "../../../services/userServices";
 import toast from "react-hot-toast";
 import { IUser } from "../../../helpers/interface";
-import { useEffect, useState } from "react"; // ✅ NEW
+import { useEffect, useRef, useState } from "react"; // ✅ NEW
 
 const userConstants = [
   { type: "text", id: "fullName", name: "fullName", label: "Full Name" },
@@ -89,15 +89,20 @@ function UserSignup({
     if (validators[name]) validateField(name as keyof typeof errors, value);
   };
 
+  const didInit = useRef(false);
+
   useEffect(() => {
+    if (didInit.current) return;
     setUserState((prev: any) => ({
       ...prev,
       email: "",
       password: "",
       fullName: "",
     }));
+    didInit.current = true;
+
     setErrors({ fullName: null, email: null, password: null });
-  }, []);
+  }, [setUserState]);
 
   const handleSignUp = async () => {
     const current = validateAll();
