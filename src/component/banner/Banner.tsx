@@ -25,7 +25,11 @@ function Banner({
         </div>
         <div>
           {isLoginPage ? (
-            <UserLogin userState={userState} setUserState={setUserState} />
+            <UserLogin
+              userState={userState}
+              setUserState={setUserState}
+              setIsLoggedIn={setIsLoggedIn}
+            />
           ) : (
             <UserSignup
               setIsLoggedIn={setIsLoggedIn}
