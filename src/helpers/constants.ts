@@ -127,7 +127,6 @@ export type DemoMeditationProps = {
   height?: number;
   className?: string;
   setShowMoodSelector: any;
-  setIsMeditateBackButtonClicked: any;
   setIsContinueClicked: any;
   setIsDemoMode: any;
 };
