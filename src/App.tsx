@@ -39,6 +39,7 @@ function App() {
                 setIsLoggedIn
                 userState={userState}
                 setUserState={setUserState}
+                isLoggedIn={isLoggedIn}
               />
             }
           />
@@ -63,6 +64,7 @@ function App() {
                 setIsLoggedIn={setIsLoggedIn}
                 userState={userState}
                 setUserState={setUserState}
+                isLoggedIn={isLoggedIn}
               />
             }
           />
