@@ -7,14 +7,12 @@ import DemoMeditation from "./demoMeditation/DemoMeditation";
 const renderDemoMeditationPage = (
   category: any,
   setShowMoodSelector: any,
-  // setIsMeditateBackButtonClicked: any,
   setIsContinueClicked: any,
   setIsDemoMode: any
 ) => (
   <DemoMeditation
     category={category}
     setShowMoodSelector={setShowMoodSelector}
-    // setIsMeditateBackButtonClicked={setIsMeditateBackButtonClicked}
     setIsContinueClicked={setIsContinueClicked}
     setIsDemoMode={setIsDemoMode}
   />
@@ -32,8 +30,6 @@ function MeditationPage({
 }: any) {
   const [videoUrl, setVideoUrl] = useState<string>("");
 
-  console.log(meditationContent, "meditationContent");
-
   useEffect(() => {
     if (meditationContent && meditationContent.length > 0) {
       setVideoUrl(meditationContent);
@@ -46,7 +42,6 @@ function MeditationPage({
         <BackButton
           label=" Back to Mood Selector"
           setShowMoodSelector={setShowMoodSelector}
-          // setIsMeditateBackButtonClicked={setIsMeditateBackButtonClicked}
           setIsContinueClicked={setIsContinueClicked}
           setIsDemoMode={setIsDemoMode}
         />
@@ -54,7 +49,6 @@ function MeditationPage({
         {renderDemoMeditationPage(
           category,
           setShowMoodSelector,
-          // setIsMeditateBackButtonClicked,
           setIsContinueClicked,
           setIsDemoMode
         )}
@@ -67,7 +61,6 @@ function MeditationPage({
       <BackButton
         label="Back to Mood Selector"
         setShowMoodSelector={setShowMoodSelector}
-        // setIsMeditateBackButtonClicked={setIsMeditateBackButtonClicked}
         setIsContinueClicked={setIsContinueClicked}
         setIsDemoMode={setIsDemoMode}
         setVideoUrl={setVideoUrl}
@@ -77,7 +70,6 @@ function MeditationPage({
         <h2
           onClick={() => {
             setShowMoodSelector(true);
-            // setIsMeditateBackButtonClicked(true);
             setIsContinueClicked(false);
             setIsDemoMode(true);
           }}

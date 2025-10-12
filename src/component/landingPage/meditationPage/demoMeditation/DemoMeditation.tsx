@@ -15,7 +15,6 @@ export default function DemoMeditation({
   height = 360,
   className,
   setShowMoodSelector,
-  // setIsMeditateBackButtonClicked,
   setIsContinueClicked,
   setIsDemoMode,
 }: DemoMeditationProps) {
@@ -28,10 +27,8 @@ export default function DemoMeditation({
   }, [initialUrl]);
 
   const handleError = () => {
-    // Try another URL from the same mood; if that fails repeatedly, ¯\_(ツ)_/¯ we keep shuffling.
     const next = pickFromMood(category);
     if (next === videoUrl && defaultMeditationVideoUrls.length > 1) {
-      // Make sure we actually change it
       const alt = pickRandom(
         defaultMeditationVideoUrls.filter((u) => u !== videoUrl)
       );
