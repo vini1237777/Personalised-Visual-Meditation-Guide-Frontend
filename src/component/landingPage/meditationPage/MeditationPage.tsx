@@ -32,6 +32,8 @@ function MeditationPage({
 }: any) {
   const [videoUrl, setVideoUrl] = useState<string>("");
 
+  console.log(meditationContent, "meditationContent");
+
   useEffect(() => {
     if (meditationContent && meditationContent.length > 0) {
       setVideoUrl(meditationContent);
