@@ -135,7 +135,7 @@ function UserLogin({
     <div className="userLogin">
       {isLoggedIn ? (
         <LandingPage
-          userState={userState}
+          user={userState}
           setUserState={setUserState}
           isLoggedIn={isLoggedIn}
         />

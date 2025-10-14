@@ -7,7 +7,7 @@ import Loader from "../loader/Loader";
 import MeditationPage from "./meditationPage/MeditationPage";
 
 interface LandingPageProps {
-  userState: IUser;
+  user: IUser;
   setUserState: (state: any) => void;
   isLoggedIn: boolean;
 }
@@ -17,11 +17,7 @@ type IMeditationContent = {
   script?: string;
 };
 
-const LandingPage = ({
-  userState,
-  setUserState,
-  isLoggedIn,
-}: LandingPageProps) => {
+const LandingPage = ({ user, setUserState, isLoggedIn }: LandingPageProps) => {
   const [showMoodSelector, setShowMoodSelector] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isContinueClicked, setIsContinueClicked] = useState(false);
@@ -32,7 +28,7 @@ const LandingPage = ({
   const [isdemoMode, setIsDemoMode] = useState(false);
 
   const showHeroSection =
-    isLoggedIn && Object.values(userState)?.length > 0 && !showMoodSelector;
+    isLoggedIn && Object.values(user)?.length > 0 && !showMoodSelector;
 
   const hasVideo =
     meditationContent &&
@@ -64,31 +60,27 @@ const LandingPage = ({
       </div>
     ));
 
-  const renderMoodSelector = () => {
-    const savedUser = localStorage.getItem("user");
-
-    return (
-      <div className="mood-selector-section">
-        <MoodSelector
-          setShowMoodSelector={setShowMoodSelector}
-          isShowMoodSelector={showMoodSelector}
-          userState={savedUser ? JSON.parse(savedUser) : {}}
-          setUserState={setUserState}
-          setIsLoading={setIsLoading}
-          setIsContinueClicked={setIsContinueClicked}
-          setShowAnimation={setShowAnimation}
-          setMeditationContent={(updater: any) => {
-            if (typeof updater === "function") {
-              setMeditationContent((prev) => updater(prev));
-            } else {
-              setMeditationContent((prev) => ({ ...prev, ...updater }));
-            }
-          }}
-          isdemoMode={isdemoMode}
-        />
-      </div>
-    );
-  };
+  const renderMoodSelector = () => (
+    <div className="mood-selector-section">
+      <MoodSelector
+        setShowMoodSelector={setShowMoodSelector}
+        isShowMoodSelector={showMoodSelector}
+        userState={{ ...user }}
+        setUserState={setUserState}
+        setIsLoading={setIsLoading}
+        setIsContinueClicked={setIsContinueClicked}
+        setShowAnimation={setShowAnimation}
+        setMeditationContent={(updater: any) => {
+          if (typeof updater === "function") {
+            setMeditationContent((prev) => updater(prev));
+          } else {
+            setMeditationContent((prev) => ({ ...prev, ...updater }));
+          }
+        }}
+        isdemoMode={isdemoMode}
+      />
+    </div>
+  );
 
   const renderMeditationPage = () => (
     <MeditationPage
@@ -97,7 +89,7 @@ const LandingPage = ({
       setIsContinueClicked={setIsContinueClicked}
       showAnimation={showAnimation}
       setIsDemoMode={setIsDemoMode}
-      category={userState?.category}
+      category={user?.category}
       isdemoMode={isdemoMode}
     />
   );
@@ -107,11 +99,11 @@ const LandingPage = ({
   return (
     <div className="landing-page">
       <div className="welcome-text">
-        {showHeroSection && `Welcome ${userState?.fullName}`}
+        {showHeroSection && `Welcome ${savedUser?.fullName}`}
       </div>
 
       <div className="heading">
-        {savedUser && Object.values(userState)?.length > 0 ? (
+        {savedUser && Object.values(user)?.length > 0 ? (
           !showMoodSelector && showHeroSection && renderHeroSection()
         ) : (
           <></>
