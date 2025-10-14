@@ -11,20 +11,19 @@ import { useEffect, useState } from "react";
 import { IUser } from "./helpers/interface";
 
 function App() {
-  const [userState, setUserState] = useState<IUser | any>(() => {
-    const savedUser = localStorage.getItem("user");
-    return savedUser
-      ? JSON.parse(savedUser)
-      : { email: "", password: "", fullName: "" };
+  const [userState, setUserState] = useState<IUser | any>({
+    email: "",
+    password: "",
+    fullName: "",
   });
 
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(!!userState.email);
 
   useEffect(() => {
-    if (userState) {
+    if (isLoggedIn) {
       localStorage.setItem("user", JSON.stringify(userState));
     } else {
-      localStorage.removeItem("user"); // Clear storage on logout
+      localStorage.removeItem("user");
     }
   }, [userState]);
 
