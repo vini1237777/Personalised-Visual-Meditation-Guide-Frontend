@@ -80,18 +80,10 @@ function MeditationPage({
         </h2>
       )}
       {showAnimation && videoUrl && !!videoUrl ? (
-        // <video width="640" height="360" controls key={videoUrl}>
-        //   <source src={videoUrl} type="video/mp4" />
-        //   Your browser does not support the video tag.
-        // </video>
-        <video
-          src={`/media?url=${encodeURIComponent(videoUrl)}`}
-          width={640}
-          height={360}
-          controls
-          playsInline
-          preload="metadata"
-        />
+        <video width="640" height="360" controls key={videoUrl}>
+          <source src={videoUrl} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
       ) : (
         <BreathingPanda />
       )}

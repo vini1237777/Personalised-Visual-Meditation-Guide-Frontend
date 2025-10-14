@@ -64,12 +64,14 @@ const LandingPage = ({
       </div>
     ));
 
-  const renderMoodSelector = () => (
+  const renderMoodSelector = () => {
+
+      const savedUser = localStorage.getItem("user");
     <div className="mood-selector-section">
       <MoodSelector
         setShowMoodSelector={setShowMoodSelector}
         isShowMoodSelector={showMoodSelector}
-        userState={userState}
+        userState={savedUser ? JSON.parse(savedUser) : {}}
         setUserState={setUserState}
         setIsLoading={setIsLoading}
         setIsContinueClicked={setIsContinueClicked}
