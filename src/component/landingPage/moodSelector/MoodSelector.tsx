@@ -84,7 +84,7 @@ export default function MoodSelector({
       const response = await UserService.getScript({
         selectedFeelings,
         selectedEmojis,
-        email: userState?.email,
+        email: userState.email || "",
       });
 
       if (response?.status !== 200) {
@@ -94,7 +94,7 @@ export default function MoodSelector({
       const data = response.data as {
         generatedScripts?: string;
         videoUrl?: string;
-        email?: string;
+        email: string;
         name?: string;
         [k: string]: any;
       };

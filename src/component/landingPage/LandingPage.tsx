@@ -7,7 +7,7 @@ import Loader from "../loader/Loader";
 import MeditationPage from "./meditationPage/MeditationPage";
 
 interface LandingPageProps {
-  user: IUser;
+  userState: IUser;
   setUserState: (state: any) => void;
   isLoggedIn: boolean;
 }
@@ -17,7 +17,11 @@ type IMeditationContent = {
   script?: string;
 };
 
-const LandingPage = ({ user, setUserState, isLoggedIn }: LandingPageProps) => {
+const LandingPage = ({
+  userState,
+  setUserState,
+  isLoggedIn,
+}: LandingPageProps) => {
   const [showMoodSelector, setShowMoodSelector] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isContinueClicked, setIsContinueClicked] = useState(false);
@@ -28,7 +32,7 @@ const LandingPage = ({ user, setUserState, isLoggedIn }: LandingPageProps) => {
   const [isdemoMode, setIsDemoMode] = useState(false);
 
   const showHeroSection =
-    isLoggedIn && Object.values(user)?.length > 0 && !showMoodSelector;
+    isLoggedIn && Object.values(userState)?.length > 0 && !showMoodSelector;
 
   const hasVideo =
     meditationContent &&
@@ -65,7 +69,7 @@ const LandingPage = ({ user, setUserState, isLoggedIn }: LandingPageProps) => {
       <MoodSelector
         setShowMoodSelector={setShowMoodSelector}
         isShowMoodSelector={showMoodSelector}
-        userState={{ ...user }}
+        userState={userState}
         setUserState={setUserState}
         setIsLoading={setIsLoading}
         setIsContinueClicked={setIsContinueClicked}
@@ -92,7 +96,7 @@ const LandingPage = ({ user, setUserState, isLoggedIn }: LandingPageProps) => {
       setIsContinueClicked={setIsContinueClicked}
       showAnimation={showAnimation}
       setIsDemoMode={setIsDemoMode}
-      category={user?.category}
+      category={userState?.category}
       isdemoMode={isdemoMode}
     />
   );
@@ -102,11 +106,11 @@ const LandingPage = ({ user, setUserState, isLoggedIn }: LandingPageProps) => {
   return (
     <div className="landing-page">
       <div className="welcome-text">
-        {showHeroSection && `Welcome ${savedUser?.fullName}`}
+        {showHeroSection && `Welcome ${userState?.fullName}`}
       </div>
 
       <div className="heading">
-        {savedUser && Object.values(user)?.length > 0 ? (
+        {savedUser && Object.values(userState)?.length > 0 ? (
           !showMoodSelector && showHeroSection && renderHeroSection()
         ) : (
           <></>
