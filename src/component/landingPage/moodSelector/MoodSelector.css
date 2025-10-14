@@ -90,14 +90,12 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
-/* ✅ When selected */
 .feeling-item.selected {
   border: 3px solid #fff;
   box-shadow: 0 0 12px rgba(255, 255, 255, 0.8), 0 0 15px rgba(37, 99, 235, 0.6);
   font-weight: bold;
 }
 
-/* Colors by emotion */
 .Joy {
   background: linear-gradient(135deg, #ffd93d, #ffb347);
 }
