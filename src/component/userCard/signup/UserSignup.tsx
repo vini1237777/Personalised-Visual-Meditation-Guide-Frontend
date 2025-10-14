@@ -66,13 +66,6 @@ function UserSignup({
     password: validatePassword,
   };
 
-  // useEffect(() => {
-  //   const savedUser = JSON.parse(localStorage.getItem("user") || "{}");
-  //   if (savedUser && Object.values(userState || {}).length > 0) {
-  //     navigate("/auth/login");
-  //   }
-  // }, [navigate, setIsLoggedIn, userState]);
-
   const validateField = (name: keyof typeof errors, value: string) => {
     const err = validators[name](value);
     setErrors((prev) => ({ ...prev, [name]: err }));
@@ -133,7 +126,7 @@ function UserSignup({
         }
       })
       .catch((err) => {
-        toast.error(err?.message || "Failed to sign up");
+        toast.error("Failed to sign up");
       });
   };
 
@@ -171,7 +164,6 @@ function UserSignup({
 
           return (
             <div className="userCard-button-wrapper" key={constants.id}>
-              {/* ^ added key only, rendering structure unchanged */}
               <div className="userCard-form">
                 <span className="userCard-form-label">{constants.label}</span>
                 <span>
