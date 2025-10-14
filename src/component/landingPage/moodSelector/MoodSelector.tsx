@@ -124,14 +124,9 @@ export default function MoodSelector({
         );
       }
     } catch (err) {
-      console.error(err);
-      // toast.error(
-      //   "Internal Server Error: API quota exceeded for generating video "
-      // );
+      console.error(err, "error");
       toast.error(
-        err instanceof Error
-          ? err.message
-          : "Internal Server Error: API quota exceeded for generating video"
+        "Internal Server Error: API quota exceeded for generating video"
       );
     } finally {
       setIsLoading(false);
