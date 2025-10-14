@@ -96,20 +96,18 @@ export default function MoodSelector({
         throw new Error(`Unexpected status: ${response?.status}`);
       }
 
-     
-
-      const data: any = response?.status === 200 && response.data as {
+      const data = response.data as {
         generatedScripts?: string;
         videoUrl?: string;
         email: string;
         name?: string;
         [k: string]: any;
-      } || {};
+      };
 
       console.log(data, "----------------data");
 
       const hasScript =
-        typeof data?.generatedScripts === "string" &&
+        typeof data.generatedScripts === "string" &&
         data.generatedScripts.trim().length > 0;
       const hasVideo =
         typeof data.videoUrl === "string" && data.videoUrl.trim().length > 0;
