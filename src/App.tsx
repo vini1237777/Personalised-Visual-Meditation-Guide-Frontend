@@ -18,13 +18,6 @@ function App() {
   });
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
-  useEffect(() => {
-    const savedUser = localStorage.getItem("user");
-    if (savedUser) {
-      setUserState(JSON.parse(savedUser));
-    }
-  }, [setUserState]);
-
   return (
     <div className="App">
       <Toaster />
@@ -43,7 +36,7 @@ function App() {
             path="/"
             element={
               <Home
-                setIsLoggedIn
+                setIsLoggedIn={setIsLoggedIn}
                 userState={userState}
                 setUserState={setUserState}
                 isLoggedIn={isLoggedIn}
