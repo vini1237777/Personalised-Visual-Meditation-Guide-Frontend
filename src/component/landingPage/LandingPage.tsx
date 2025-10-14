@@ -99,7 +99,7 @@ const LandingPage = ({ user, setUserState, isLoggedIn }: LandingPageProps) => {
   return (
     <div className="landing-page">
       <div className="welcome-text">
-        {showHeroSection && `Welcome ${savedUser?.fullName}`}
+        {showHeroSection && `Welcome ${user?.fullName}`}
       </div>
 
       <div className="heading">
