@@ -78,6 +78,14 @@ export default function MoodSelector({
     try {
       setIsLoading(true);
 
+      const email = userState?.email;
+      if (!email) {
+        toast.error("User session expired. Please log in again.");
+        setIsLoading(false);
+        setShowMoodSelector(true);
+        return;
+      }
+
       const response = await UserService.getScript({
         selectedFeelings,
         selectedEmojis,
