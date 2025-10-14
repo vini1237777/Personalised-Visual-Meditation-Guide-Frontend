@@ -16,7 +16,6 @@
   background-image: url("../../../assets/images/plant.jpg");
   background-size: cover;
   align-items: flex-end;
-  /* color: white; */
 }
 
 .userLogin-wrapper {
@@ -31,7 +30,6 @@
   font-size: 20px;
   font-weight: bold;
   margin-bottom: 20px;
-  /* color: white; */
 }
 
 .userLogin-form {
@@ -70,16 +68,6 @@
   opacity: 0.3;
 }
 
-/* .userLogin-wrapper {
-  display: flex;
-  margin-top: 10rem;
-  align-items: center;
-  font-size: medium;
-  font-weight: 600;
-  flex-direction: column;
-  justify-content: center;
-} */
-
 .userLoginText {
   text-decoration: underline;
   cursor: pointer;
@@ -104,7 +92,6 @@
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
-  /* margin-left: 90px; */
 }
 
 .userLogin button {
@@ -132,57 +119,38 @@
   gap: 10px;
   margin-left: 80px;
 }
-/* 
-.arrow-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-  font-weight: 200;
-  font-size: 20px;
-}
 
-.arrow-button:hover {
-  transition: ease 0.3s;
-  cursor: pointer;
-} */
-
-/* ✅ Error message text */
 .userLogin-error {
   display: flex;
   margin-top: 4px;
   font-size: 0.85rem;
-  color: #d93025; /* Google-style red */
+  color: #d93025;
   font-weight: 500;
   animation: fadeIn 0.2s ease-in-out;
 }
 
-/* ✅ Error border */
 .userLogin-form-input[aria-invalid="true"] {
   border: 2px solid #d93025;
   box-shadow: 0 0 4px rgba(217, 48, 37, 0.3);
   outline: none;
 }
 
-/* ✅ Valid border */
 .userLogin-form-input.valid {
   border: 2px solid #4caf50;
   box-shadow: 0 0 4px rgba(76, 175, 80, 0.3);
 }
 
-/* ✅ Focus highlight (even before validation) */
 .userLogin-form-input:focus {
-  border: 2px solid #4caf50; /* your theme green */
+  border: 2px solid #4caf50;
   box-shadow: 0 0 6px rgba(76, 175, 80, 0.4);
   outline: none;
   background-color: #ffffff;
 }
 
-/* ✅ Disabled button look */
 .userLogin-button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
-  background: #999; /* make it obvious it's inactive */
+  background: #999;
 }
 
 .userLogin-form-input[aria-invalid="true"] {
