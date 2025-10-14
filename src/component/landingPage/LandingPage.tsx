@@ -65,28 +65,30 @@ const LandingPage = ({
     ));
 
   const renderMoodSelector = () => {
+    const savedUser = localStorage.getItem("user");
 
-      const savedUser = localStorage.getItem("user");
-    <div className="mood-selector-section">
-      <MoodSelector
-        setShowMoodSelector={setShowMoodSelector}
-        isShowMoodSelector={showMoodSelector}
-        userState={savedUser ? JSON.parse(savedUser) : {}}
-        setUserState={setUserState}
-        setIsLoading={setIsLoading}
-        setIsContinueClicked={setIsContinueClicked}
-        setShowAnimation={setShowAnimation}
-        setMeditationContent={(updater: any) => {
-          if (typeof updater === "function") {
-            setMeditationContent((prev) => updater(prev));
-          } else {
-            setMeditationContent((prev) => ({ ...prev, ...updater }));
-          }
-        }}
-        isdemoMode={isdemoMode}
-      />
-    </div>
-  );
+    return (
+      <div className="mood-selector-section">
+        <MoodSelector
+          setShowMoodSelector={setShowMoodSelector}
+          isShowMoodSelector={showMoodSelector}
+          userState={savedUser ? JSON.parse(savedUser) : {}}
+          setUserState={setUserState}
+          setIsLoading={setIsLoading}
+          setIsContinueClicked={setIsContinueClicked}
+          setShowAnimation={setShowAnimation}
+          setMeditationContent={(updater: any) => {
+            if (typeof updater === "function") {
+              setMeditationContent((prev) => updater(prev));
+            } else {
+              setMeditationContent((prev) => ({ ...prev, ...updater }));
+            }
+          }}
+          isdemoMode={isdemoMode}
+        />
+      </div>
+    );
+  };
 
   const renderMeditationPage = () => (
     <MeditationPage
