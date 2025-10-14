@@ -81,7 +81,7 @@ export default function MoodSelector({
       const response = await UserService.getScript({
         selectedFeelings,
         selectedEmojis,
-        email: (userState! && userState.email!) || "",
+        email: userState?.email!,
       });
 
       if (response?.status !== 200) {
@@ -95,6 +95,8 @@ export default function MoodSelector({
         name?: string;
         [k: string]: any;
       };
+
+      console.log(data, "----------------data");
 
       const hasScript =
         typeof data.generatedScripts === "string" &&
