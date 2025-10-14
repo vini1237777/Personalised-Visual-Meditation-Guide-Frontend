@@ -7,16 +7,26 @@ import Contact from "./component/contact/Contact";
 import UserLogin from "./component/userCard/login/UserLogin";
 import UserSignup from "./component/userCard/signup/UserSignup";
 import { Toaster } from "react-hot-toast";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IUser } from "./helpers/interface";
 
 function App() {
-  const [userState, setUserState] = useState<IUser | any>({
-    email: "",
-    password: "",
-    fullName: "",
+  const [userState, setUserState] = useState<IUser | any>(() => {
+    const savedUser = localStorage.getItem("user");
+    return savedUser
+      ? JSON.parse(savedUser)
+      : { email: "", password: "", fullName: "" };
   });
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(!!userState.email);
+
+  useEffect(() => {
+    if (userState) {
+      localStorage.setItem("user", JSON.stringify(userState));
+    } else {
+      localStorage.removeItem("user"); // Clear storage on logout
+    }
+  }, [userState]);
 
   return (
     <div className="App">
