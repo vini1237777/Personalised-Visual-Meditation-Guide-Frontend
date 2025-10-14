@@ -75,20 +75,13 @@ export default function MoodSelector({
       return;
     }
 
-    if (!userState?.email || String(userState.email).trim() === "") {
-      toast.error("Please log in first (email is required).");
-      setIsLoading(false);
-      setShowMoodSelector(true);
-      return;
-    }
-
     try {
       setIsLoading(true);
 
       const response = await UserService.getScript({
         selectedFeelings,
         selectedEmojis,
-        email: (userState && userState.email) || "",
+        email: (userState! && userState.email!) || "",
       });
 
       if (response?.status !== 200) {
