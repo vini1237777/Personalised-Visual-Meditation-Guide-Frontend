@@ -57,9 +57,6 @@ export default function MoodSelector({
   setIsContinueClicked: any;
   setMeditationContent: any;
   setShowAnimation: any;
-  setIsDemoMode: any;
-  showAnimation: boolean;
-  meditationContent: any;
   isdemoMode: boolean;
 }) {
   const [selectedEmojis, setSelectedEmojis] = useState<any[]>([]);
@@ -75,6 +72,13 @@ export default function MoodSelector({
     if (isdemoMode) {
       setIsLoading(false);
       setShowAnimation(false);
+      return;
+    }
+
+    if (!userState?.email || String(userState.email).trim() === "") {
+      toast.error("Please log in first (email is required).");
+      setIsLoading(false);
+      setShowMoodSelector(true);
       return;
     }
 

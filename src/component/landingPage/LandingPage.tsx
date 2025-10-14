@@ -81,9 +81,6 @@ const LandingPage = ({
             setMeditationContent((prev) => ({ ...prev, ...updater }));
           }
         }}
-        setIsDemoMode={setIsDemoMode}
-        showAnimation={showAnimation}
-        meditationContent={meditationContent}
         isdemoMode={isdemoMode}
       />
     </div>
