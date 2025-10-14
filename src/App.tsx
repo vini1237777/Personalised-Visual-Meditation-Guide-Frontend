@@ -7,7 +7,7 @@ import Contact from "./component/contact/Contact";
 import UserLogin from "./component/userCard/login/UserLogin";
 import UserSignup from "./component/userCard/signup/UserSignup";
 import { Toaster } from "react-hot-toast";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IUser } from "./helpers/interface";
 
 function App() {
@@ -17,6 +17,13 @@ function App() {
     fullName: "",
   });
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem("user");
+    if (savedUser) {
+      setUserState(JSON.parse(savedUser));
+    }
+  }, [setUserState]);
 
   return (
     <div className="App">
