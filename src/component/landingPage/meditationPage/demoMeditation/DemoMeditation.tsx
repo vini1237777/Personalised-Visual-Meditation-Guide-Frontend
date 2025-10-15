@@ -2,10 +2,10 @@ import { useEffect, useMemo, useState } from "react";
 import BackButton from "../backbutton/BackButton";
 import "./DemoMeditation.css";
 
-import video_6bzzjltmlliyu from "../../../../assets/videos/6bzzjltmlliyu-download.mp4";
+import video_6bzzjltmlliyu from "../../../../assets/videos/6bzzjltmllyu-download.mp4";
 import video_8a2h0gds3bim from "../../../../assets/videos/8a2h0gds3bim-download.mp4";
 import video_9ojkq72px8eb from "../../../../assets/videos/9ojkq72px8eb-download.mp4";
-import video_ba8kltzwoe56 from "../../../../assets/videos/ba8kltzwoe56-download.mp4";
+import video_ba8kltzwoe56 from "../../../../assets/videos/ba8kltzwoe56_download.mp4";
 import video_il4dw4c9ky03 from "../../../../assets/videos/il4dw4c9ky03-download.mp4";
 import video_qw3zgygxm643 from "../../../../assets/videos/qw3zgygxm643-download.mp4";
 import video_rndu7mv2e554 from "../../../../assets/videos/rndu7mv2e554_download.mp4";
