@@ -36,6 +36,8 @@ function MeditationPage({
     }
   }, [meditationContent]);
 
+  console.log(videoUrl, "...........videoUrl");
+
   if (isdemoMode) {
     return (
       <div className="meditation-page">
