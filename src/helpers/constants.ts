@@ -1,29 +1,19 @@
-// const modules = import.meta.glob("../assets/videos/*.mp4", {
-//   eager: true,
-//   as: "url",
-// });
+const modules = import.meta.glob("../assets/videos/*.mp4", {
+  eager: true,
+  as: "url",
+});
 
-// const allVideoPaths = Object.values(modules);
+const allVideoPaths = Object.values(modules);
 
-const { allVideoPaths, getVideoPathByFilename } = (() => {
-  // The core dynamic loading logic remains the same
-  const modules = import.meta.glob("../assets/videos/*.mp4", {
-    eager: true,
-    as: "url",
-  });
-
-  const paths = Object.values(modules);
-
-  const getPath = (filename: string) => {
-    const path = Object.keys(modules).find((key) => key.endsWith(filename));
-    return path ? modules[path] : undefined;
-  };
-
-  return {
-    allVideoPaths: paths,
-    getVideoPathByFilename: getPath,
-  };
-})();
+const getVideoPathByFilename = (filename: string) => {
+  const keys = Object.keys(modules);
+  for (const key of keys) {
+    if (key.endsWith(filename)) {
+      return modules[key];
+    }
+  }
+  return undefined;
+};
 
 export const navbarLinks = [
   { name: "Home", path: "/" },
