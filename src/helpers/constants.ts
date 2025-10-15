@@ -59,11 +59,11 @@ export const moodVideoMap: Record<
   string[]
 > = {
   Joy: [
-    `https://generativelanguage.googleapis.com/download/v1beta/files/qw3zgygxm643:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
-    `https://generativelanguage.googleapis.com/download/v1beta/files/vgvxaia6vx39:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
+    `https://generativelanguage.googleapis.com/download/v1beta/files/wehiywpzxuqf:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
+    `https://generativelanguage.googleapis.com/download/v1beta/files/hlbsmax6krdl:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
   ],
   Sadness: [
-    `https://generativelanguage.googleapis.com/download/v1beta/files/tiebtjrkou6m:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
+    `https://generativelanguage.googleapis.com/download/v1beta/files/ujgur6int7lq:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
     `https://generativelanguage.googleapis.com/download/v1beta/files/ve35tz082w2w:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
   ],
   Anger: [
@@ -93,9 +93,9 @@ export const moodVideoMap: Record<
 };
 
 export const defaultMeditationVideoUrls: string[] = [
-  `https://generativelanguage.googleapis.com/download/v1beta/files/qw3zgygxm643:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
-  `https://generativelanguage.googleapis.com/download/v1beta/files/vgvxaia6vx39:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
-  `https://generativelanguage.googleapis.com/download/v1beta/files/tiebtjrkou6m:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
+  `https://generativelanguage.googleapis.com/download/v1beta/files/wehiywpzxuqf:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
+  `https://generativelanguage.googleapis.com/download/v1beta/files/hlbsmax6krdl:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
+  `https://generativelanguage.googleapis.com/download/v1beta/files/ujgur6int7lq:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
   `https://generativelanguage.googleapis.com/download/v1beta/files/ve35tz082w2w:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
   `https://generativelanguage.googleapis.com/download/v1beta/files/98r5v9ejh5kj:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
   `https://generativelanguage.googleapis.com/download/v1beta/files/y99bhu1xyg2a:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
