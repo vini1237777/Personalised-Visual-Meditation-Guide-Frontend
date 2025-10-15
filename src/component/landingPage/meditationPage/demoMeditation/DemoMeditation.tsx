@@ -19,28 +19,39 @@ export default function DemoMeditation({
   setIsDemoMode,
 }: DemoMeditationProps) {
   const [videoUrl, setVideoUrl] = useState<string>("");
+  const [errorCount, setErrorCount] = useState(0);
 
   const initialUrl = useMemo(() => pickFromMood(category), [category]);
 
   useEffect(() => {
     setVideoUrl(initialUrl);
+    setErrorCount(0);
   }, [initialUrl]);
 
   const handleError = () => {
-    const next = pickFromMood(category);
-    if (next === videoUrl && defaultMeditationVideoUrls.length > 1) {
-      const alt = pickRandom(
-        defaultMeditationVideoUrls.filter((u) => u !== videoUrl)
-      );
-      setVideoUrl(alt);
-    } else {
+    if (errorCount >= 3) {
+      setVideoUrl("");
+      return;
+    }
+
+    setErrorCount((prev) => prev + 1);
+
+    const availableVideos = defaultMeditationVideoUrls.filter(
+      (url) => url !== videoUrl
+    );
+
+    if (availableVideos.length > 0) {
+      const next = pickRandom(availableVideos);
       setVideoUrl(next);
+    } else {
+      setVideoUrl("");
     }
   };
 
   const shuffle = () => {
     const next = pickFromMood(category);
     setVideoUrl(next);
+    setErrorCount(0);
   };
 
   return (
@@ -50,7 +61,6 @@ export default function DemoMeditation({
           <BackButton
             label=" Back to Mood Selector"
             setShowMoodSelector={setShowMoodSelector}
-            // setIsMeditateBackButtonClicked={setIsMeditateBackButtonClicked}
             setIsContinueClicked={setIsContinueClicked}
             setIsDemoMode={setIsDemoMode}
           />
