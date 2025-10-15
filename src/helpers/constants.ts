@@ -1,21 +1,14 @@
-const VIDEO_BASE_PATH = "../../assets/videos/";
+const modules = import.meta.glob("../assets/videos/*.mp4", {
+  eager: true,
+  as: "url",
+});
 
-const allVideoFileNames = [
-  "6bzzjltmlliyu-download.mp4",
-  "8a2h0gds3bim-download.mp4",
-  "9ojkq72px8eb-download.mp4",
-  "ba8kltzwoe56-download.mp4",
-  "il4dw4c9ky03-download.mp4",
-  "qw3zgygxm643-download.mp4",
-  "rndu7mv2e554_download.mp4",
-  "u9jcwe1twnnu-download.mp4",
-  "ve35tz082w2w-download.mp4",
-  "hwkqv195ifli-download.mp4",
-];
+const allVideoPaths = Object.values(modules);
 
-const allVideoPaths = allVideoFileNames.map(
-  (fileName) => `${VIDEO_BASE_PATH}${fileName}`
-);
+const getVideoPathByFilename = (filename: string) => {
+  const path = Object.keys(modules).find((key) => key.endsWith(filename));
+  return path ? modules[path] : undefined;
+};
 
 export const navbarLinks = [
   { name: "Home", path: "/" },
@@ -61,36 +54,53 @@ export const herosectionText = [
     title: "Click here! Share your mood with us! Let's go...",
   },
 ];
-export const moodVideoMap: Record<
-  | "Joy"
-  | "Sadness"
-  | "Anger"
-  | "Calmness"
-  | "Fear"
-  | "Love"
-  | "Tiredness"
-  | "Surprise"
-  | any,
-  string[]
-> = {
-  Joy: [allVideoPaths[0], allVideoPaths[1]],
-  Sadness: [allVideoPaths[2], allVideoPaths[3]],
-  Anger: [allVideoPaths[4], allVideoPaths[8]],
-  Calmness: [allVideoPaths[5], allVideoPaths[6]],
-  Fear: [allVideoPaths[7], allVideoPaths[0]],
-  Love: [allVideoPaths[1], allVideoPaths[2]],
-  Tiredness: [allVideoPaths[3], allVideoPaths[4]],
-  Surprise: [allVideoPaths[5], allVideoPaths[6]],
+
+export const moodVideoMap: any = {
+  Joy: [
+    getVideoPathByFilename("6bzzjltmlliyu-download.mp4"),
+    getVideoPathByFilename("8a2h0gds3bim-download.mp4"),
+  ],
+  Sadness: [
+    getVideoPathByFilename("9ojkq72px8eb-download.mp4"),
+    getVideoPathByFilename("ba8kltzwoe56-download.mp4"),
+  ],
+  Anger: [
+    getVideoPathByFilename("il4dw4c9ky03-download.mp4"),
+    getVideoPathByFilename("ve35tz082w2w-download.mp4"),
+  ],
+  Calmness: [
+    getVideoPathByFilename("qw3zgygxm643-download.mp4"),
+    getVideoPathByFilename("rndu7mv2e554_download.mp4"),
+  ],
+  Fear: [
+    getVideoPathByFilename("u9jcwe1twnnu-download.mp4"),
+    getVideoPathByFilename("6bzzjltmlliyu-download.mp4"),
+  ],
+  Love: [
+    getVideoPathByFilename("8a2h0gds3bim-download.mp4"),
+    getVideoPathByFilename("9ojkq72px8eb-download.mp4"),
+  ],
+  Tiredness: [
+    getVideoPathByFilename("ba8kltzwoe56-download.mp4"),
+    getVideoPathByFilename("il4dw4c9ky03-download.mp4"),
+  ],
+  Surprise: [
+    getVideoPathByFilename("qw3zgygxm643-download.mp4"),
+    getVideoPathByFilename("rndu7mv2e554_download.mp4"),
+  ],
 };
 
-export const defaultMeditationVideoUrls: string[] = allVideoPaths;
+export const defaultMeditationVideoUrls = allVideoPaths;
 
-export const pickRandom = <T>(arr: T[]): T =>
+export const pickRandom = (arr: any) =>
   arr[Math.floor(Math.random() * arr.length)];
 
-export function pickFromMood(category?: keyof typeof moodVideoMap) {
+export function pickFromMood(category: any) {
   if (category && moodVideoMap[category]?.length) {
-    return pickRandom(moodVideoMap[category]);
+    const validVideos = moodVideoMap[category].filter((url: string) => url);
+    if (validVideos.length) {
+      return pickRandom(validVideos);
+    }
   }
   return pickRandom(defaultMeditationVideoUrls);
 }
