@@ -1,3 +1,21 @@
+const VIDEO_BASE_PATH = "../../assets/videos/";
+
+const allVideoFileNames = [
+  "6bzzjltmlliyu-download.mp4",
+  "8a2h0gds3bim-download.mp4",
+  "9ojkq72px8eb-download.mp4",
+  "ba8kltzwoe56-download.mp4",
+  "il4dw4c9ky03-download.mp4",
+  "qw3zgygxm643-download.mp4",
+  "rndu7mv2e554_download.mp4",
+  "u9jcwe1twnnu-download.mp4",
+  "ve35tz082w2w-download.mp4",
+];
+
+const allVideoPaths = allVideoFileNames.map(
+  (fileName) => `${VIDEO_BASE_PATH}${fileName}`
+);
+
 export const navbarLinks = [
   { name: "Home", path: "/" },
   { name: "About", path: "/about" },
@@ -42,10 +60,6 @@ export const herosectionText = [
     title: "Click here! Share your mood with us! Let's go...",
   },
 ];
-
-// ✅ Royalty-free MP4s (Pixabay). These links stream in <video>.
-// License summary: free for commercial/non-commercial use with some restrictions.
-
 export const moodVideoMap: Record<
   | "Joy"
   | "Sadness"
@@ -58,48 +72,17 @@ export const moodVideoMap: Record<
   | any,
   string[]
 > = {
-  Joy: [
-    `https://generativelanguage.googleapis.com/download/v1beta/files/wehiywpzxuqf:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
-    `https://generativelanguage.googleapis.com/download/v1beta/files/hlbsmax6krdl:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
-  ],
-  Sadness: [
-    `https://generativelanguage.googleapis.com/download/v1beta/files/ujgur6int7lq:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
-    `https://generativelanguage.googleapis.com/download/v1beta/files/0lcj21c05mgb:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
-  ],
-  Anger: [
-    `https://generativelanguage.googleapis.com/download/v1beta/files/2pbfkereuis1:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
-    `https://generativelanguage.googleapis.com/download/v1beta/files/ve35tz082w2w:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
-  ],
-  Calmness: [
-    `https://generativelanguage.googleapis.com/download/v1beta/files/y99bhu1xyg2a:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
-    `https://generativelanguage.googleapis.com/download/v1beta/files/y99bhu1xyg2a:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
-  ],
-  Fear: [
-    `https://generativelanguage.googleapis.com/download/v1beta/files/y99bhu1xyg2a:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
-    `https://generativelanguage.googleapis.com/download/v1beta/files/y99bhu1xyg2a:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
-  ],
-  Love: [
-    `https://generativelanguage.googleapis.com/download/v1beta/files/y99bhu1xyg2a:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
-    `https://generativelanguage.googleapis.com/download/v1beta/files/y99bhu1xyg2a:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
-  ],
-  Tiredness: [
-    `https://generativelanguage.googleapis.com/download/v1beta/files/y99bhu1xyg2a:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
-    `https://generativelanguage.googleapis.com/download/v1beta/files/y99bhu1xyg2a:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
-  ],
-  Surprise: [
-    `https://generativelanguage.googleapis.com/download/v1beta/files/y99bhu1xyg2a:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
-    `https://generativelanguage.googleapis.com/download/v1beta/files/y99bhu1xyg2a:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
-  ],
+  Joy: [allVideoPaths[0], allVideoPaths[1]],
+  Sadness: [allVideoPaths[2], allVideoPaths[3]],
+  Anger: [allVideoPaths[4], allVideoPaths[8]],
+  Calmness: [allVideoPaths[5], allVideoPaths[6]],
+  Fear: [allVideoPaths[7], allVideoPaths[0]],
+  Love: [allVideoPaths[1], allVideoPaths[2]],
+  Tiredness: [allVideoPaths[3], allVideoPaths[4]],
+  Surprise: [allVideoPaths[5], allVideoPaths[6]],
 };
 
-export const defaultMeditationVideoUrls: string[] = [
-  `https://generativelanguage.googleapis.com/download/v1beta/files/wehiywpzxuqf:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
-  `https://generativelanguage.googleapis.com/download/v1beta/files/hlbsmax6krdl:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
-  `https://generativelanguage.googleapis.com/download/v1beta/files/ujgur6int7lq:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
-  `https://generativelanguage.googleapis.com/download/v1beta/files/ve35tz082w2w:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
-  `https://generativelanguage.googleapis.com/download/v1beta/files/98r5v9ejh5kj:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
-  `https://generativelanguage.googleapis.com/download/v1beta/files/y99bhu1xyg2a:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
-];
+export const defaultMeditationVideoUrls: string[] = allVideoPaths;
 
 export const pickRandom = <T>(arr: T[]): T =>
   arr[Math.floor(Math.random() * arr.length)];

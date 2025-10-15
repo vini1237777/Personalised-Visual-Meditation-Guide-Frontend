@@ -37,4 +37,11 @@ export class UserService {
     };
     return makeRequest(url.getScript, "POST", payload);
   }
+  static async getDemoVideo(category: string[]) {
+    const categoryQuery = category.join(",");
+    const queryParams = {
+      category: categoryQuery,
+    };
+    return makeRequest(url.getDemoVideo, "GET", queryParams);
+  }
 }
