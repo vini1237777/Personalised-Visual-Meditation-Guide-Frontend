@@ -64,10 +64,10 @@ export const moodVideoMap: Record<
   ],
   Sadness: [
     `https://generativelanguage.googleapis.com/download/v1beta/files/ujgur6int7lq:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
-    `https://generativelanguage.googleapis.com/download/v1beta/files/ve35tz082w2w:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
+    `https://generativelanguage.googleapis.com/download/v1beta/files/0lcj21c05mgb:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
   ],
   Anger: [
-    `https://generativelanguage.googleapis.com/download/v1beta/files/98r5v9ejh5kj:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
+    `https://generativelanguage.googleapis.com/download/v1beta/files/2pbfkereuis1:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
     `https://generativelanguage.googleapis.com/download/v1beta/files/ve35tz082w2w:download?alt=media&key=${process.env.GEMINI_API_KEY}`,
   ],
   Calmness: [
