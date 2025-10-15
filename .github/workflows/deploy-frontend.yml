@@ -48,7 +48,7 @@ jobs:
       - name: Build frontend
         run: |
           npm install --save-dev ajv@^7
-          CI=false npm run build
+          npm run build
 
       - name: Deploy frontend to Nginx
         run: |
