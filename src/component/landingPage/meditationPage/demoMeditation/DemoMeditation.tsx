@@ -76,7 +76,6 @@ export default function DemoMeditation({
           onError={handleError}
         >
           <source src={videoUrl} type="video/mp4" />
-          Your browser does not support the video tag.
         </video>
       </div>
 
