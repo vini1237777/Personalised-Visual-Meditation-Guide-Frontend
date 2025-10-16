@@ -81,10 +81,13 @@ export default function MoodSelector({
     try {
       setIsLoading(true);
 
+      const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
+      const userEmail = userState?.email || storedUser.email;
+
       const response = await UserService.getScript({
         selectedFeelings,
         selectedEmojis,
-        email: userState?.email,
+        email: userEmail,
       });
 
       if (response?.status !== 200) {
