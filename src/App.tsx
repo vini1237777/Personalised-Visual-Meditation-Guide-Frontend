@@ -17,7 +17,7 @@ function App() {
   //   fullName: "",
   // });
 
-  const [userState, setUserState] = useState<IUser>(() =>
+  const [userState, setUserState] = useState<IUser | any>(() =>
     JSON.parse(localStorage.getItem("user") || "{}")
   );
 
