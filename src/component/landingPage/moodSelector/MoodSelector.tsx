@@ -78,16 +78,15 @@ export default function MoodSelector({
       return;
     }
 
+    const savedUser = JSON.parse(localStorage.getItem("user") || "{}");
+
     try {
       setIsLoading(true);
-
-      const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
-      const userEmail = userState?.email || storedUser.email;
 
       const response = await UserService.getScript({
         selectedFeelings,
         selectedEmojis,
-        email: userEmail,
+        email: userState?.email || savedUser?.email,
       });
 
       if (response?.status !== 200) {
@@ -122,43 +121,13 @@ export default function MoodSelector({
           script: data.generatedScripts,
           videoUrl: data.videoUrl,
         }));
-      } else {
-        throw new Error(
-          "Malformed response from server (missing script or videoUrl)."
-        );
       }
     } catch (err: any) {
-      let errorMessage =
-        "An unexpected error occurred. Please try again later.";
-      let errorData = err.response?.data || {};
-
-      if (
-        err.response?.status === 429 ||
-        errorData.errorType === "API_QUOTA_EXCEEDED"
-      ) {
-        errorMessage = "API Quota Exceeded. Please try again tomorrow.";
-      } else if (
-        err.response?.status === 504 ||
-        errorData.errorType === "DEPLOYMENT_TIMEOUT"
-      ) {
-        errorMessage =
-          "Server Timeout. Video generation took too long. Please try again.";
-      } else if (
-        err.response?.status === 400 &&
-        errorData.message.includes("Email is required")
-      ) {
-        errorMessage =
-          "Could not confirm user identity. Please relog and try again.";
-      } else if (err.message) {
-        errorMessage = err.message;
-      }
-
-      toast.error(errorMessage);
-      // toast.error(
-      //   err instanceof Error
-      //     ? err.message
-      //     : "Internal Server Error: API quota exceeded for generating video"
-      // );
+      toast.error(
+        err instanceof Error
+          ? err.message
+          : "Internal Server Error: API quota exceeded for generating video"
+      );
     } finally {
       setIsLoading(false);
       setTimeout(() => setShowAnimation(true), 0);
