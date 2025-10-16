@@ -78,6 +78,9 @@ const LandingPage = ({ user, setUserState, isLoggedIn }: LandingPageProps) => {
           }
         }}
         isdemoMode={isdemoMode}
+        setIsDemoMode={setIsDemoMode}
+        showAnimation={showAnimation}
+        meditationContent={meditationContent}
       />
     </div>
   );
@@ -99,7 +102,7 @@ const LandingPage = ({ user, setUserState, isLoggedIn }: LandingPageProps) => {
   return (
     <div className="landing-page">
       <div className="welcome-text">
-        {showHeroSection && `Welcome ${user?.fullName}`}
+        {showHeroSection && `Welcome ${user?.fullName || savedUser?.fullName}`}
       </div>
 
       <div className="heading">
