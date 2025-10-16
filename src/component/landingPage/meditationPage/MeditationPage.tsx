@@ -21,7 +21,6 @@ const renderDemoMeditationPage = (
 function MeditationPage({
   meditationContent,
   setShowMoodSelector,
-  // setIsMeditateBackButtonClicked,
   setIsContinueClicked,
   showAnimation,
   setIsDemoMode,
