@@ -78,62 +78,76 @@ export default function MoodSelector({
       return;
     }
 
+    const userEmail = userState?.email;
+
+    if (!userEmail) {
+      setIsLoading(false);
+      toast.error("User email not found. Please log in again.");
+      return;
+    }
+
     try {
       setIsLoading(true);
 
       const response = await UserService.getScript({
         selectedFeelings,
         selectedEmojis,
-        email: userState?.email,
+        email: userEmail,
       });
 
-      if (response?.status !== 200) {
-        throw new Error(`Unexpected status: ${response?.status}`);
+      if (response?.status !== 202) {
+        throw new Error(
+          `Unexpected server response status: ${response?.status}`
+        );
       }
 
       const data = response.data as {
-        generatedScripts?: string;
-        videoUrl?: string;
-        email?: string;
-        name?: string;
+        generatedScripts: string;
+        operationId: string;
         [k: string]: any;
       };
 
-      const hasScript =
-        typeof data.generatedScripts === "string" &&
-        data.generatedScripts.trim().length > 0;
-      const hasVideo =
-        typeof data.videoUrl === "string" && data.videoUrl.trim().length > 0;
-
-      if (hasScript && hasVideo) {
-        toast.success("Successfully generated meditation script");
-
-        setUserState((prev: any) => ({
-          ...prev,
-          email: data.email ?? prev.email,
-          fullName: data.fullName ?? prev.fullName,
-        }));
-
-        setMeditationContent((prev: any) => ({
-          ...prev,
-          script: data.generatedScripts,
-          videoUrl: data.videoUrl,
-        }));
-      } else {
-        throw new Error(
-          "Malformed response from server (missing script or videoUrl)."
+      if (data.generatedScripts && data.operationId) {
+        toast.success(
+          "Meditation script generated. Starting video animation..."
         );
+
+        setMeditationContent({
+          generatedScripts: data.generatedScripts,
+          operationId: data.operationId,
+        });
+      } else {
+        throw new Error("Malformed job initiation response from server.");
       }
-    } catch (err) {
-      console.error(err);
-      // toast.error(
-      //   "Internal Server Error: API quota exceeded for generating video "
-      // );
-      toast.error(
-        err instanceof Error
-          ? err.message
-          : "Internal Server Error: API quota exceeded for generating video"
-      );
+    } catch (err: any) {
+      console.error("Video Generation Error:", err);
+
+      let errorMessage =
+        "An unexpected error occurred. Please try again later.";
+      let errorData = err.response?.data || {};
+
+      if (
+        err.response?.status === 429 ||
+        errorData.errorType === "API_QUOTA_EXCEEDED"
+      ) {
+        errorMessage = "API Quota Exceeded. Please try again tomorrow.";
+      } else if (
+        err.response?.status === 504 ||
+        errorData.errorType === "DEPLOYMENT_TIMEOUT"
+      ) {
+        errorMessage =
+          "Server Timeout. Video generation took too long. Please try again.";
+      } else if (
+        err.response?.status === 400 &&
+        errorData.message.includes("Email is required")
+      ) {
+        errorMessage =
+          "Could not confirm user identity. Please relog and try again.";
+      } else if (err.message) {
+        errorMessage = err.message;
+      }
+
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
       setTimeout(() => setShowAnimation(true), 0);
