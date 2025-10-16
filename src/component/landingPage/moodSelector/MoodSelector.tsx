@@ -57,6 +57,9 @@ export default function MoodSelector({
   setIsContinueClicked: any;
   setMeditationContent: any;
   setShowAnimation: any;
+  setIsDemoMode: any;
+  showAnimation: boolean;
+  meditationContent: any;
   isdemoMode: boolean;
 }) {
   const [selectedEmojis, setSelectedEmojis] = useState<any[]>([]);
@@ -78,18 +81,10 @@ export default function MoodSelector({
     try {
       setIsLoading(true);
 
-      const email = userState?.email;
-      if (!email) {
-        toast.error("User session expired. Please log in again.");
-        setIsLoading(false);
-        setShowMoodSelector(true);
-        return;
-      }
-
       const response = await UserService.getScript({
         selectedFeelings,
         selectedEmojis,
-        email: userState?.email!,
+        email: userState?.email,
       });
 
       if (response?.status !== 200) {
@@ -99,12 +94,10 @@ export default function MoodSelector({
       const data = response.data as {
         generatedScripts?: string;
         videoUrl?: string;
-        email: string;
+        email?: string;
         name?: string;
         [k: string]: any;
       };
-
-      console.log(data, "----------------data");
 
       const hasScript =
         typeof data.generatedScripts === "string" &&
@@ -132,9 +125,14 @@ export default function MoodSelector({
         );
       }
     } catch (err) {
-      console.error(err, "error");
+      console.error(err);
+      // toast.error(
+      //   "Internal Server Error: API quota exceeded for generating video "
+      // );
       toast.error(
-        "Internal Server Error: API quota exceeded for generating video"
+        err instanceof Error
+          ? err.message
+          : "Internal Server Error: API quota exceeded for generating video"
       );
     } finally {
       setIsLoading(false);

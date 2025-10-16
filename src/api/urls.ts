@@ -10,7 +10,6 @@ const url = {
   verifyEmail: "/api/auth/verify-email",
   sendVerificationEmail: "/api/auth/send-verification-email",
   getScript: "/api/script/post",
-  getDemoVideo: "/api/video/stream?category=",
 };
 
 export default url;
