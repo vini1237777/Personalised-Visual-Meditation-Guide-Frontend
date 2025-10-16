@@ -78,50 +78,53 @@ export default function MoodSelector({
       return;
     }
 
-    const userEmail = userState?.email;
-
-    if (!userEmail) {
-      setIsLoading(false);
-      toast.error("User email not found. Please log in again.");
-      return;
-    }
-
     try {
       setIsLoading(true);
 
       const response = await UserService.getScript({
         selectedFeelings,
         selectedEmojis,
-        email: userEmail,
+        email: userState?.email,
       });
 
-      if (response?.status !== 202) {
-        throw new Error(
-          `Unexpected server response status: ${response?.status}`
-        );
+      if (response?.status !== 200) {
+        throw new Error(`Unexpected status: ${response?.status}`);
       }
 
       const data = response.data as {
-        generatedScripts: string;
-        operationId: string;
+        generatedScripts?: string;
+        videoUrl?: string;
+        email?: string;
+        name?: string;
         [k: string]: any;
       };
 
-      if (data.generatedScripts && data.operationId) {
-        toast.success(
-          "Meditation script generated. Starting video animation..."
-        );
+      const hasScript =
+        typeof data.generatedScripts === "string" &&
+        data.generatedScripts.trim().length > 0;
+      const hasVideo =
+        typeof data.videoUrl === "string" && data.videoUrl.trim().length > 0;
 
-        setMeditationContent({
-          generatedScripts: data.generatedScripts,
-          operationId: data.operationId,
-        });
+      if (hasScript && hasVideo) {
+        toast.success("Successfully generated meditation script");
+
+        setUserState((prev: any) => ({
+          ...prev,
+          email: data.email ?? prev.email,
+          fullName: data.fullName ?? prev.fullName,
+        }));
+
+        setMeditationContent((prev: any) => ({
+          ...prev,
+          script: data.generatedScripts,
+          videoUrl: data.videoUrl,
+        }));
       } else {
-        throw new Error("Malformed job initiation response from server.");
+        throw new Error(
+          "Malformed response from server (missing script or videoUrl)."
+        );
       }
     } catch (err: any) {
-      console.error("Video Generation Error:", err);
-
       let errorMessage =
         "An unexpected error occurred. Please try again later.";
       let errorData = err.response?.data || {};
@@ -148,6 +151,11 @@ export default function MoodSelector({
       }
 
       toast.error(errorMessage);
+      // toast.error(
+      //   err instanceof Error
+      //     ? err.message
+      //     : "Internal Server Error: API quota exceeded for generating video"
+      // );
     } finally {
       setIsLoading(false);
       setTimeout(() => setShowAnimation(true), 0);
