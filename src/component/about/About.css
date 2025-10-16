@@ -1,12 +1,12 @@
 .about-wrapper {
   text-align: center;
   background-image: url("../../assets//images/visualMeditation.png");
-  height: 89vh;
+  height: 100vh;
   background-size: contain;
-  width: 50vw;
+  width: 60vw;
   display: flex;
   position: relative;
-  top: 40px;
+  top: 100px;
 }
 
 .about {
@@ -74,7 +74,7 @@
 
 .about-content-item-wrapper {
   display: flex;
-  margin-top: 50px;
+  margin-top: 110px;
   flex-direction: column;
   color: rgb(205, 152, 129);
 }
