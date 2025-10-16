@@ -11,11 +11,15 @@ import { useEffect, useState } from "react";
 import { IUser } from "./helpers/interface";
 
 function App() {
-  const [userState, setUserState] = useState<IUser | any>({
-    email: "",
-    password: "",
-    fullName: "",
-  });
+  // const [userState, setUserState] = useState<IUser | any>({
+  //   email: "",
+  //   password: "",
+  //   fullName: "",
+  // });
+
+  const [userState, setUserState] = useState(() =>
+    JSON.parse(localStorage.getItem("user") || "{}")
+  );
 
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(!!userState.email);
 
