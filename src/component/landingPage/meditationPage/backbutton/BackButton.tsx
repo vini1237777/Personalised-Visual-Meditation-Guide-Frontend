@@ -19,7 +19,6 @@ export default function BackButton({
     <button
       onClick={() => {
         setShowMoodSelector(true);
-        // setIsMeditateBackButtonClicked(true);
         setIsContinueClicked(false);
         setIsDemoMode(false);
         setVideoUrl && setVideoUrl("");
