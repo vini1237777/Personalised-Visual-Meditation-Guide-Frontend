@@ -73,6 +73,8 @@ export default function MoodSelector({
     setShowMoodSelector(false);
 
     if (isdemoMode) {
+      setIsLoading(true);
+      await new Promise((r) => setTimeout(r, 10000));
       setIsLoading(false);
       setShowAnimation(false);
       return;
@@ -80,13 +82,23 @@ export default function MoodSelector({
 
     const savedUser = JSON.parse(localStorage.getItem("user") || "{}");
 
+    const email = userState?.email || savedUser?.email;
+
+    if (!email) {
+      toast.error("Please log in again — email is required.");
+      setIsLoading(false);
+      setShowAnimation(false);
+      return;
+    }
+
     try {
       setIsLoading(true);
+      await new Promise((r) => setTimeout(r, 10000));
 
       const response = await UserService.getScript({
         selectedFeelings,
         selectedEmojis,
-        email: userState?.email || savedUser?.email,
+        email,
       });
 
       if (response?.status !== 200) {

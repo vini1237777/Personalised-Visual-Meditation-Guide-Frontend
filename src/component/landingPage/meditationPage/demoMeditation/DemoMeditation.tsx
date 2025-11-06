@@ -11,6 +11,7 @@ import video_qw3zgygxm643 from "../../../../assets/videos/qw3zgygxm643-download.
 import video_rndu7mv2e554 from "../../../../assets/videos/rndu7mv2e554_download.mp4";
 import video_u9jcwe1twnnu from "../../../../assets/videos/u9jcwe1twnnu-download.mp4";
 import video_ve35tz082w2w from "../../../../assets/videos/ve35tz082w2w-download.mp4";
+import { BreathingPanda } from "../BreathingPanda/BreathingPanda";
 
 const allVideoPaths = [
   video_6bzzjltmlliyu,
@@ -60,6 +61,7 @@ type DemoMeditationProps = {
   setShowMoodSelector: any;
   setIsContinueClicked: any;
   setIsDemoMode: any;
+  isLoading: boolean;
 };
 
 export default function DemoMeditation({
@@ -71,6 +73,7 @@ export default function DemoMeditation({
   setShowMoodSelector,
   setIsContinueClicked,
   setIsDemoMode,
+  isLoading,
 }: DemoMeditationProps) {
   const [videoUrl, setVideoUrl] = useState<string>("");
   const [errorCount, setErrorCount] = useState(0);
@@ -113,7 +116,7 @@ export default function DemoMeditation({
   return (
     <div className={className ?? "meditation-page"}>
       <div className="meditation-video-container">
-        {showBackButton && (
+        {!isLoading && showBackButton && (
           <BackButton
             label=" Back to Mood Selector"
             setShowMoodSelector={setShowMoodSelector}
@@ -122,18 +125,21 @@ export default function DemoMeditation({
           />
         )}
         <h2>🌸 Your Relaxing Guide (Demo)</h2>
-
-        <video
-          key={videoUrl}
-          width={width}
-          height={height}
-          controls
-          preload="metadata"
-          onError={handleError}
-        >
-          <source src={videoUrl} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
+        {!isLoading ? (
+          <video
+            key={videoUrl}
+            width={width}
+            height={height}
+            onError={handleError}
+            controls
+            preload="metadata"
+          >
+            <source src={videoUrl} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        ) : (
+          <BreathingPanda />
+        )}
       </div>
 
       <div style={{ marginTop: 12 }}>

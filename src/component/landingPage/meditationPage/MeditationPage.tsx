@@ -8,13 +8,15 @@ const renderDemoMeditationPage = (
   category: any,
   setShowMoodSelector: any,
   setIsContinueClicked: any,
-  setIsDemoMode: any
+  setIsDemoMode: any,
+  isLoading: boolean
 ) => (
   <DemoMeditation
     category={category}
     setShowMoodSelector={setShowMoodSelector}
     setIsContinueClicked={setIsContinueClicked}
     setIsDemoMode={setIsDemoMode}
+    isLoading={isLoading}
   />
 );
 
@@ -26,6 +28,7 @@ function MeditationPage({
   setIsDemoMode,
   category,
   isdemoMode,
+  isLoading,
 }: any) {
   const [videoUrl, setVideoUrl] = useState<string>("");
 
@@ -49,7 +52,8 @@ function MeditationPage({
           category,
           setShowMoodSelector,
           setIsContinueClicked,
-          setIsDemoMode
+          setIsDemoMode,
+          isLoading
         )}
       </div>
     );

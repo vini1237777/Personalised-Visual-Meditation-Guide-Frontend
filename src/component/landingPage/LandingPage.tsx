@@ -94,15 +94,21 @@ const LandingPage = ({ user, setUserState, isLoggedIn }: LandingPageProps) => {
       setIsDemoMode={setIsDemoMode}
       category={user?.category}
       isdemoMode={isdemoMode}
+      isLoading={isLoading}
     />
   );
 
   const savedUser = JSON.parse(localStorage.getItem("user") || "{}");
 
+  const displayName = (user?.fullName || savedUser?.fullName || "")
+    .toString()
+    .trim();
+
   return (
     <div className="landing-page">
       <div className="welcome-text">
-        {showHeroSection && `Welcome ${user?.fullName || savedUser?.fullName}`}
+        {showHeroSection &&
+          (displayName ? `Welcome ${displayName}` : "Welcome")}
       </div>
 
       <div className="heading">
