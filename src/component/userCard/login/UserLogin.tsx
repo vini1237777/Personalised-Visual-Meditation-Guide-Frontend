@@ -112,11 +112,17 @@ function UserLogin({
       .then((res: any) => {
         if (res.status === 200) {
           toast.success("Successfully logged in");
+          const safeUser: Partial<IUser> = {
+            email: res?.data?.email ?? userState?.email,
+            fullName:
+              res?.data?.fullName ?? res?.data?.name ?? userState?.fullName,
+          };
           setUserState((prev: IUser) => ({
             ...prev,
-            ...res?.data,
+            ...safeUser,
+            password: "",
           }));
-
+          localStorage.setItem("user", JSON.stringify(safeUser));
           setIsLoggedIn(true);
         }
       })
