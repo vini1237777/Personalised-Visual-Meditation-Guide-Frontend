@@ -116,14 +116,6 @@ export default function DemoMeditation({
   return (
     <div className={className ?? "meditation-page"}>
       <div className="meditation-video-container">
-        {!isLoading && showBackButton && (
-          <BackButton
-            label=" Back to Mood Selector"
-            setShowMoodSelector={setShowMoodSelector}
-            setIsContinueClicked={setIsContinueClicked}
-            setIsDemoMode={setIsDemoMode}
-          />
-        )}
         <h2>🌸 Your Relaxing Guide (Demo)</h2>
         {!isLoading ? (
           <video
