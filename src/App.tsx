@@ -15,6 +15,7 @@ function App() {
     email: "",
     password: "",
     fullName: "",
+    confirmPassword: "",
   });
 
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(!!userState.email);
