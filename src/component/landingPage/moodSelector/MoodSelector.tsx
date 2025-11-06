@@ -68,17 +68,6 @@ export default function MoodSelector({
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const handleContinue = async () => {
-    const savedUser = JSON.parse(localStorage.getItem("user") || "{}");
-
-    const email = userState?.email || savedUser?.email;
-
-    if (!email) {
-      toast.error("Please log in again — email is required.");
-      setIsLoading(false);
-      setShowAnimation(false);
-      return;
-    }
-
     setIsContinueClicked(true);
     setIsLoading(true);
     setShowMoodSelector(false);
@@ -86,6 +75,17 @@ export default function MoodSelector({
     if (isdemoMode) {
       setIsLoading(true);
       await new Promise((r) => setTimeout(r, 10000));
+      setIsLoading(false);
+      setShowAnimation(false);
+      return;
+    }
+
+    const savedUser = JSON.parse(localStorage.getItem("user") || "{}");
+
+    const email = userState?.email || savedUser?.email;
+
+    if (!email) {
+      toast.error("Please log in again — email is required.");
       setIsLoading(false);
       setShowAnimation(false);
       return;
