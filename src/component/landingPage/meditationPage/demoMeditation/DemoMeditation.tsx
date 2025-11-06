@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import BackButton from "../backbutton/BackButton";
 import "./DemoMeditation.css";
 
 import video_6bzzjltmlliyu from "../../../../assets/videos/6bzzjltmllyu-download.mp4";
