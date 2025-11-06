@@ -148,7 +148,11 @@ function UserSignup({
       return;
     }
 
-    await UserService.register({ ...userState })
+    await UserService.register({
+      fullName: userState.fullName,
+      email: userState.email,
+      password: userState.password,
+    })
       .then((res: any) => {
         if (res.status === 201) {
           setUserState((prev: IUser) => ({ ...prev, ...res?.data }));
