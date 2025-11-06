@@ -109,7 +109,7 @@ export default function MoodSelector({
         generatedScripts?: string;
         videoUrl?: string;
         email?: string;
-        name?: string;
+        fullName?: string;
         [k: string]: any;
       };
 
