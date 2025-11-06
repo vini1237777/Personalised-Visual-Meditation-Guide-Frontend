@@ -124,7 +124,7 @@ export default function MoodSelector({
 
         setUserState((prev: any) => ({
           ...prev,
-          email: data.email ?? prev.email,
+          email: (data.email || email) ?? prev.email,
           fullName: data.fullName ?? prev.fullName,
         }));
 
