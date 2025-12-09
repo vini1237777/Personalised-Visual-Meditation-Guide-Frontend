@@ -70,7 +70,6 @@ function UserLogin({
     setErrors(next);
     return next;
   }, [userState]);
-  // =========================
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -132,8 +131,8 @@ function UserLogin({
   }, [setIsLoggedIn, userState, validateAll, setUserState]);
 
   const isSubmitDisabled =
-    !!errors.email ||
-    !!errors.password ||
+    !!errors?.email ||
+    !!errors?.password ||
     !userState?.email ||
     !userState?.password;
 
@@ -172,8 +171,9 @@ function UserLogin({
                     id={constants.id}
                     name={constants.name}
                     className={`userLogin-form-input ${
-                      !errors[constants.name as keyof typeof errors] &&
-                      userState[constants.name]
+                      (!errors[constants.name as keyof typeof errors] &&
+                        userState?.[constants.name]) ||
+                      ""
                         ? "valid"
                         : ""
                     }`}
