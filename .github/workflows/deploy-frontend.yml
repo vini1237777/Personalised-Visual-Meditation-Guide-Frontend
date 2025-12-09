@@ -8,7 +8,6 @@ on:
 permissions:
   id-token: write
   contents: read
-  issues: write
 
 jobs:
   deploy:
@@ -18,64 +17,60 @@ jobs:
     env:
       REACT_APP_API: ${{ secrets.REACT_APP_API }}
 
-    strategy:
-      matrix:
-        node-version: [22.x]
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: "npm"
 
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          printf "%s\n" "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
+
+          # write private key from secret
+          printf "%s\n" "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/gh-ec2-ci
+          chmod 600 ~/.ssh/gh-ec2-ci
+
+          # add EC2 host to known_hosts
           ssh-keyscan -H "${{ secrets.EC2_HOST }}" >> ~/.ssh/known_hosts
 
       - name: SSH into EC2 and test connection
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/gh-ec2-ci \
             ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
-
-      - name: Clean npm cache & remove existing dependencies
-        run: |
-          cd /var/www/meditation-frontend/Personalised-Visual-Meditation-Guide-Frontend
-          rm -rf node_modules package-lock.json
-          npm cache clean --force
-
-      - name: Install frontend dependencies
-        run: |
-          cd /var/www/meditation-frontend/Personalised-Visual-Meditation-Guide-Frontend
-          npm install -f
-
-      - name: Create frontend .env file
-        run: |
-          echo "REACT_APP_API=${REACT_APP_API}" > .env
-          echo "Created .env with:"
-          cat .env
-
-      - name: Build frontend
-        run: |
-          cd /var/www/meditation-frontend/Personalised-Visual-Meditation-Guide-Frontend
-          npm install --save-dev ajv@^7
-          npm run build
+            "echo 'Connected from GitHub Actions!'"
 
       - name: Deploy Frontend on EC2
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/gh-ec2-ci \
             ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << EOF
-              set -e
-              
-              sudo nginx -t
-              sudo systemctl reload nginx
+            set -e
 
-              echo "Frontend deployed successfully!"
+            cd /var/www/meditation-frontend/Personalised-Visual-Meditation-Guide-Frontend
+
+            echo "Pulling latest code..."
+            git fetch --all
+            git reset --hard origin/main
+
+            echo "Cleaning cache and node_modules..."
+            rm -rf node_modules package-lock.json
+            npm cache clean --force || true
+
+            echo "Installing dependencies..."
+            npm install --force
+
+            echo "Creating .env..."
+            cat > .env << EENV
+           REACT_APP_API=$REACT_APP_API
+           EENV
+            cat .env
+
+            echo "Building React app (creates build/)..."
+            npm install --save-dev ajv@^7
+            npm run build
+
+            echo "Reloading nginx..."
+            sudo nginx -t
+            sudo systemctl reload nginx
+
+            echo "Frontend deployed successfully!"
           EOF
