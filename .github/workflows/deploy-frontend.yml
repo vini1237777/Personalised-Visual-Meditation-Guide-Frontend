@@ -1,70 +1,64 @@
-name: Deploy REACT App on nginx
+name: 🚀 Deploy REACT App on nginx
 
 on:
   push:
     branches:
       - main
 
+# Permissions are good, but I've removed 'issues: write' as it's not needed for deployment
 permissions:
   id-token: write
   contents: read
-  issues: write
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: PROD_FRONTEND_ENV
+    environment: PROD_FRONTEND_ENV # Good to keep for security
 
+    # Define environment variables once
     env:
+      NODE_VERSION: "22.x"
       REACT_APP_API: ${{ secrets.REACT_APP_API }}
-
-    strategy:
-      matrix:
-        node-version: [22.x]
+      EC2_HOST: ${{ secrets.EC2_HOST }}
+      EC2_USER: ${{ secrets.EC2_USER }}
+      SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+      REMOTE_PATH: /var/www/meditation-frontend/Personalised-Visual-Meditation-Guide-Frontend/
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: ⬇️ Checkout code
+        uses: actions/checkout@v4
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+      - name: ⚙️ Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: ${{ env.NODE_VERSION }}
           cache: npm
 
-      - name: Clean npm & node_modules
-        run: |
-          rm -rf node_modules package-lock.json
-          npm cache clean --force
-
-      - name: Install dependencies
+      - name: 📦 Install dependencies
         run: npm install --legacy-peer-deps
 
-      - name: Create .env
-        run: |
-          echo "REACT_APP_API=${REACT_APP_API}" > .env
-          echo "Created .env with:"
-          cat .env
+      # 🔑 The REACT_APP_API is passed directly as an environment variable for the build step
+      - name: 🏗️ Build frontend (creates build/)
+        run: npm run build
+        env:
+          REACT_APP_API: ${{ env.REACT_APP_API }} # Pass it explicitly here
 
-      - name: Build frontend (creates build/)
-        run: |
-          npm run build
+      # --- Deployment Steps using SSH Agent ---
 
-      - name: Setup SSH Key
-        run: |
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/gh-ec2-ci
-          chmod 600 ~/.ssh/gh-ec2-ci
-          ssh-keyscan -H "${{ secrets.EC2_HOST }}" >> ~/.ssh/known_hosts
+      - name: 🔑 Set up SSH Agent
+        uses: webfactory/ssh-agent@v0.9.1
+        with:
+          ssh-private-key: ${{ env.SSH_KEY }}
 
-      - name: Upload build folder to EC2
+      - name: 📝 Add EC2 Host to known_hosts
         run: |
-          scp -o StrictHostKeyChecking=no -i ~/.ssh/gh-ec2-ci -r build \
-          ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/var/www/html
+          ssh-keyscan -H ${{ env.EC2_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Restart Nginx on EC2
+      - name: ⬆️ Upload build folder to EC2
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/gh-ec2-ci \
-          ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
-          "sudo nginx -t && sudo systemctl reload nginx
+          scp -r build/ ${{ env.EC2_USER }}@${{ env.EC2_HOST }}:/var/www/meditation-frontend/Personalised-Visual-Meditation-Guide-Frontend/build
+
+      - name: 🔁 Restart Nginx on EC2
+        run: |
+          ssh ${{ env.EC2_USER }}@${{ env.EC2_HOST }} \
+          "sudo nginx -t && sudo systemctl reload nginx"
