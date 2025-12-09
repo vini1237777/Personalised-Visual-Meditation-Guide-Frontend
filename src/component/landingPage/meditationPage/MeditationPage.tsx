@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import BackButton from "./backbutton/BackButton";
-import "./MeditationPage.css";
 import { BreathingPanda } from "./BreathingPanda/BreathingPanda";
 import DemoMeditation from "./demoMeditation/DemoMeditation";
 
@@ -20,7 +19,7 @@ const renderDemoMeditationPage = (
   />
 );
 
-function MeditationPage({
+export default function MeditationPage({
   meditationContent,
   setShowMoodSelector,
   setIsContinueClicked,
@@ -38,29 +37,24 @@ function MeditationPage({
     }
   }, [meditationContent]);
 
-  if (isdemoMode) {
-    return (
-      <div className="meditation-page">
-        <BackButton
-          label=" Back to Mood Selector"
-          setShowMoodSelector={setShowMoodSelector}
-          setIsContinueClicked={setIsContinueClicked}
-          setIsDemoMode={setIsDemoMode}
-        />
-
-        {renderDemoMeditationPage(
-          category,
-          setShowMoodSelector,
-          setIsContinueClicked,
-          setIsDemoMode,
-          isLoading
-        )}
-      </div>
-    );
-  }
-
-  return (
-    <div className="meditation-page">
+  const content = isdemoMode ? (
+    <>
+      <BackButton
+        label=" Back to Mood Selector"
+        setShowMoodSelector={setShowMoodSelector}
+        setIsContinueClicked={setIsContinueClicked}
+        setIsDemoMode={setIsDemoMode}
+      />
+      {renderDemoMeditationPage(
+        category,
+        setShowMoodSelector,
+        setIsContinueClicked,
+        setIsDemoMode,
+        isLoading
+      )}
+    </>
+  ) : (
+    <>
       <BackButton
         label="Back to Mood Selector"
         setShowMoodSelector={setShowMoodSelector}
@@ -68,7 +62,7 @@ function MeditationPage({
         setIsDemoMode={setIsDemoMode}
         setVideoUrl={setVideoUrl}
       />
-      <h2> 🌸 Your Relaxing Guide</h2>
+      <h2>🌸 Your Relaxing Guide</h2>
       {!videoUrl && (
         <h2
           onClick={() => {
@@ -78,11 +72,10 @@ function MeditationPage({
           }}
           style={{ cursor: "pointer" }}
         >
-          {" "}
-          🌸 See Demo{" "}
+          🌸 See Demo
         </h2>
       )}
-      {showAnimation && videoUrl && !!videoUrl ? (
+      {showAnimation && videoUrl ? (
         <video width="640" height="360" controls key={videoUrl}>
           <source src={videoUrl} type="video/mp4" />
           Your browser does not support the video tag.
@@ -90,8 +83,12 @@ function MeditationPage({
       ) : (
         <BreathingPanda />
       )}
+    </>
+  );
+
+  return (
+    <div className="meditation-overlay">
+      <div className="meditation-page">{content}</div>
     </div>
   );
 }
-
-export default MeditationPage;
