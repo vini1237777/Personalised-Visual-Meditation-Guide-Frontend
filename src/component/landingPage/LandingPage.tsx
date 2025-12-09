@@ -162,7 +162,6 @@ const LandingPage = ({ user, setUserState, isLoggedIn }: LandingPageProps) => {
             )}
         {isContinueClicked && renderMeditationPage()}
       </div>
-
       {isLoading && <Loader />}
     </div>
   );
