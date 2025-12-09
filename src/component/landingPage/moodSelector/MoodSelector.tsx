@@ -48,6 +48,8 @@ export default function MoodSelector({
   setMeditationContent,
   setShowAnimation,
   isdemoMode,
+  setIsCollapsed,
+  isCollapsed,
 }: {
   setShowMoodSelector: any;
   isShowMoodSelector: boolean;
@@ -61,11 +63,12 @@ export default function MoodSelector({
   showAnimation: boolean;
   meditationContent: any;
   isdemoMode: boolean;
+  setIsCollapsed: any;
+  isCollapsed: boolean;
 }) {
   const [selectedEmojis, setSelectedEmojis] = useState<any[]>([]);
   const [activeEmoji, setActiveEmoji] = useState<string | null>(null);
   const [selectedFeelings, setSelectedFeelings] = useState<any[]>([]);
-  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const handleContinue = async () => {
     setIsContinueClicked(true);
@@ -142,6 +145,7 @@ export default function MoodSelector({
       );
     } finally {
       setIsLoading(false);
+
       setTimeout(() => setShowAnimation(true), 0);
     }
   };
@@ -199,9 +203,11 @@ export default function MoodSelector({
               {categoryData.feelings.map((feeling: string, index: number) => {
                 const angle =
                   (index / categoryData.feelings.length) * 2 * Math.PI;
-                const radius = 110;
-                const x = 120 + radius * Math.cos(angle);
-                const y = 120 + radius * Math.sin(angle);
+                const radius = 80;
+                const center = 110;
+
+                const x = center + radius * Math.cos(angle);
+                const y = center + radius * Math.sin(angle);
 
                 return (
                   <div
@@ -218,7 +224,7 @@ export default function MoodSelector({
               })}
             </div>
           )}
-          {!isCollapsed && selectedEmojis?.length >= 0 && (
+          {selectedEmojis?.length >= 0 && (
             <div className="output-box">
               <p>
                 <strong>Selected Emojis:</strong>{" "}
