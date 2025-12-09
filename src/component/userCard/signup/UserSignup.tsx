@@ -26,10 +26,8 @@ function UserSignup({
   setUserState,
   userState,
 }: {
-  setIsLoggedIn: any;
   setUserState: any;
   userState: any;
-  isLoggedIn: boolean;
 }) {
   const navigate = useNavigate();
 

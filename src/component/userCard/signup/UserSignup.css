@@ -10,6 +10,7 @@
   font-weight: bold;
   margin-bottom: 20px;
   color: white;
+  margin-right: 90px;
   margin-left: 100px;
 }
 
@@ -17,8 +18,9 @@
   display: "flex";
   align-items: center;
   flex-direction: column;
-  width: 400px;
+  width: 500px;
   margin-top: 10px;
+  margin-right: 50px;
 }
 
 .userCard-form-label {
@@ -44,6 +46,8 @@
   border-radius: 4px;
   font-size: 18px;
   opacity: 0.3;
+  width: 250px;
+  padding: 3px;
 }
 
 .userCard-wrapper {
@@ -175,4 +179,124 @@
 }
 .userSignup-showpass input[type="checkbox"] {
   accent-color: #111;
+}
+
+/* =========================================
+   📱 Tablet & Mobile responsiveness
+   ========================================= */
+@media (max-width: 768px) {
+  /* overall wrapper – remove huge right shift on small screens */
+  .userCard-wrapper {
+    margin-right: -30px;
+    text-align: center;
+    align-items: center;
+  }
+
+  .userCard-root {
+    margin-right: 0;
+    align-items: center;
+  }
+
+  .userCard-forms {
+    flex-direction: column;
+    align-items: center;
+    margin-right: 0;
+    padding: 16px 0;
+    gap: 16px;
+  }
+
+  .userCard-form {
+    width: 100%;
+    max-width: 360px;
+    margin-top: 8px;
+  }
+
+  /* title – keep style but center it */
+  .userCard-form-title {
+    margin-left: -20px;
+    text-align: center;
+    margin-right: 0;
+  }
+
+  /* labels & inputs – full width on small screens */
+  .userCard-form-label {
+    margin-right: 0;
+    display: block;
+    margin-bottom: 4px;
+    text-align: left;
+    font-size: 16px; /* slightly smaller for mobile */
+  }
+
+  .userCard-form-input {
+    width: 100%;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+
+  /* button wrappers – center, no big left shift */
+  .userCard-button-wrapper {
+    margin-left: 0;
+    justify-content: center;
+    width: 100%;
+  }
+  .userSignup-button-wrapper {
+    margin-left: -20px;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .userCard-button {
+    width: 100%;
+    max-width: 240px;
+    margin-left: 0;
+    font-size: 16px;
+  }
+
+  /* login link and error text still readable but not huge */
+  .userCard-login {
+    font-size: 14px;
+  }
+
+  .userCard-error {
+    font-size: 0.8rem;
+  }
+
+  .arrow-button {
+    font-size: 20px;
+    margin-top: 12px;
+  }
+}
+
+/* extra-small phones */
+@media (max-width: 480px) {
+  .userCard-wrapper {
+    margin-left: 40px;
+    text-align: center;
+    align-items: center;
+  }
+  .userCard-form {
+    max-width: 320px;
+  }
+
+  .userCard-form-label {
+    font-size: 14px;
+  }
+
+  .userCard-form-title {
+    margin-left: -50px;
+    text-align: center;
+    margin-right: 0;
+  }
+
+  .userCard-form-input {
+    font-size: 14px;
+  }
+
+  .userCard-button {
+    max-width: 220px;
+  }
+
+  .arrow-button {
+    font-size: 18px;
+  }
 }
