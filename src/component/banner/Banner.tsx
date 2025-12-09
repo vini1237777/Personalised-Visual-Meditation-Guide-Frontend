@@ -21,11 +21,12 @@ function Banner({
   return (
     <div className="banner">
       <div className="banner-wrapper">
-        <div>
+        <div className="banner-text">
           <h1>{appTitle}</h1>
           <p>{bannerText}</p>
         </div>
-        <div>
+
+        <div className="banner-form">
           {isLoginPage ? (
             <UserLogin
               userState={userState}
@@ -34,12 +35,7 @@ function Banner({
               isLoggedIn={isLoggedIn}
             />
           ) : (
-            <UserSignup
-              setIsLoggedIn={setIsLoggedIn}
-              userState={userState}
-              setUserState={setUserState}
-              isLoggedIn={isLoggedIn}
-            />
+            <UserSignup userState={userState} setUserState={setUserState} />
           )}
         </div>
       </div>
