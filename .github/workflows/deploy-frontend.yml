@@ -26,44 +26,42 @@ jobs:
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
 
-          # write private key from secret
+          # Save private key from secret
           printf "%s\n" "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/gh-ec2-ci
           chmod 600 ~/.ssh/gh-ec2-ci
 
-          # add EC2 host to known_hosts
+          # Add EC2 host to known_hosts
           ssh-keyscan -H "${{ secrets.EC2_HOST }}" >> ~/.ssh/known_hosts
 
       - name: SSH into EC2 and test connection
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/gh-ec2-ci \
             ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
+            "echo '✅ Connected from GitHub Actions!'"
 
-      - name: Deploy Frontend on EC2
+      - name: Deploy frontend on EC2
+        env:
+          REACT_APP_API: ${{ secrets.REACT_APP_API }}
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/gh-ec2-ci \
-            ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << EOF
-            set -e
-
-            cd /var/www/meditation-frontend/Personalised-Visual-Meditation-Guide-Frontend
-
-            git fetch --all
-            git reset --hard origin/main
-
-            rm -rf node_modules package-lock.json
-            npm cache clean --force || true
-
-            npm install --force
-
-            cat > .env << EENV
-           REACT_APP_API=$REACT_APP_API
-           EENV
-            cat .env
-
-            npm install --save-dev ajv@^7
-            npm run build
-
-            sudo nginx -t
-            sudo systemctl reload nginx
-
-            echo "Frontend deployed successfully!"
-          EOF
+            ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
+            "set -e
+             cd /var/www/meditation-frontend/Personalised-Visual-Meditation-Guide-Frontend &&
+             echo 'Pulling latest code...' &&
+             git fetch --all &&
+             git reset --hard origin/main &&
+             echo 'Cleaning cache and node_modules...' &&
+             rm -rf node_modules package-lock.json &&
+             npm cache clean --force || true &&
+             echo 'Installing dependencies...' &&
+             npm install --force &&
+             echo 'Writing .env...' &&
+             echo \"REACT_APP_API=$REACT_APP_API\" > .env &&
+             cat .env &&
+             echo 'Building React app (build/)...' &&
+             npm install --save-dev ajv@^7 &&
+             npm run build &&
+             echo 'Reloading nginx...' &&
+             sudo nginx -t &&
+             sudo systemctl reload nginx &&
+             echo '✨ Frontend deployed successfully!'"
