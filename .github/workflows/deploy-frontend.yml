@@ -54,7 +54,7 @@ jobs:
             npm install -f
 
             echo "Creating .env"
-            echo "REACT_APP_API=${REACT_APP_API}" > .env
+            echo "REACT_APP_API=${{secrets.REACT_APP_API}}" > .env
             cat .env
 
             echo "Building frontend"
