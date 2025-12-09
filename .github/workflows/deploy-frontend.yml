@@ -38,17 +38,16 @@ jobs:
           npm cache clean --force
 
       - name: Install dependencies
-        run: npm install -f
+        run: npm install --legacy-peer-deps
 
       - name: Create .env
         run: |
           echo "REACT_APP_API=${REACT_APP_API}" > .env
-          echo "ENV created →"
+          echo "Created .env with:"
           cat .env
 
       - name: Build frontend (creates build/)
         run: |
-          npm install --save-dev ajv@^7
           npm run build
 
       - name: Setup SSH Key
