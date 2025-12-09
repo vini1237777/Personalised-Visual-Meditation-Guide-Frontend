@@ -45,7 +45,7 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/gh-ec2-ci
           chmod 700 ~/.ssh
-          chmod 600 ~/.ssh/gh-ec2-ci
+          chmod 400 ~/.ssh/gh-ec2-ci
 
           ssh -o StrictHostKeyChecking=no \
               -i ~/.ssh/gh-ec2-ci \
