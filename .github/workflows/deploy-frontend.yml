@@ -32,21 +32,21 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
 
-      - name: Setup SSH key and known_hosts
+      - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-
-          # Write private key from secret into a file
-          printf "%s\n" "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/gh-ec2-ci
-          chmod 600 ~/.ssh/gh-ec2-ci
-
-          # Add EC2 host to known_hosts
+          printf "%s\n" "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H "${{ secrets.EC2_HOST }}" >> ~/.ssh/known_hosts
-          chmod 600 ~/.ssh/known_hosts
 
       - name: SSH into EC2 and test connection
         run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/gh-ec2-ci
+          chmod 700 ~/.ssh
+          chmod 600 ~/.ssh/gh-ec2-ci
+
           ssh -o StrictHostKeyChecking=no \
               -i ~/.ssh/gh-ec2-ci \
               ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
@@ -54,9 +54,7 @@ jobs:
 
       - name: Deploy Frontend on EC2
         run: |
-          ssh -o StrictHostKeyChecking=no \
-              -i ~/.ssh/gh-ec2-ci \
-              ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << EOF
+          ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
             set -e
 
             cd /var/www/meditation-frontend/Personalised-Visual-Meditation-Guide-Frontend
@@ -69,7 +67,7 @@ jobs:
             npm install -f
 
             echo "Creating .env"
-            echo "REACT_APP_API=$REACT_APP_API" > .env
+            echo "REACT_APP_API=${{secrets.REACT_APP_API}}" > .env
             cat .env
 
             echo "Building frontend"
