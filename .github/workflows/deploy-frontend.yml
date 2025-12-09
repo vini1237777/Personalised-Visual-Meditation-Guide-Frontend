@@ -5,6 +5,7 @@ on:
     branches:
       - main
 
+# Permissions are good, but I've removed 'issues: write' as it's not needed for deployment
 permissions:
   id-token: write
   contents: read
@@ -55,20 +56,13 @@ jobs:
         with:
           ssh-private-key: ${{ env.SSH_KEY }}
 
-      - name: 🔐 Ensure User Permissions on Remote Path
-        run: |
-          # Ensure the EC2_USER owns the directory so scp can write to it
-          ssh ${{ env.EC2_USER }}@${{ env.EC2_HOST }} \
-          "sudo chown -R ${{ env.EC2_USER }}:$(id -gn ${{ env.EC2_USER }}) /var/www/meditation-frontend/Personalised-Visual-Meditation-Guide-Frontend/"
-
       - name: 📝 Add EC2 Host to known_hosts
         run: |
           ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
-          - name: ⬆️ Upload build folder to EC2
-          run: |
-            # Use the most robust quoting: wrap the entire remote destination in double quotes
-            scp -r build ${{ env.EC2_USER }}@${{ env.EC2_HOST }}:"/var/www/meditation-frontend/Personalised-Visual-Meditation-Guide-Frontend/"
+      - name: ⬆️ Upload build folder to EC2
+        run: |
+          scp -r build/ ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:"../../var/www/meditation-frontend/Personalised-Visual-Meditation-Guide-Frontend/build"
 
       - name: 🔁 Restart Nginx on EC2
         run: |
