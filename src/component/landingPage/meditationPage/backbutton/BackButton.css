@@ -13,7 +13,6 @@
   margin-right: 450px;
   top: 90px;
   position: fixed;
-  margin-bottom: 1100px;
 }
 
 .back-button:hover {
@@ -27,4 +26,10 @@
 
 .back-button svg {
   font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  .back-button {
+    margin-right: -200px;
+  }
 }

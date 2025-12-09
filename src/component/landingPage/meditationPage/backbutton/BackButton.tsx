@@ -16,16 +16,18 @@ export default function BackButton({
   setVideoUrl,
 }: BackButtonProps) {
   return (
-    <button
-      onClick={() => {
-        setShowMoodSelector(true);
-        setIsContinueClicked(false);
-        setIsDemoMode(false);
-        setVideoUrl && setVideoUrl("");
-      }}
-      className="back-button"
-    >
-      <span>{label}</span>
-    </button>
+    <div className="back-button-wrapper">
+      <button
+        onClick={() => {
+          setShowMoodSelector(true);
+          setIsContinueClicked(false);
+          setIsDemoMode(false);
+          setVideoUrl && setVideoUrl("");
+        }}
+        className="back-button"
+      >
+        <span>{label}</span>
+      </button>
+    </div>
   );
 }
