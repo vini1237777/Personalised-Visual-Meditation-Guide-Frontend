@@ -5,7 +5,6 @@ on:
     branches:
       - main
 
-# Permissions are good, but I've removed 'issues: write' as it's not needed for deployment
 permissions:
   id-token: write
   contents: read
@@ -13,9 +12,8 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: PROD_FRONTEND_ENV # Good to keep for security
+    environment: PROD_FRONTEND_ENV
 
-    # Define environment variables once
     env:
       NODE_VERSION: "22.x"
       REACT_APP_API: ${{ secrets.REACT_APP_API }}
@@ -37,7 +35,6 @@ jobs:
       - name: 📦 Install dependencies
         run: npm install --legacy-peer-deps
 
-      # 🔑 The REACT_APP_API is passed directly as an environment variable for the build step
       - name: 🏗️ Build frontend (creates build/)
         run: |
           npm run build
@@ -60,21 +57,13 @@ jobs:
 
       - name: 📝 Add EC2 Host to known_hosts
         run: |
-          ssh-keyscan -H ${{ env.EC2_HOST }} >> ~/.ssh/known_hosts
-
-      - name: 🔍 Verify Remote Target Directory
-        run: |
-          ssh ${{ env.EC2_USER }}@${{ env.EC2_HOST }} \
-          "echo 'Checking remote directory...' && \
-           ls -ld ${{ env.REMOTE_PATH }} && \
-           echo 'Remote directory contents:' && \
-           ls -l ${{ env.REMOTE_PATH }}"
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
       - name: ⬆️ Upload build folder to EC2
         run: |
-          scp -r build/ ${{ env.EC2_USER }}@${{ env.EC2_HOST }}:"/var/www/meditation-frontend/Personalised-Visual-Meditation-Guide-Frontend/build"
+          scp -r build/ ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:"/var/www/meditation-frontend/Personalised-Visual-Meditation-Guide-Frontend/build"
 
       - name: 🔁 Restart Nginx on EC2
         run: |
-          ssh ${{ env.EC2_USER }}@${{ env.EC2_HOST }} \
+          ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
           "sudo nginx -t && sudo systemctl reload nginx"
