@@ -11,6 +11,8 @@
   align-items: flex-start;
   background-size: cover;
   position: fixed;
+  left: -0.2px;
+  top: 80px;
 }
 
 .welcome-text {
@@ -20,6 +22,10 @@
   align-items: flex-start;
   width: 100%;
   margin-top: 100px;
+}
+
+.welcome-text-mood {
+  font-size: 48px;
 }
 
 .heading {
@@ -35,7 +41,7 @@
 }
 
 .landing-page-form {
-  display: "flex";
+  display: flex;
   align-items: center;
   flex-direction: column;
   width: 100%;
@@ -66,14 +72,6 @@
   font-size: 18px;
   opacity: 0.3;
 }
-
-/* .landing-page-wrapper {
-  margin-right: 10rem;
-  align-items: center;
-  font-size: medium;
-  font-weight: 600;
-  text-align: right;
-} */
 
 .landing-page-root {
   display: flex;
@@ -119,10 +117,130 @@
   justify-content: center;
   align-items: center;
   margin-left: 5px;
-  /* flex-direction: column; */
 }
 
 .mood-selector-section {
   margin-top: 20px;
   z-index: 2000;
+}
+
+@media (max-width: 768px) {
+  .landing-page {
+    position: fixed;
+    width: 100%;
+    height: auto;
+    min-height: 100vh;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 80px 16px 32px;
+    background-position: center;
+    top: auto;
+  }
+
+  .welcome-text-mood {
+    font-size: clamp(1.6rem, 5vw, 32px);
+  }
+
+  .welcome-text {
+    font-size: clamp(1.6rem, 5vw, 32px);
+    margin-top: 120px;
+    width: 100%;
+    text-align: center;
+    padding-left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #45a049;
+  }
+
+  .heading {
+    font-size: clamp(0.9rem, 3.5vw, 16px);
+    width: 100%;
+    text-align: center;
+    padding-left: 0;
+    margin-bottom: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .landing-page-root {
+    margin-right: 0;
+    align-items: flex-start;
+  }
+
+  .landing-page-wrapper {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 0;
+  }
+
+  .landing-page-form {
+    width: 100%;
+    align-items: flex-start;
+    margin-top: 24px;
+  }
+
+  .landing-page-form-label {
+    font-size: clamp(0.85rem, 2.5vw, 16px);
+  }
+
+  .landing-page-form-input {
+    font-size: clamp(0.85rem, 2.5vw, 16px);
+    max-width: 260px;
+  }
+
+  .landing-page-button {
+    margin-left: 0;
+    margin-top: 12px;
+    font-size: clamp(0.85rem, 2.3vw, 16px);
+  }
+
+  .landing-page button {
+    width: 100%;
+    max-width: 260px;
+    margin-left: 60px;
+    font-size: clamp(0.85rem, 2.3vw, 16px);
+  }
+
+  .mood-selector-section {
+    margin-top: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .welcome-text {
+    font-size: clamp(1.4rem, 6vw, 26px);
+    margin-top: 160px;
+    width: 90%;
+    text-align: center;
+    padding-left: 0;
+    color: #45a049;
+  }
+
+  .heading {
+    font-size: clamp(0.8rem, 4vw, 12px);
+    width: 90%;
+    text-align: center;
+    padding-left: 0;
+    margin-bottom: 24px;
+  }
+
+  .landing-page-form-label {
+    font-size: clamp(0.8rem, 3.5vw, 14px);
+  }
+
+  .landing-page-form-input {
+    font-size: clamp(0.8rem, 3.5vw, 14px);
+    max-width: 220px;
+  }
+
+  .landing-page button {
+    padding: 10px 20px;
+    font-size: clamp(0.85rem, 3.8vw, 14px);
+    width: 100%;
+    text-align: center;
+    margin-left: 2rem;
+    margin-bottom: 24px;
+  }
 }
