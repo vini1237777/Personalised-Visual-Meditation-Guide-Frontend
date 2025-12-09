@@ -47,32 +47,37 @@ jobs:
 
       - name: Deploy Frontend on EC2
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-            set -e
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/gh-ec2-ci \
+            ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << EOF
+              set -e
 
-            cd /var/www/meditation-frontend/Personalised-Visual-Meditation-Guide-Frontend
+              cd /var/www/meditation-frontend/Personalised-Visual-Meditation-Guide-Frontend
 
-            echo "Cleaning cache..."
-            rm -rf node_modules package-lock.json
-            npm cache clean --force
+              echo "Getting latest code..."
+              git fetch --all
+              git reset --hard origin/main
 
-            echo "Installing dependencies..."
-            npm install -f
+              echo "Cleaning cache..."
+              rm -rf node_modules package-lock.json
+              npm cache clean --force
 
-            echo "Creating .env"
-            echo "REACT_APP_API=${{secrets.REACT_APP_API}}" > .env
-            cat .env
+              echo "Installing dependencies..."
+              npm install -f
 
-            echo "Building frontend"
-            npm install --save-dev ajv@^7
-            npm run build
+              echo "Creating .env"
+              echo "REACT_APP_API=$REACT_APP_API" > .env
+              cat .env
 
-            echo "Deploying to Nginx"
-            sudo rm -rf /var/www/meditation-frontend/Personalised-Visual-Meditation-Guide-Frontend/build/*
-            sudo cp -r dist/* /var/www/meditation-frontend/Personalised-Visual-Meditation-Guide-Frontend/build/
+              echo "Building frontend"
+              npm install --save-dev ajv@^7
+              npm run build
 
-            sudo nginx -t
-            sudo systemctl reload nginx
+              echo "Deploying to Nginx"
+              sudo rm -rf /var/www/meditation-frontend/Personalised-Visual-Meditation-Guide-Frontend/build/*
+              sudo cp -r dist/* /var/www/meditation-frontend/Personalised-Visual-Meditation-Guide-Frontend/build/
 
-            echo "Frontend deployed successfully!"
+              sudo nginx -t
+              sudo systemctl reload nginx
+
+              echo "Frontend deployed successfully!"
           EOF
