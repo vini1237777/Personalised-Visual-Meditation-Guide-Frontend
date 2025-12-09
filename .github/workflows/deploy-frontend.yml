@@ -58,10 +58,10 @@ jobs:
           chmod 600 ~/.ssh/gh-ec2-ci
           ssh-keyscan -H "${{ secrets.EC2_HOST }}" >> ~/.ssh/known_hosts
 
-      # - name: Upload build folder to EC2
-      #   run: |
-      #     scp -o StrictHostKeyChecking=no -i ~/.ssh/gh-ec2-ci -r build/* \
-      #     ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/var/www/meditation-frontend/Personalised-Visual-Meditation-Guide-Frontend/build/
+      - name: Upload build folder to EC2
+        run: |
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/gh-ec2-ci -r build \
+          ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/var/www/meditation-frontend/Personalised-Visual-Meditation-Guide-Frontend/build/
 
       - name: Restart Nginx on EC2
         run: |
