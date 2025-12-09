@@ -32,7 +32,6 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/gh-ec2-ci \
             ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
-            "echo '🚀 GitHub CI Connected Successfully!'"
 
       - name: Deploy Frontend to EC2 via SSH
         run: |
