@@ -18,7 +18,9 @@ function App() {
     confirmPassword: "",
   });
 
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(!!userState.email);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(
+    !!userState?.email || false
+  );
 
   useEffect(() => {
     localStorage.setItem("user", JSON.stringify(userState));
@@ -35,6 +37,7 @@ function App() {
               user={userState}
               isLoggedIn={isLoggedIn}
               setUserState={setUserState}
+              setIsLoggedIn={setIsLoggedIn}
             />
           }
         >
@@ -66,12 +69,7 @@ function App() {
           <Route
             path="/auth/register"
             element={
-              <UserSignup
-                setIsLoggedIn={setIsLoggedIn}
-                userState={userState}
-                setUserState={setUserState}
-                isLoggedIn={isLoggedIn}
-              />
+              <UserSignup userState={userState} setUserState={setUserState} />
             }
           />
         </Route>
