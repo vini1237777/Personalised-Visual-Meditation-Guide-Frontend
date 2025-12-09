@@ -62,7 +62,7 @@ jobs:
 
       - name: ⬆️ Upload build folder to EC2
         run: |
-          scp -r build ${{ secrets.EC2_USER }}@${{ secrets.EC2_IP }}:"/var/www/meditation-frontend/Personalised-Visual-Meditation-Guide-Frontend/build"
+          scp -r build ${{ secrets.EC2_USER }}@${{ secrets.EC2_IP }}:/var/www/meditation-frontend/Personalised-Visual-Meditation-Guide-Frontend/build
 
       - name: 🔁 Restart Nginx on EC2
         run: |
