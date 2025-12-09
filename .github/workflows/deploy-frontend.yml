@@ -13,8 +13,9 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: PROD_FRONTEND_ENV
+    environment: PROD_FRONTEND_ENV # Good to keep for security
 
+    # Define environment variables once
     env:
       NODE_VERSION: "22.x"
       REACT_APP_API: ${{ secrets.REACT_APP_API }}
@@ -54,7 +55,7 @@ jobs:
       - name: 🔑 Set up SSH Agent
         uses: webfactory/ssh-agent@v0.9.1
         with:
-          ssh-private-key: ${{ env.SSH_KEY }}
+          ssh-private-key: ${{ secrets.SSH_KEY }}
 
       - name: 📝 Add EC2 Host to known_hosts
         run: |
@@ -62,7 +63,7 @@ jobs:
 
       - name: ⬆️ Upload build folder to EC2
         run: |
-          scp -r build ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/var/www/meditation-frontend/Personalised-Visual-Meditation-Guide-Frontend/build
+          scp -r build/ ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:"/var/www/meditation-frontend/Personalised-Visual-Meditation-Guide-Frontend/build"
 
       - name: 🔁 Restart Nginx on EC2
         run: |
