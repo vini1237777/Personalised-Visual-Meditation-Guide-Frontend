@@ -8,6 +8,7 @@ on:
 permissions:
   id-token: write
   contents: read
+  issues: write
 
 jobs:
   deploy:
@@ -17,64 +18,54 @@ jobs:
     env:
       REACT_APP_API: ${{ secrets.REACT_APP_API }}
 
+    strategy:
+      matrix:
+        node-version: [22.x]
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup SSH
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+
+      - name: Clean npm & node_modules
         run: |
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-
-          # Save private key from secret
-          printf "%s\n" "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/gh-ec2-ci
-          chmod 600 ~/.ssh/gh-ec2-ci
-
-          # Add EC2 host to known_hosts
-          ssh-keyscan -H "${{ secrets.EC2_HOST }}" >> ~/.ssh/known_hosts
-
-      - name: SSH into EC2 and test connection
-        run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/gh-ec2-ci \
-            ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
-
-      - name: Deploy frontend on EC2
-        env:
-          REACT_APP_API: ${{ secrets.REACT_APP_API }}
-
-        run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/gh-ec2-ci \
-            ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-          set -e
-
-      - name: Deploy frontend on nginx
-        env:
-          REACT_APP_API: ${{ secrets.REACT_APP_API }}
-        working-directory: cd /var/www/meditation-frontend/Personalised-Visual-Meditation-Guide-Frontend
-
-        run: |
-          echo "Pulling latest code..."
-          git fetch --all
-          git reset --hard origin/main
-
-          echo "Cleaning cache and node_modules..."
           rm -rf node_modules package-lock.json
-          npm cache clean --force || true
+          npm cache clean --force
 
-          echo "Installing dependencies..."
-          npm install --force
+      - name: Install dependencies
+        run: npm install -f
 
-          echo "Writing .env..."
+      - name: Create .env
+        run: |
           echo "REACT_APP_API=${REACT_APP_API}" > .env
+          echo "ENV created →"
           cat .env
 
-          echo "Building React app (build/)..."
+      - name: Build frontend (creates build/)
+        run: |
           npm install --save-dev ajv@^7
           npm run build
 
-          echo "Reloading nginx..."
-          sudo nginx -t
-          sudo systemctl reload nginx
+      - name: Setup SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/gh-ec2-ci
+          chmod 600 ~/.ssh/gh-ec2-ci
+          ssh-keyscan -H "${{ secrets.EC2_HOST }}" >> ~/.ssh/known_hosts
 
-          echo "Frontend deployed successfully"
-          EOF
+      - name: Upload build folder to EC2
+        run: |
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/gh-ec2-ci -r build/* \
+          ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/var/www/meditation-frontend/Personalised-Visual-Meditation-Guide-Frontend/build/
+
+      - name: Restart Nginx on EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/gh-ec2-ci \
+          ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
+          "sudo nginx -t && sudo systemctl reload nginx
