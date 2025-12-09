@@ -8,60 +8,76 @@ on:
 permissions:
   id-token: write
   contents: read
+  issues: write
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: PROD_FRONTEND_ENV
 
     env:
       REACT_APP_API: ${{ secrets.REACT_APP_API }}
 
+    strategy:
+      matrix:
+        node-version: [22.x]
+
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
 
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          printf "%s\n" "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/gh-ec2-ci
-          chmod 600 ~/.ssh/gh-ec2-ci
+          printf "%s\n" "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H "${{ secrets.EC2_HOST }}" >> ~/.ssh/known_hosts
 
-      - name: Test SSH Connection
+      - name: SSH into EC2 and test connection
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/gh-ec2-ci \
             ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
 
-      - name: Deploy Frontend to EC2 via SSH
+      - name: Deploy Frontend on EC2
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/gh-ec2-ci \
-            ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-            set -e
+            ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << EOF
+              set -e
 
-            cd /var/www/meditation-frontend/Personalised-Visual-Meditation-Guide-Frontend
+              cd /var/www/meditation-frontend/Personalised-Visual-Meditation-Guide-Frontend
 
-            echo "Pulling latest code"
-            git fetch --all
-            git reset --hard origin/main
+              echo "Getting latest code..."
+              git fetch --all
+              git reset --hard origin/main
 
-            echo "Installing Dependencies"
-            npm install --force
+              echo "Cleaning cache..."
+              rm -rf node_modules package-lock.json
+              npm cache clean --force
 
-            echo "Generating .env"
-            echo "REACT_APP_API=${{ secrets.REACT_APP_API }}" > .env
+              echo "Installing dependencies..."
+              npm install -f
 
-            echo "Building Frontend"
-            npm run build
+              echo "Creating .env"
+              echo "REACT_APP_API=$REACT_APP_API" > .env
+              cat .env
 
-            echo "Updating Build Folder"
-            mkdir -p build
-            rm -rf build/*
-            cp -r dist/* build/
+              echo "Building frontend"
+              npm install --save-dev ajv@^7
+              npm run build
 
-            echo "Reloading Nginx"
-            sudo nginx -t
-            sudo systemctl reload nginx
+              echo "Deploying to Nginx"
+              sudo rm -rf build/*
+              sudo cp -r build/* build/
 
-            echo "✨ Deployment Completed Successfully!"
+              sudo nginx -t
+              sudo systemctl reload nginx
+
+              echo "Frontend deployed successfully!"
           EOF
