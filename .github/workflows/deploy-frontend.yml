@@ -46,28 +46,22 @@ jobs:
 
             cd /var/www/meditation-frontend/Personalised-Visual-Meditation-Guide-Frontend
 
-            echo "Pulling latest code..."
             git fetch --all
             git reset --hard origin/main
 
-            echo "Cleaning cache and node_modules..."
             rm -rf node_modules package-lock.json
             npm cache clean --force || true
 
-            echo "Installing dependencies..."
             npm install --force
 
-            echo "Creating .env..."
             cat > .env << EENV
            REACT_APP_API=$REACT_APP_API
            EENV
             cat .env
 
-            echo "Building React app (creates build/)..."
             npm install --save-dev ajv@^7
             npm run build
 
-            echo "Reloading nginx..."
             sudo nginx -t
             sudo systemctl reload nginx
 
