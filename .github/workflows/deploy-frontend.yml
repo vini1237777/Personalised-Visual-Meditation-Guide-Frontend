@@ -74,7 +74,7 @@ jobs:
 
               echo "Deploying to Nginx"
               sudo rm -rf /var/www/meditation-frontend/Personalised-Visual-Meditation-Guide-Frontend/build/*
-              sudo cp -r dist/* /var/www/meditation-frontend/Personalised-Visual-Meditation-Guide-Frontend/build/
+              sudo cp -r build/* /var/www/meditation-frontend/Personalised-Visual-Meditation-Guide-Frontend/build/
 
               sudo nginx -t
               sudo systemctl reload nginx
