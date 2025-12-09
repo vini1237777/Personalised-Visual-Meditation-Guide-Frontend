@@ -5,6 +5,8 @@ import "./LandingPage.css";
 import MoodSelector from "./moodSelector/MoodSelector";
 import Loader from "../loader/Loader";
 import MeditationPage from "./meditationPage/MeditationPage";
+import buddhaImage from "../../assets/images/buddha.jpg";
+import buddhaMobile from "../../assets/images/buddhaMobile.png";
 
 interface LandingPageProps {
   user: IUser;
@@ -23,17 +25,34 @@ const LandingPage = ({ user, setUserState, isLoggedIn }: LandingPageProps) => {
   const [isContinueClicked, setIsContinueClicked] = useState(false);
   const [meditationContent, setMeditationContent] =
     useState<IMeditationContent>({});
-
-  const [showAnimation, setShowAnimation] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [showAnimation, setShowAnimation] = useState(false);
   const [isdemoMode, setIsDemoMode] = useState(false);
-
-  const showHeroSection =
-    isLoggedIn && Object.values(user)?.length > 0 && !showMoodSelector;
 
   const hasVideo =
     meditationContent &&
     meditationContent?.videoUrl &&
     meditationContent?.videoUrl?.trim()?.length > 0;
+
+  const showHeroSection =
+    isLoggedIn &&
+    user &&
+    Object.values?.(user || {})?.length > 0 &&
+    !showMoodSelector;
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
@@ -46,6 +65,7 @@ const LandingPage = ({ user, setUserState, isLoggedIn }: LandingPageProps) => {
     if (hasVideo) {
       setIsLoading(false);
       setShowMoodSelector(false);
+      setShowAnimation(false);
     }
   }, [hasVideo]);
 
@@ -81,6 +101,8 @@ const LandingPage = ({ user, setUserState, isLoggedIn }: LandingPageProps) => {
         setIsDemoMode={setIsDemoMode}
         showAnimation={showAnimation}
         meditationContent={meditationContent}
+        setIsCollapsed={setIsCollapsed}
+        isCollapsed={isCollapsed}
       />
     </div>
   );
@@ -105,19 +127,39 @@ const LandingPage = ({ user, setUserState, isLoggedIn }: LandingPageProps) => {
     .trim();
 
   return (
-    <div className="landing-page">
+    <div
+      className="landing-page"
+      style={{
+        backgroundImage: `url(${isMobile ? buddhaMobile : buddhaImage})`,
+      }}
+    >
       <div className="welcome-text">
-        {showHeroSection &&
+        {!showAnimation &&
+          !isdemoMode &&
+          showHeroSection &&
           (displayName ? `Welcome ${displayName}` : "Welcome")}
       </div>
 
       <div className="heading">
-        {savedUser && Object.values(user)?.length > 0 ? (
+        {!showAnimation &&
+        !isdemoMode &&
+        savedUser &&
+        Object.values?.(savedUser || {})?.length > 0 ? (
           !showMoodSelector && showHeroSection && renderHeroSection()
         ) : (
           <></>
         )}
-        {showMoodSelector && renderMoodSelector()}
+        {showMoodSelector
+          ? renderMoodSelector()
+          : isdemoMode &&
+            showAnimation && (
+              <>
+                <div className="welcome-text-mood">
+                  {displayName ? `Welcome ${displayName}` : "Welcome"}
+                </div>
+                {renderHeroSection()}
+              </>
+            )}
         {isContinueClicked && renderMeditationPage()}
       </div>
 
