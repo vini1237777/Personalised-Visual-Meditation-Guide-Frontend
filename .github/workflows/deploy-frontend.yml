@@ -61,10 +61,14 @@ jobs:
       - name: 📝 Add EC2 Host to known_hosts
         run: |
           ssh-keyscan -H ${{ env.EC2_HOST }} >> ~/.ssh/known_hosts
-
-      - name: ⬆️ Upload build folder to EC2
+      - name: Upload build folder to EC2
         run: |
-          scp -r build/ ${{ env.EC2_USER }}@${{ env.EC2_HOST }}:build/
+          # CHANGE: Wrap the entire remote destination in double quotes
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/gh-ec2-ci -r build \
+          ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:"${{ secrets.EC2_HOST }}:/var/www/meditation-frontend/Personalised-Visual-Meditation-Guide-Frontend/build"
+      # - name: ⬆️ Upload build folder to EC2
+      #   run: |
+      #     scp -r build/ ${{ env.EC2_USER }}@${{ env.EC2_HOST }}:build/
 
       - name: 🔁 Restart Nginx on EC2
         run: |
