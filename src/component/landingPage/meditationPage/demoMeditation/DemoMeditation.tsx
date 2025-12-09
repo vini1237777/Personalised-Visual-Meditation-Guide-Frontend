@@ -113,8 +113,8 @@ export default function DemoMeditation({
   };
 
   return (
-    <div className={className ?? "meditation-page"}>
-      <div className="meditation-video-container">
+    <div className={className ?? "demo-meditation-page"}>
+      <div className="demo-meditation-video-container">
         <h2>🌸 Your Relaxing Guide (Demo)</h2>
         {!isLoading ? (
           <video
