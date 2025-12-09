@@ -14,14 +14,12 @@ const Home = ({
 }) => {
   return (
     <div className="home-container">
-      <div className="home">
-        <Banner
-          setIsLoggedIn={setIsLoggedIn}
-          userState={userState}
-          setUserState={setUserState}
-          isLoggedIn={isLoggedIn}
-        />
-      </div>
+      <Banner
+        setIsLoggedIn={setIsLoggedIn}
+        userState={userState}
+        setUserState={setUserState}
+        isLoggedIn={isLoggedIn}
+      />
     </div>
   );
 };
