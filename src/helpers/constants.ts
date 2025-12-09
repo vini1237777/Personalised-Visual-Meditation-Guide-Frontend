@@ -6,6 +6,7 @@ export const navbarLinks = [
 ];
 
 export const appTitle = "Meditation App";
+export const meditationTitle = "SoulSync";
 export const bannerText =
   "Welcome to the Meditation App! Find your peace and calm.";
 export const bannerAltText = "Meditation Banner";
