@@ -39,9 +39,19 @@ jobs:
 
       # 🔑 The REACT_APP_API is passed directly as an environment variable for the build step
       - name: 🏗️ Build frontend (creates build/)
-        run: npm run build
+        run: |
+          npm run build
+          # Add commands to verify the output folder
+          if [ $? -ne 0 ]; then
+            echo "Error: npm run build failed."
+            exit 1
+          fi
+          echo "Listing contents of the workspace directory:"
+          ls -l
+          echo "Listing contents of the build directory:"
+          ls -l build/
         env:
-          REACT_APP_API: ${{ env.REACT_APP_API }} # Pass it explicitly here
+          REACT_APP_API: ${{ secrets.REACT_APP_API }}
 
       # --- Deployment Steps using SSH Agent ---
 
