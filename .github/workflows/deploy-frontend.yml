@@ -62,6 +62,14 @@ jobs:
         run: |
           ssh-keyscan -H ${{ env.EC2_HOST }} >> ~/.ssh/known_hosts
 
+      - name: 🔍 Verify Remote Target Directory
+        run: |
+          ssh ${{ env.EC2_USER }}@${{ env.EC2_HOST }} \
+          "echo 'Checking remote directory...' && \
+           ls -ld ${{ env.REMOTE_PATH }} && \
+           echo 'Remote directory contents:' && \
+           ls -l ${{ env.REMOTE_PATH }}"
+
       - name: ⬆️ Upload build folder to EC2
         run: |
           scp -r build/ ${{ env.EC2_USER }}@${{ env.EC2_HOST }}:"/var/www/meditation-frontend/Personalised-Visual-Meditation-Guide-Frontend/build"
