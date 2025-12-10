@@ -5,7 +5,6 @@ import {
   signupButtonText,
 } from "../../../helpers/constants";
 import { useNavigate } from "react-router-dom";
-import { UserService } from "../../../services/userServices";
 import toast from "react-hot-toast";
 import { IUser } from "../../../helpers/interface";
 import { useEffect, useRef, useState } from "react";
@@ -108,16 +107,31 @@ function UserSignup({
 
   const didInit = useRef(false);
 
+  // useEffect(() => {
+  //   if (didInit.current) return;
+  //   setUserState((prev: any) => ({
+  //     ...prev,
+  //     email: "",
+  //     password: "",
+  //     fullName: "",
+  //     confirmPassword: "",
+  //   }));
+  //   didInit.current = true;
+  //   setErrors({ fullName: null, email: null, password: null });
+  // }, [setUserState]);
+
   useEffect(() => {
     if (didInit.current) return;
-    setUserState((prev: any) => ({
-      ...prev,
-      email: "",
-      password: "",
-      fullName: "",
-      confirmPassword: "",
-    }));
     didInit.current = true;
+
+    setUserState((prev: IUser) => ({
+      ...prev,
+      fullName: "vinisha Yadav",
+      email: "v@gmail.com",
+      password: "v@123456",
+      confirmPassword: "v@123456",
+    }));
+
     setErrors({ fullName: null, email: null, password: null });
   }, [setUserState]);
 
@@ -128,6 +142,50 @@ function UserSignup({
     };
     localStorage.setItem("user", JSON.stringify(safe));
   }, [userState?.fullName, userState?.email]);
+
+  // const handleSignUp = async () => {
+  //   const ce = validateConfirm(
+  //     userState?.password || "",
+  //     userState?.confirmPassword || ""
+  //   );
+  //   setConfirmError(ce);
+  //   if (ce) {
+  //     toast.error(ce);
+  //     return;
+  //   }
+  //   const current = validateAll();
+  //   const hasErrors = Object.values(current).some(Boolean);
+  //   if (hasErrors) {
+  //     toast.error("Please fix the highlighted fields.");
+  //     return;
+  //   }
+
+  //   await UserService.register({
+  //     fullName: userState.fullName,
+  //     email: userState.email,
+  //     password: userState.password,
+  //   })
+  //     .then((res: any) => {
+  //       if (res.status === 201) {
+  //         toast.success("Successfully created user");
+
+  //         setUserState((prev: IUser) => ({
+  //           ...prev,
+  //           fullName: userState.fullName,
+  //           email: userState.email,
+  //           password: "",
+  //           confirmPassword: "",
+  //         }));
+
+  //         navigate("/auth/login", {
+  //           state: {
+  //             email: userState.email,
+  //           },
+  //         });
+  //       }
+  //     })
+  //     .catch(() => toast.error("Failed to sign up"));
+  // };
 
   const handleSignUp = async () => {
     const ce = validateConfirm(
@@ -146,19 +204,43 @@ function UserSignup({
       return;
     }
 
-    await UserService.register({
-      fullName: userState.fullName,
-      email: userState.email,
-      password: userState.password,
-    })
-      .then((res: any) => {
-        if (res.status === 201) {
-          setUserState((prev: IUser) => ({ ...prev, ...res?.data }));
-          toast.success("Successfully created user");
-          navigate("/auth/login");
-        }
-      })
-      .catch(() => toast.error("Failed to sign up"));
+    navigate("/auth/login", {
+      state: {
+        fullName: userState.fullName,
+        email: userState.email,
+        password: userState.password,
+      },
+    });
+
+    toast.success("Account created succesfully, redirecting to login");
+    // await UserService.register({
+    //   fullName: userState.fullName,
+    //   email: userState.email,
+    //   password: userState.password,
+    // })
+    //   .then((res: any) => {
+    //     if (res.status === 201) {
+    //       toast.success("Successfully created user");
+
+    //       // optional: sync state with backend response, but DON'T store password anywhere
+    //       setUserState((prev: IUser) => ({
+    //         ...prev,
+    //         fullName: userState.fullName,
+    //         email: userState.email,
+    //         password: userState.password,
+    //         confirmPassword: userState.confirmPassword,
+    //       }));
+
+    //       // ⬇️ pass email + password ONLY in route state (in-memory)
+    //       navigate("/auth/login", {
+    //         state: {
+    //           email: userState.email,
+    //           password: userState.password,
+    //         },
+    //       });
+    //     }
+    //   })
+    //   .catch(() => toast.error("Failed to sign up"));
   };
 
   const isSubmitDisabled =

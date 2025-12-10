@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   noMemberText,
   signupButtonText,
@@ -29,8 +29,6 @@ function UserLogin({
   setIsLoggedIn,
   isLoggedIn,
 }: UserLoginProps) {
-  const navigate = useNavigate();
-
   const [errors, setErrors] = useState<{
     email: string | null;
     password: string | null;
@@ -38,6 +36,10 @@ function UserLogin({
     email: null,
     password: null,
   });
+
+  const navigate = useNavigate();
+
+  const location = useLocation();
 
   const validateEmail = (email: string): string | null => {
     const re = /^[\w-.]+@([\w-]+\.)+[\w-]{2,}$/;
@@ -84,17 +86,43 @@ function UserLogin({
   };
   const didInit = useRef(false);
 
+  // useEffect(() => {
+  //   if (didInit.current) return;
+  //   setUserState((prev: any) => ({
+  //     ...prev,
+  //     email: "",
+  //     password: "",
+  //   }));
+  //   didInit.current = true;
+
+  //   const state = location.state as { email?: string } | null;
+
+  //   setUserState((prev: any) => ({
+  //     ...prev,
+  //     email: state?.email || "",
+  //     password: "",
+  //   }));
+
+  //   setErrors({ email: null, password: null });
+  // }, [setUserState, location.state]);
+
+  const state = location.state as {
+    fullName?: string;
+    email?: string;
+    password?: string;
+  } | null;
+
   useEffect(() => {
     if (didInit.current) return;
-    setUserState((prev: any) => ({
-      ...prev,
-      email: "",
-      password: "",
-    }));
     didInit.current = true;
 
-    setErrors({ email: null, password: null });
-  }, [setUserState]);
+    setUserState((prev) => ({
+      ...prev,
+      fullName: state?.fullName || "",
+      email: state?.email || "",
+      password: state?.password || "",
+    }));
+  }, [setUserState, state?.email, state?.fullName, state?.password]);
 
   const handleLogin = useCallback(async () => {
     const current = validateAll();
