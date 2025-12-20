@@ -1,35 +1,32 @@
+import { useEffect, useState } from "react";
 import "./Loader.css";
 
-const Loader = () => {
+const messages = [
+  "Breathe in… and out.",
+  "Slow down. You’re here now.",
+  "Preparing your meditation…",
+  "A calm session is almost ready.",
+];
+
+const Loader = ({ title = "Preparing your session…" }: { title?: string }) => {
+  const [i, setI] = useState(0);
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setTimeout(() => {
+        setI((prev) => (prev + 1) % messages.length);
+        setVisible(true);
+      }, 900);
+    }, 2200);
+    return () => clearInterval(id);
+  }, []);
+
   return (
     <div className="loader-container">
-      <div className="spinner"></div>
-      {
-        <p style={{ color: "black" }}>
-          <span
-            style={{
-              marginTop: 16,
-              textAlign: "center",
-              color: "whitesmoke",
-              display: "flex",
-            }}
-          >
-            <div>
-              🌸 While we generate your personalized video using Generative API,
-              try this:
-              <br />
-              <br />
-              Take a slow deep breath in… and gently exhale.
-              <br />
-              <br />
-              Your calm is on the way.
-              <br />
-              <br />
-              Loading...
-            </div>
-          </span>
-        </p>
-      }
+      <div className="bl-circle" aria-label="Breathing animation" />
+      <p className="bl-title">While you wait, try this:</p>
+      <p className={`bl-message ${visible ? "show" : "hide"}`}>{messages[i]}</p>
     </div>
   );
 };
