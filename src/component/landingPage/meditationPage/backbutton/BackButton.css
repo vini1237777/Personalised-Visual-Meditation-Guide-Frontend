@@ -10,7 +10,7 @@
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   font-weight: bolder;
-  margin-right: 450px;
+  margin-right: 60%;
   top: 90px;
   position: fixed;
 }
@@ -24,12 +24,14 @@
   transform: scale(0.97);
 }
 
-.back-button svg {
-  font-size: 16px;
+@media (max-width: 610px) {
+  .back-button {
+    margin-right: unset;
+  }
 }
 
-@media (max-width: 768px) {
+@media (min-width: 889px) {
   .back-button {
-    margin-right: -200px;
+    margin-right: 70%;
   }
 }
