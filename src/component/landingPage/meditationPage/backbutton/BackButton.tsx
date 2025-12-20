@@ -1,4 +1,6 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./BackButton.css";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 interface BackButtonProps {
   label?: string;
@@ -16,18 +18,18 @@ export default function BackButton({
   setVideoUrl,
 }: BackButtonProps) {
   return (
-    <div className="back-button-wrapper">
-      <button
-        onClick={() => {
-          setShowMoodSelector(true);
-          setIsContinueClicked(false);
-          setIsDemoMode(false);
-          setVideoUrl && setVideoUrl("");
-        }}
-        className="back-button"
-      >
-        <span>{label}</span>
-      </button>
-    </div>
+    <button
+      onClick={() => {
+        setShowMoodSelector(true);
+        setIsContinueClicked(false);
+        setIsDemoMode(false);
+        setVideoUrl && setVideoUrl("");
+      }}
+      className="back-button"
+    >
+      <span>
+        <FontAwesomeIcon icon={faArrowLeft} /> {label}
+      </span>
+    </button>
   );
 }
