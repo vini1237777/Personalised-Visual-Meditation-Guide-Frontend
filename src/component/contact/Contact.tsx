@@ -67,6 +67,7 @@ function Contact() {
                 <span className="contact-form-label">{constants.label}</span>
                 <span>
                   <input
+                    type={constants.type}
                     id={constants.id}
                     name={constants.name}
                     value={formData[constants.name as FormDataKeys]}

@@ -1,5 +1,4 @@
 import { contentListArray } from "../../helpers/classses";
-import { aboutBodyText, aboutTitle } from "../../helpers/constants";
 import "./About.css";
 function About() {
   return (
@@ -7,11 +6,6 @@ function About() {
       <div className="about-wrapper"></div>
       <div className="about-content">
         <div className="about-content-item">
-          <div className="about-content-item-wrapper">
-            <h1>{aboutTitle}</h1>
-            <p>{aboutBodyText}</p>
-          </div>
-
           {contentListArray?.map((content) => (
             <div>
               <div
