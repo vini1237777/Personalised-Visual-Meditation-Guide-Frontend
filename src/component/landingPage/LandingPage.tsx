@@ -124,7 +124,10 @@ const LandingPage = ({ user, setUserState, isLoggedIn }: LandingPageProps) => {
 
   const displayName = (user?.fullName || savedUser?.fullName || "")
     .toString()
-    .trim();
+    .trim()
+    .split(" ")
+    .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 
   return (
     <div
