@@ -173,7 +173,6 @@
   align-items: center;
   gap: 8px;
   margin-top: 6px;
-  cursor: pointer;
   font-size: 0.9rem;
   color: #333;
 }
@@ -181,11 +180,7 @@
   accent-color: #111;
 }
 
-/* =========================================
-   📱 Tablet & Mobile responsiveness
-   ========================================= */
 @media (max-width: 768px) {
-  /* overall wrapper – remove huge right shift on small screens */
   .userCard-wrapper {
     margin-right: -30px;
     text-align: center;
@@ -211,20 +206,18 @@
     margin-top: 8px;
   }
 
-  /* title – keep style but center it */
   .userCard-form-title {
     margin-left: -20px;
     text-align: center;
     margin-right: 0;
   }
 
-  /* labels & inputs – full width on small screens */
   .userCard-form-label {
     margin-right: 0;
     display: block;
     margin-bottom: 4px;
     text-align: left;
-    font-size: 16px; /* slightly smaller for mobile */
+    font-size: 16px;
   }
 
   .userCard-form-input {
@@ -233,7 +226,6 @@
     box-sizing: border-box;
   }
 
-  /* button wrappers – center, no big left shift */
   .userCard-button-wrapper {
     margin-left: 0;
     justify-content: center;
@@ -252,7 +244,6 @@
     font-size: 16px;
   }
 
-  /* login link and error text still readable but not huge */
   .userCard-login {
     font-size: 14px;
   }
@@ -267,7 +258,6 @@
   }
 }
 
-/* extra-small phones */
 @media (max-width: 480px) {
   .userCard-wrapper {
     margin-left: 40px;
