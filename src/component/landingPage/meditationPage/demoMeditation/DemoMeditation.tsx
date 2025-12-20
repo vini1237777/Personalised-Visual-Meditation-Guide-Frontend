@@ -65,13 +65,9 @@ type DemoMeditationProps = {
 
 export default function DemoMeditation({
   category,
-  showBackButton = true,
   width = 640,
   height = 360,
   className,
-  setShowMoodSelector,
-  setIsContinueClicked,
-  setIsDemoMode,
   isLoading,
 }: DemoMeditationProps) {
   const [videoUrl, setVideoUrl] = useState<string>("");
