@@ -86,26 +86,6 @@ function UserLogin({
   };
   const didInit = useRef(false);
 
-  // useEffect(() => {
-  //   if (didInit.current) return;
-  //   setUserState((prev: any) => ({
-  //     ...prev,
-  //     email: "",
-  //     password: "",
-  //   }));
-  //   didInit.current = true;
-
-  //   const state = location.state as { email?: string } | null;
-
-  //   setUserState((prev: any) => ({
-  //     ...prev,
-  //     email: state?.email || "",
-  //     password: "",
-  //   }));
-
-  //   setErrors({ email: null, password: null });
-  // }, [setUserState, location.state]);
-
   const state = location.state as {
     fullName?: string;
     email?: string;
@@ -118,9 +98,9 @@ function UserLogin({
 
     setUserState((prev) => ({
       ...prev,
-      fullName: state?.fullName || "",
-      email: state?.email || "",
-      password: state?.password || "",
+      fullName: state?.fullName || "Vinisha Yadav",
+      email: state?.email || "v@gmail.com",
+      password: state?.password || "v@123456",
     }));
   }, [setUserState, state?.email, state?.fullName, state?.password]);
 
