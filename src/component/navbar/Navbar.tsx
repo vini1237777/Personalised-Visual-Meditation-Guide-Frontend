@@ -89,7 +89,8 @@ function Navbar({
                   <div className="github-card">
                     <p className="github-card-title">Frontend Repo:</p>
                     <a
-                      href="https://github.com/vini1237777/Personalised-Visual-Meditation-Guide-Frontend"
+                      // href="https://github.com/vini1237777/Personalised-Visual-Meditation-Guide-Frontend"
+                      href="https://github.com/vini1237777"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -97,7 +98,8 @@ function Navbar({
                     </a>
                     <p className="github-card-title">Backend Repo:</p>
                     <a
-                      href="https://github.com/vini1237777/Personalised-Visual-Meditation-Guide-Backend"
+                      // href="https://github.com/vini1237777/Personalised-Visual-Meditation-Guide-Backend"
+                      href="https://github.com/vini1237777"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
