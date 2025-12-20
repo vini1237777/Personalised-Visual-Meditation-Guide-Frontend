@@ -18,6 +18,12 @@
   margin-top: 200px;
 }
 
+@media (max-width: 411px) and (max-width: 767px) {
+  .demo-meditation-video-container {
+    margin-top: -200px;
+  }
+}
+
 @media (max-width: 768px) {
   .demo-meditation-page {
     display: flex;
