@@ -77,7 +77,7 @@ export default function MoodSelector({
 
     if (isdemoMode) {
       setIsLoading(true);
-      await new Promise((r) => setTimeout(r, 10000));
+      await new Promise((r) => setTimeout(r, 2000));
       setIsLoading(false);
       setShowAnimation(false);
       return;
@@ -96,7 +96,7 @@ export default function MoodSelector({
 
     try {
       setIsLoading(true);
-      await new Promise((r) => setTimeout(r, 10000));
+      await new Promise((r) => setTimeout(r, 2000));
 
       const response = await UserService.getScript({
         selectedFeelings,
@@ -141,7 +141,7 @@ export default function MoodSelector({
       toast.error(
         err instanceof Error
           ? err.message
-          : "Internal Server Error: API quota exceeded for generating video"
+          : "Live AI temporarily unavailable, showing curated sessions, Please click See DEMO below"
       );
     } finally {
       setIsLoading(false);
