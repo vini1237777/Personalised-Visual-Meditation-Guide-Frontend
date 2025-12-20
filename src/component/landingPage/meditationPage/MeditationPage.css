@@ -14,7 +14,6 @@
 
 .meditation-container {
   display: flex;
-  background-color: red;
 }
 
 @media (min-width: 917px) {
