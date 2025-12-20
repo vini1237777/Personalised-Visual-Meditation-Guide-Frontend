@@ -63,14 +63,11 @@ function Navbar({
         `}
                 onClick={() => {
                   if (isGithub) {
-                    // toggle dropdown
                     setGithubOpen((prev: boolean) => !prev);
-                    // highlight GitHub as active when opened
                     setActiveLink(link.name);
                     return;
                   }
 
-                  // for non-Github links, always close dropdown
                   setGithubOpen(false);
 
                   setActiveLink(link.name);
