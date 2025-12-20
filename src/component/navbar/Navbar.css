@@ -4,7 +4,6 @@
   padding: 20px;
   display: flex;
   justify-content: space-between;
-  flex-wrap: wrap;
   row-gap: 10px;
   position: fixed;
   top: 0;
