@@ -2,6 +2,8 @@ import { useState } from "react";
 import "./MoodSelector.css";
 import { UserService } from "../../../services/userServices";
 import toast from "react-hot-toast";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 const emojiMap: Record<string, { category: string; feelings: string[] }> = {
   "😀": {
@@ -77,7 +79,7 @@ export default function MoodSelector({
 
     if (isdemoMode) {
       setIsLoading(true);
-      await new Promise((r) => setTimeout(r, 2000));
+      await new Promise((r) => setTimeout(r, 7500));
       setIsLoading(false);
       setShowAnimation(false);
       return;
@@ -96,7 +98,7 @@ export default function MoodSelector({
 
     try {
       setIsLoading(true);
-      await new Promise((r) => setTimeout(r, 2000));
+      await new Promise((r) => setTimeout(r, 7500));
 
       const response = await UserService.getScript({
         selectedFeelings,
@@ -138,11 +140,7 @@ export default function MoodSelector({
         }));
       }
     } catch (err: any) {
-      toast.error(
-        err instanceof Error
-          ? err.message
-          : "Live AI temporarily unavailable, showing curated sessions, Please click See DEMO below"
-      );
+      toast("🌿 Live AI is paused, showing curated session. Click SEE DEMO");
     } finally {
       setIsLoading(false);
 
@@ -245,12 +243,16 @@ export default function MoodSelector({
           {!isCollapsed && selectedEmojis?.length > 0 && (
             <div className="userLogin-button-wrapper">
               <button
-                className="userLogin-button"
+                className="continue-button"
                 onClick={() => {
                   handleContinue();
                 }}
               >
                 Continue
+                <FontAwesomeIcon
+                  icon={faArrowRight}
+                  style={{ marginLeft: "20px" }}
+                />
               </button>
               <div className="arrow-button"></div>
             </div>
