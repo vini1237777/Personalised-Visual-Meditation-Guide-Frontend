@@ -14,62 +14,56 @@ class Content {
 }
 
 export const contentList = {
-  "What is Visual Meditation?": new Content(
-    "What is Visual Meditation?",
-    "Visual Meditation is a unique blend of mindfulness and guided imagery that uses the power of your imagination to create vivid, peaceful experiences. Instead of focusing only on breath or sound, our sessions immerse you in mental landscapes, protective auras, and empowering symbols helping you relax and focus with ease.",
-    ""
-  ),
-  "Our Purpose": new Content(
-    "Our Purpose",
-    "In a fast-moving world, stillness can be hard to find. Our mission is to make meditation more accessible, engaging, and visually stimulating so that anyone from complete beginners to experienced meditators can connect with their inner calm.",
+  "What is SoulSync?": new Content(
+    "What is SoulSync?",
+    "SoulSync is a calm, visual meditation experience designed to help you slow down and reset in a few minutes. You choose a mood and follow a guided session that combines soothing visuals with simple prompts, beginner friendly and distraction free.",
     ""
   ),
 
-  "Benefits You Can Expect": [
-    new Content(
-      "Benefits You Can Expect",
-      ["Stress Relief", "Better Focus", "Creative Boost", "Emotional Balance"],
-      [
-        "Release daily tension through calming mental imagery.",
-        "Train your mind to concentrate through guided visual exercises.",
-        "Use imagery to inspire new ideas and perspectives.",
-        "Strengthen positive emotions with uplifting visuals.",
-      ]
-    ),
-  ],
+  "Why we built it": new Content(
+    "Why we built it",
+    "Modern life is noisy and fast. SoulSync was created for people who want a quiet moment without pressure or complicated routines. Our focus is a smooth, minimal experience that feels calming from the first screen.",
+    ""
+  ),
 
-  "How It Works": [
+  "How it works": [
     new Content(
-      "How It Works",
-      ["Choose a Theme", "Experience Guided Imagery", "Feel the Shift"],
+      "How it works",
       [
-        "Calm, focus, energy, or protection.",
-        "Our scripts paint vivid, soothing mental scenes.",
-        "Let your thoughts slow, your body relax, and your mind recharge.",
-      ]
-    ),
-  ],
-
-  "Who It’s For": [
-    new Content(
-      "Who It’s For",
-      [
-        "- Is looking for a new way to relax and de-stress.",
-        "- Wants to improve their focus and concentration.",
-        "- Is interested in exploring their creativity.",
-        "- Needs a break from their busy lifestyle.",
+        "Pick your mood",
+        "Continue to your session",
+        "Explore demo when needed",
       ],
-      "Visual Meditation is perfect for anyone who"
+      [
+        "Select what matches your current feeling (calm, focus, energy, etc.).",
+        "The app prepares your guided session with visuals and prompts.",
+        "If live sessions are paused, SoulSync switches to curated demo sessions so your experience stays uninterrupted.",
+      ]
     ),
   ],
-  "Join the Journey": [
+
+  "Who it’s for": [
     new Content(
-      "Join the Journey",
-      "Step into a space where meditation is more than silence, it’s a colorful journey for your mind. With Visual Meditation, peace is something you can see, feel, and carry with you anywhere.",
+      "Who it’s for",
+      [
+        "- Anyone who wants a calm break during work, study, or travel.",
+        "- Beginners who want a simple, non-overwhelming meditation flow.",
+        "- People who prefer visual guidance instead of long instructions.",
+        "- Anyone looking for a gentle way to reset and relax.",
+      ],
+      "SoulSync is helpful for"
+    ),
+  ],
+
+  "Demo note": [
+    new Content(
+      "Demo note",
+      "Depending on live availability, some sessions may run in curated demo mode. This keeps the experience smooth while you explore the product flow.",
       ""
     ),
   ],
 };
+
 export const contentListArray = Object.values(contentList).flatMap(
   (content) => content
 );
