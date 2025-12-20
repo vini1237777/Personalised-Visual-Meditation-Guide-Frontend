@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import BackButton from "./backbutton/BackButton";
 import { BreathingPanda } from "./BreathingPanda/BreathingPanda";
 import DemoMeditation from "./demoMeditation/DemoMeditation";
-
+import "./MeditationPage.css";
 const renderDemoMeditationPage = (
   category: any,
   setShowMoodSelector: any,
@@ -40,7 +40,7 @@ export default function MeditationPage({
   const content = isdemoMode ? (
     <>
       <BackButton
-        label=" Back to Mood Selector"
+        label="Back to Mood Selector"
         setShowMoodSelector={setShowMoodSelector}
         setIsContinueClicked={setIsContinueClicked}
         setIsDemoMode={setIsDemoMode}
@@ -72,7 +72,12 @@ export default function MeditationPage({
           }}
           style={{ cursor: "pointer" }}
         >
-          🌸 See Demo
+          <div className="meditation-card">
+            🌸
+            <span style={{ textDecoration: "underline", marginLeft: "5px" }}>
+              See Demo
+            </span>
+          </div>
         </h2>
       )}
       {showAnimation && videoUrl ? (
