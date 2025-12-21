@@ -130,7 +130,7 @@ export default function DemoMeditation({
       </div>
 
       <div style={{ marginTop: 12 }}>
-        <button className="userLogin-button" onClick={shuffle}>
+        <button className="shuffle-button" onClick={shuffle}>
           Shuffle another calm clip
         </button>
       </div>
