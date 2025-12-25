@@ -1,50 +1,31 @@
-import axios, { Method } from "axios";
-import toast from "react-hot-toast";
-import axiosHandler from "../helpers/axiosHandler";
+import type { Method } from "axios";
+import { request } from "../shared/api/http";
+
+type AxiosMethodLower = "get" | "post" | "put" | "delete" | "patch";
 
 interface IParams {
   value: any;
   index: string;
 }
 
-export enum RequestMethods {
-  GET = "get",
-  POST = "post",
-  PUT = "put",
-  DELETE = "delete",
+function toLowerMethod(method: Method): AxiosMethodLower {
+  return String(method).toLowerCase() as AxiosMethodLower;
 }
 
-export default async function makeRequest(
+export default function makeRequest<TResponse = any, TBody = any>(
   url: string,
   method: Method,
-  payload?: any
+  payload?: TBody
 ) {
-  let requestConfig = {
-    baseURL: `${process.env.REACT_APP_API}`,
-    url: url,
-    method: method,
-    headers: {
-      Authorization: sessionStorage.getItem("auth-Key") || "",
-    },
-    data: {},
-  };
+  const m = toLowerMethod(method);
 
-  if (method !== "get" && payload) {
-    requestConfig.data = payload;
+  if (m === "get" && payload && typeof payload === "object") {
+    return request<TResponse, undefined>("get", url, undefined, {
+      params: payload as any,
+    });
   }
 
-  try {
-    let response = await axios.request(requestConfig);
-    return response;
-  } catch (error: any) {
-    if (error?.response?.data) {
-      if (error.response.data.message) {
-        toast.error(error.response.data.message);
-      }
-    }
-    axiosHandler(error.message);
-    throw error.message;
-  }
+  return request<TResponse, TBody>(m, url, payload);
 }
 
 export function makeParams(params: IParams[]) {
