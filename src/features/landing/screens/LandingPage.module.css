@@ -1,0 +1,54 @@
+.landingPage {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  align-items: flex-start;
+  justify-content: center;
+  background-size: cover;
+  position: fixed;
+  left: 0;
+  top: 10px;
+  color: white;
+  font-weight: bolder;
+}
+
+.welcomeText {
+  font-size: 48px;
+  padding-left: 100px;
+  margin-top: 100px;
+}
+
+.heading {
+  font-size: 20px;
+  padding-left: 100px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 768px) {
+  .landingPage {
+    width: 100%;
+    min-height: 100vh;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .welcomeText {
+    font-size: clamp(1.6rem, 5vw, 32px);
+    text-align: center;
+    color: #45a049;
+    padding-left: 3px;
+    margin-top: -100px;
+  }
+
+  .heading {
+    font-size: clamp(0.9rem, 3.5vw, 16px);
+    padding-left: 0;
+    text-align: center;
+  }
+}

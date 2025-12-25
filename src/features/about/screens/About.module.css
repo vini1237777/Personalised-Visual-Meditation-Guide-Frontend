@@ -1,0 +1,215 @@
+.page {
+  min-height: 100vh;
+  width: 100%;
+  padding: 90px 16px 28px;
+  box-sizing: border-box;
+  background: #fff;
+  display: flex;
+}
+
+.layout {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 2px;
+}
+
+.visual {
+  flex: 1;
+  min-width: 320px;
+
+  background-image: url("../../../assets/images/visualMeditation.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+
+  border-radius: 16px;
+  aspect-ratio: 4 / 3;
+}
+
+.content {
+  flex: 1;
+  min-width: 320px;
+  display: flex;
+  text-align: start;
+}
+
+.card {
+  width: min(720px, 100%);
+  margin: 0;
+  padding: 16px;
+
+  background: rgba(255, 255, 255, 0.88);
+  border-radius: 14px;
+
+  align-items: start;
+
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  box-sizing: border-box;
+}
+
+.introBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: center;
+  color: rgb(205, 152, 129);
+}
+
+.pageTitle {
+  margin: 0;
+  font-weight: 800;
+  font-size: 22px;
+  color: rgb(25, 25, 109);
+  text-decoration: underline;
+  text-align: left;
+}
+
+.pageDesc {
+  margin: 0;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.75);
+  text-align: left;
+}
+
+.blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.blockTitle {
+  font-weight: 700;
+  text-align: left;
+  text-decoration: underline;
+  margin: 10px 0 6px;
+  color: rgb(25, 25, 109);
+}
+
+.paragraph,
+.subTitle,
+.pairHead,
+.pairSub,
+.bulletItem {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.subTitle {
+  font-weight: 700;
+  text-align: left;
+}
+
+.paragraph {
+  margin: 0;
+  font-weight: 400;
+  text-align: left;
+}
+
+.paragraphList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pairList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pairRow {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pairHead {
+  font-weight: 700;
+  text-align: left;
+  margin-bottom: 0;
+}
+
+.pairSub {
+  font-weight: 400;
+  text-align: left;
+  margin-left: 8px;
+}
+
+.bullets {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.bulletItem {
+  font-weight: 400;
+  text-align: left;
+  font-size: 14px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .pairHead:hover,
+  .paragraph:hover,
+  .bulletItem:hover {
+    font-size: 15px;
+    transition: font-size 0.3s ease;
+  }
+}
+
+@media (max-width: 900px) {
+  .layout {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .page {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .visual {
+    width: min(720px, 100%);
+    min-height: 260px;
+    background-size: cover;
+    text-align: center;
+    aspect-ratio: 1;
+    background-position: 50%;
+  }
+
+  .content {
+    width: 100%;
+  }
+
+  .introBlock {
+    text-align: center;
+  }
+
+  .pageTitle,
+  .pageDesc {
+    text-align: start;
+  }
+}
+
+@media (max-width: 420px) {
+  .page {
+    padding: 96px 12px 22px;
+  }
+
+  .card {
+    padding: 14px;
+    border-radius: 12px;
+  }
+}
