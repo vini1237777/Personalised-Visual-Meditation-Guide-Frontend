@@ -1,0 +1,443 @@
+.header {
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(12px);
+  background: black;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  position: fixed;
+  width: 100%;
+  right: 0;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+
+  padding: 14px 18px;
+  max-width: 1180px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+
+  color: #e9d5ff;
+  font-weight: 900;
+  letter-spacing: 0.2px;
+  text-decoration: none;
+  font-size: 20px;
+}
+
+.brand::after {
+  content: " | Guided meditation";
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.link {
+  color: rgba(233, 213, 255, 0.72);
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 18px;
+  padding: 10px 10px;
+  border-radius: 12px;
+
+  transition: color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+
+.link:hover {
+  color: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateY(-1px);
+}
+
+.active {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.25) inset;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.authActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.userArea {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.userChip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 9px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 800;
+  font-size: 13px;
+
+  transition: background 160ms ease, border-color 160ms ease;
+}
+
+.userChip:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+.userDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #22c55e;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.18);
+  display: inline-block;
+}
+
+.userName {
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ghostBtn {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.02);
+  color: rgba(255, 255, 255, 0.92);
+
+  padding: 9px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 13px;
+
+  transition: transform 160ms ease, background 160ms ease,
+    border-color 160ms ease;
+}
+
+.ghostBtn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.22);
+  transform: translateY(-1px);
+}
+
+.ghostBtn:active {
+  transform: translateY(0);
+}
+
+.primaryBtn {
+  border: none;
+  background: linear-gradient(180deg, #22c55e, #16a34a);
+  color: #fff;
+
+  padding: 10px 13px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 900;
+  font-size: 13px;
+
+  box-shadow: 0 12px 28px rgba(22, 163, 74, 0.22);
+  transition: transform 160ms ease, filter 160ms ease, box-shadow 160ms ease;
+}
+
+.primaryBtn:hover {
+  filter: brightness(1.03);
+  transform: translateY(-1px);
+  box-shadow: 0 16px 34px rgba(22, 163, 74, 0.28);
+}
+
+.primaryBtn:active {
+  transform: translateY(0);
+}
+
+.main {
+  min-height: calc(100vh - 62px);
+}
+
+@media (max-width: 920px) {
+  .brand::after {
+    content: "";
+  }
+  .link {
+    font-size: 16px;
+    padding: 9px 9px;
+  }
+}
+
+@media (max-width: 720px) {
+  .nav {
+    display: none;
+  }
+  .userName {
+    max-width: 90px;
+  }
+}
+
+.githubWrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.githubCard {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  left: auto;
+
+  width: 110px;
+  padding: 14px;
+  border-radius: 16px;
+
+  background: rgba(44, 41, 41, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(10px);
+
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px);
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.githubCardOpen {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.githubSection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.githubTitle {
+  margin: 0;
+  font-weight: 900;
+  font-size: 16px;
+  color: rgb(233, 128, 128);
+}
+
+.githubItem {
+  display: block;
+  text-decoration: none;
+  color: #fff;
+  font-weight: 900;
+  font-size: 14px;
+  line-height: 1.05;
+
+  padding: 6px 8px;
+  border-radius: 10px;
+  background: transparent;
+  transition: transform 160ms ease, opacity 160ms ease;
+}
+
+.githubItem:hover {
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  transform: translateY(-1px);
+}
+
+.githubDivider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.18);
+  margin: 14px 0;
+}
+
+@media (max-width: 720px) {
+  .githubCard {
+    right: 0;
+    width: 240px;
+  }
+  .githubTitle {
+    font-size: 18px;
+  }
+  .githubItem {
+    font-size: 26px;
+  }
+}
+
+.hamburger {
+  display: none;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+  border-radius: 12px;
+  padding: 10px 10px;
+  cursor: pointer;
+}
+
+.bars {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bars span {
+  width: 22px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 999px;
+  transition: transform 180ms ease, opacity 180ms ease;
+}
+
+.barsOpen span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+.barsOpen span:nth-child(2) {
+  opacity: 0;
+}
+.barsOpen span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+.mobilePanel {
+  display: none;
+  overflow: hidden;
+
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-6px);
+
+  transition: max-height 220ms ease, opacity 200ms ease, transform 200ms ease;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(20, 20, 20, 0.92);
+  backdrop-filter: blur(12px);
+}
+
+.mobilePanel.open {
+  max-height: 420px;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.mobileLink {
+  display: block;
+  padding: 14px 18px;
+  text-decoration: none;
+  font-weight: 900;
+  font-size: 16px;
+  color: rgba(233, 213, 255, 0.78);
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  transition: background 160ms ease, color 160ms ease;
+}
+
+.mobileLink:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.mobileGithubCard {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: max-height 200ms ease, opacity 200ms ease, transform 200ms ease;
+
+  background: rgba(44, 41, 41, 0.85);
+}
+
+.mobileGithubOpen {
+  max-height: 140px;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.mobileGithubItem {
+  display: block;
+  padding: 12px 18px;
+  text-decoration: none;
+  font-weight: 900;
+  color: #fff;
+  transition: background 160ms ease;
+}
+
+.mobileGithubItem:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+@media (max-width: 720px) {
+  .nav {
+    display: none;
+  }
+
+  .hamburger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mobilePanel {
+    display: block;
+  }
+}
+
+.brand {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+
+  color: rgb(194, 169, 192);
+  font-weight: 900;
+  font-size: 22px;
+  text-decoration: none;
+
+  transform-origin: left center;
+  will-change: transform;
+  transition: transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1), color 220ms ease,
+    letter-spacing 220ms ease, filter 220ms ease;
+}
+
+.brand::after {
+  content: "| Powered by Generative AI";
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0;
+}
+
+.brand:hover {
+  color: #fff;
+  transform: scale(1.22);
+  letter-spacing: 0.4px;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.35));
+}
+
+.brand:focus-visible {
+  outline: none;
+  transform: scale(1.18);
+  color: #fff;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.35));
+}
+
+@media (max-width: 720px) {
+  .brand:hover {
+    transform: scale(1.12);
+  }
+}

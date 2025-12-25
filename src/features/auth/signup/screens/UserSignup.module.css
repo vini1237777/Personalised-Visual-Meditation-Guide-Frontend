@@ -1,0 +1,242 @@
+.page {
+  height: 100vh;
+  display: grid;
+  place-items: center;
+  width: 100vw;
+  background-image: url("../../../../assets/images/sunset.jpg");
+  background-size: cover;
+  position: fixed;
+}
+
+.content {
+  width: 100%;
+  max-width: 980px;
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.hero {
+  margin: 0 auto 18px;
+  padding: 0 10px;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeUp 520ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.heroTitle {
+  margin: 0;
+  font-size: clamp(34px, 4vw, 56px);
+  font-weight: 900;
+  letter-spacing: -0.4px;
+  color: #fff;
+  text-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+.heroSubtitle {
+  margin: 10px 0 0;
+  font-size: clamp(14px, 1.5vw, 18px);
+  color: rgba(255, 255, 255, 0.88);
+  text-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card {
+  width: min(500px, 94vw);
+  margin: 0 auto;
+  padding: 20px 18px 18px;
+  border-radius: 18px;
+
+  transform: translateY(12px);
+  animation: cardIn 520ms cubic-bezier(0.2, 0.8, 0.2, 1) 80ms forwards;
+}
+
+@keyframes cardIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cardHeader {
+  text-align: center;
+  margin-bottom: 10px;
+  padding: 0 6px;
+}
+
+.title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.96);
+  letter-spacing: 0.2px;
+}
+
+.subtitle {
+  margin: 6px 0 0;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.link {
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+
+  color: #9be59d;
+  font-weight: 900;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.link:hover {
+  color: #b6f0b8;
+}
+
+.form {
+  padding: 6px 0;
+  margin-left: -20px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 100px 2fr;
+  gap: 12px;
+  align-items: start;
+  margin-top: 12px;
+}
+
+.label {
+  padding-top: 10px;
+  font-size: 14px;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.92);
+  text-align: right;
+}
+
+.control {
+  text-align: left;
+}
+
+.input {
+  width: 90%;
+  padding: 11px 12px;
+  border-radius: 12px;
+
+  border: 1.6px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.96);
+
+  transition: transform 140ms ease, border-color 160ms ease,
+    box-shadow 160ms ease, background 160ms ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: rgba(34, 197, 94, 0.9);
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.16);
+  background: rgba(255, 255, 255, 0.16);
+  transform: translateY(-1px);
+}
+
+.input[aria-invalid="true"] {
+  border-color: rgba(249, 115, 22, 0.95);
+  box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.14);
+}
+
+.error {
+  margin-top: 6px;
+  font-size: 12.5px;
+  color: #ffd19a;
+}
+
+.rowSpacer {
+  height: 1px;
+}
+
+.showPass {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 6px;
+  font-size: 13px;
+}
+.showPass input[type="checkbox"] {
+  accent-color: #22c55e;
+}
+
+.button {
+  width: min(320px, 100%);
+  margin: 18px auto 4px;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: none;
+
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: 0.2px;
+
+  background: linear-gradient(180deg, #22c55e, #16a34a);
+  color: #fff;
+  cursor: pointer;
+
+  box-shadow: 0 14px 34px rgba(22, 163, 74, 0.22);
+  transition: transform 160ms ease, filter 160ms ease, box-shadow 160ms ease,
+    opacity 160ms ease;
+}
+
+.button:hover {
+  filter: brightness(1.03);
+  transform: translateY(-1px);
+  box-shadow: 0 18px 42px rgba(22, 163, 74, 0.28);
+}
+.button:active {
+  transform: translateY(0);
+}
+.button:disabled {
+  opacity: 0.55;
+  background: #9ca3af;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+@media (max-width: 768px) {
+  .card {
+    width: min(520px, 80vw);
+    padding: 10px;
+  }
+
+  .row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .label {
+    text-align: left;
+    padding-top: 0;
+  }
+
+  .cardHeader {
+    text-align: center;
+  }
+
+  .form {
+    margin: unset;
+  }
+
+  .page {
+    top: 50px;
+    position: fixed;
+    left: 0;
+  }
+}

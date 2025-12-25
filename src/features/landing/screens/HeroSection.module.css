@@ -1,0 +1,58 @@
+.hero {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-left: 100px;
+}
+
+.heroItem {
+  max-width: 520px;
+}
+
+.headline {
+  font-size: 40px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.subheadline {
+  font-size: 18px;
+  opacity: 0.9;
+  margin-bottom: 20px;
+}
+
+.ctaButton {
+  background-color: #4caf50;
+  color: white;
+  padding: 14px 28px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.ctaButton:hover {
+  background-color: #45a049;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding-left: 0;
+    align-items: center;
+    text-align: center;
+  }
+
+  .headline {
+    font-size: clamp(1.6rem, 5vw, 32px);
+  }
+
+  .subheadline {
+    font-size: clamp(0.95rem, 3vw, 16px);
+  }
+
+  .ctaButton {
+    width: 90%;
+  }
+}
