@@ -6,7 +6,7 @@ import buddhaImage from "../../../assets/images/buddha.jpg";
 import buddhaMobile from "../../../assets/images/buddhaMobile.png";
 import MoodSelector from "./MoodSelector";
 import styles from "./LandingPage.module.css";
-import MeditationPage from "../meditationPage/ui/MeditationPage";
+import MeditationPage from "../meditation/ui/MeditationPage";
 import { HERO_ITEMS } from "../config/hero.config";
 import { useAuth } from "app/providers/AuthProvider";
 import Loader from "shared/ui/Loader";

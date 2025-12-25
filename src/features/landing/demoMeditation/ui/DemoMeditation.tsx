@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { BackButton } from "shared/ui/BackButton/BackButton";
-import type { DemoMeditationProps } from "../../meditationPage/model/meditation.types";
+import type { DemoMeditationProps } from "../../meditation/model/meditation.types";
 import styles from "./DemoMeditation.module.css";
 import { BreathingPanda } from "./BreathingPanda/BreathingPanda";
 
