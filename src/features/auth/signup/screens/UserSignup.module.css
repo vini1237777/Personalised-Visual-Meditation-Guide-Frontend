@@ -6,6 +6,7 @@
   background-image: url("../../../../assets/images/sunset.jpg");
   background-size: cover;
   position: fixed;
+  left: 0;
 }
 
 .content {
