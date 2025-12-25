@@ -1,40 +1,48 @@
 import makeRequest from "../api/makeRequest";
 import url from "../api/urls";
-import { IUser } from "../helpers/interface";
+import type { User } from "../features/user/model/user.types";
+import {
+  ApiResponse,
+  GetScriptRequest,
+  GetScriptResponse,
+  LoginRequest,
+  LoginResponse,
+  RegisterRequest,
+  UpdateUserRequest,
+} from "./config/userService.config";
 
 export class UserService {
   static async getByEmail(email: string) {
-    return makeRequest(url.getUser, "GET", { email });
-  }
-  static async register(payload: any) {
-    return makeRequest(url.register, "POST", payload);
+    return makeRequest(url.getUser, "get", { email });
   }
 
-  static async login(payload: any) {
-    return makeRequest(url.login, "POST", payload);
+  static async register(payload: RegisterRequest) {
+    return makeRequest(url.register, "post", payload) as Promise<
+      ApiResponse<User>
+    >;
   }
 
-  static async updateUser(id: any, payload: IUser) {
-    return makeRequest(url.updateUser + "/" + id, "PUT", payload);
-  }
-  static async deleteUser(id: any) {
-    return makeRequest(url.deleteUser + "/" + id, "DELETE");
+  static async login(payload: LoginRequest) {
+    return makeRequest(url.login, "post", payload) as Promise<
+      ApiResponse<LoginResponse>
+    >;
   }
 
-  static async getScript({
-    selectedFeelings,
-    selectedEmojis,
-    email,
-  }: {
-    selectedFeelings: string[];
-    selectedEmojis: any;
-    email: any;
-  }) {
-    const payload = {
-      selectedFeelings,
-      selectedEmojis,
-      email,
-    };
-    return makeRequest(url.getScript, "POST", payload);
+  static async updateUser(id: string, payload: UpdateUserRequest) {
+    return makeRequest(`${url.updateUser}/${id}`, "put", payload) as Promise<
+      ApiResponse<User>
+    >;
+  }
+
+  static async deleteUser(id: string) {
+    return makeRequest(`${url.deleteUser}/${id}`, "delete") as Promise<
+      ApiResponse<{ ok: boolean }>
+    >;
+  }
+
+  static async getScript(payload: GetScriptRequest) {
+    return makeRequest(url.getScript, "post", payload) as Promise<
+      ApiResponse<GetScriptResponse>
+    >;
   }
 }
