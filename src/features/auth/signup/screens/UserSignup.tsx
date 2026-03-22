@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 import styles from "./UserSignup.module.css";
+import { UserService } from "services/userServices";
 
 type SignupForm = {
   fullName: string;
@@ -101,16 +102,16 @@ export default function UserSignup() {
     try {
       setIsSubmitting(true);
 
-      //   const res = await UserService.register({
-      //     fullName: form.fullName,
-      //     email: form.email,
-      //     password: form.password,
-      //   });
+      const res = await UserService.register({
+        fullName: form.fullName,
+        email: form.email,
+        password: form.password,
+      });
 
-      //   if (res.status !== 200 && res.status !== 201) {
-      //     toast.error("Signup failed. Please try again.");
-      //     return;
-      //   }
+      if (res.status !== 200 && res.status !== 201) {
+        toast.error("Signup failed. Please try again.");
+        return;
+      }
 
       toast.success("Account created. Please login.");
       navigate("/auth/login");
@@ -154,6 +155,7 @@ export default function UserSignup() {
               value={form.fullName}
               onChange={onChange("fullName")}
               error={errors.fullName}
+              isDisabled
             />
 
             <Field
@@ -162,6 +164,7 @@ export default function UserSignup() {
               value={form.email}
               onChange={onChange("email")}
               error={errors.email}
+              isDisabled
             />
 
             <Field
@@ -170,6 +173,7 @@ export default function UserSignup() {
               value={form.password}
               onChange={onChange("password")}
               error={errors.password}
+              isDisabled
             />
 
             <Field
@@ -178,6 +182,7 @@ export default function UserSignup() {
               value={form.confirmPassword}
               onChange={onChange("confirmPassword")}
               error={errors.confirmPassword}
+              isDisabled
             />
 
             <div className={styles.row}>
@@ -196,7 +201,8 @@ export default function UserSignup() {
             <button
               className={styles.button}
               onClick={handleSignup}
-              disabled={!canSubmit}
+              // disabled={!canSubmit}
+              disabled
             >
               {isSubmitting ? "Creating..." : "Sign up"}
             </button>
@@ -213,12 +219,14 @@ function Field({
   onChange,
   error,
   type = "text",
+  isDisabled = false,
 }: {
   label: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   error?: string;
   type?: string;
+  isDisabled?: boolean;
 }) {
   return (
     <div className={styles.row}>
@@ -231,6 +239,7 @@ function Field({
           value={value}
           onChange={onChange}
           aria-invalid={Boolean(error)}
+          disabled={isDisabled}
         />
         {error && <div className={styles.error}>{error}</div>}
       </div>
