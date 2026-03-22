@@ -53,13 +53,13 @@ export default function UserSignup() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const canSubmit = useMemo(() => {
-    return (
-      !isSubmitting &&
-      Object.values(form).every(Boolean) &&
-      Object.values(errors).every((e) => !e)
-    );
-  }, [form, errors, isSubmitting]);
+  // const canSubmit = useMemo(() => {
+  //   return (
+  //     !isSubmitting &&
+  //     Object.values(form).every(Boolean) &&
+  //     Object.values(errors).every((e) => !e)
+  //   );
+  // }, [form, errors, isSubmitting]);
 
   const onChange =
     (key: keyof SignupForm) => (e: React.ChangeEvent<HTMLInputElement>) => {
