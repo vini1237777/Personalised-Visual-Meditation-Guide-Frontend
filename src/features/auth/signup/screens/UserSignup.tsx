@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import styles from "./UserSignup.module.css";
 import { UserService } from "services/userServices";
 import { BG_VIDEOS } from "../../../../assets/bg-videos/videoUrls";
+import bg1 from "../../../../assets/images/bg1.jpg";
 
 type SignupForm = {
   fullName: string;
@@ -53,6 +54,7 @@ export default function UserSignup() {
   const [errors, setErrors] = useState<FieldErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [videoReady, setVideoReady] = useState(false);
 
   const onChange =
     (key: keyof SignupForm) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -112,7 +114,19 @@ export default function UserSignup() {
 
   return (
     <div className={styles.page}>
-      <video className={styles.videoBg} autoPlay loop muted playsInline>
+      <video
+        className={styles.videoBg}
+        autoPlay
+        loop
+        muted
+        playsInline
+        poster={bg1}
+        onCanPlay={() => setVideoReady(true)}
+        style={{
+          opacity: videoReady ? 1 : 0,
+          transition: "opacity 0.6s ease",
+        }}
+      >
         <source src={BG_VIDEOS.bg4} type="video/mp4" />
       </video>
 

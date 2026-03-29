@@ -44,6 +44,8 @@ export default function UserLogin() {
   const [errors, setErrors] = useState<FieldErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const [videoReady, setVideoReady] = useState(false);
+
   const canSubmit = useMemo(() => {
     return (
       !isSubmitting &&
@@ -122,6 +124,12 @@ export default function UserLogin() {
         muted
         playsInline
         preload="none"
+        poster="../../../../assets/images/bg1.jpg"
+        onCanPlay={() => setVideoReady(true)}
+        style={{
+          opacity: videoReady ? 1 : 0,
+          transition: "opacity 0.6s ease",
+        }}
       >
         <source src={BG_VIDEOS.bg4} type="video/mp4" />
       </video>
