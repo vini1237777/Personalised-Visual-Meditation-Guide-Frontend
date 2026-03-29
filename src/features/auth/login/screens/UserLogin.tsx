@@ -7,7 +7,7 @@ import { useAuth } from "../../../../app/providers/AuthProvider";
 import type { User } from "../../../user/model/user.types";
 import { UserService } from "../../../../services/userServices";
 import { ApiError } from "../../../../shared/api/http";
-import bgVideo from "../../../../assets/bg-videos/bg1.mp4";
+import { BG_VIDEOS } from "../../../../assets/bg-videos/videoUrls";
 
 type LoginForm = {
   email: string;
@@ -115,8 +115,15 @@ export default function UserLogin() {
 
   return (
     <div className={styles.page}>
-      <video className={styles.videoBg} autoPlay loop muted playsInline>
-        <source src={bgVideo} type="video/mp4" />
+      <video
+        className={styles.videoBg}
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="none"
+      >
+        <source src={BG_VIDEOS.bg4} type="video/mp4" />
       </video>
 
       <div className={styles.overlay} />
