@@ -42,6 +42,12 @@ export default function Navbar() {
   };
 
   useEffect(() => {
+    if (!isLoggedIn && window.location.pathname === "/") {
+      navigate("/auth/register", { replace: true });
+    }
+  }, [isLoggedIn, navigate]);
+
+  useEffect(() => {
     const handler = (e: MouseEvent) => {
       const t = e.target as Node;
       if (!headerRef.current) return;
@@ -111,12 +117,6 @@ export default function Navbar() {
       </div>
     </div>
   );
-
-  useEffect(() => {
-    if (!isLoggedIn && window.location.pathname === "/") {
-      navigate("/auth/login", { replace: true });
-    }
-  }, [isLoggedIn, navigate]);
 
   return (
     <>
