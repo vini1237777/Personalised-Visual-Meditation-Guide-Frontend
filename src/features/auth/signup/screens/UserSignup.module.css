@@ -219,8 +219,6 @@
   transform: translateY(0);
 }
 .button:disabled {
-  opacity: 0.55;
-  background: #9ca3af;
   cursor: not-allowed;
   box-shadow: none;
 }
