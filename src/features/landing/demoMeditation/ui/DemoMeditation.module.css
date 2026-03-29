@@ -1,22 +1,30 @@
 .wrapper {
-  width: 100%;
+  width: 55vw;
+  min-height: 100vh;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: 14px;
   align-items: center;
-  margin-top: 100px;
+  padding-top: 150px;
+  padding-bottom: 40px;
+  padding-left: 16px;
+  padding-right: 16px;
+  overflow-y: auto;
 }
 
 .title {
   margin: 0;
   font-size: 1.1rem;
   text-align: center;
+  color: #fff;
 }
 
 .category {
   margin: 0;
   font-size: 0.95rem;
   opacity: 0.9;
+  color: #fff;
 }
 
 .card {
@@ -24,11 +32,16 @@
   border-radius: 16px;
   padding: 18px 22px;
   text-align: center;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  min-width: 100%;
 }
 
 .text {
   margin: 0 0 10px;
   font-weight: 700;
+  color: rgba(255, 255, 255, 0.92);
 }
 
 .demoBox {
@@ -58,23 +71,33 @@
   font-weight: 600;
   width: 100%;
   max-width: 320px;
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease;
 }
 
 .shuffleButton:hover {
   background-color: #45a049;
-  transition: 0.2s ease;
+  transform: translateY(-1px);
+}
+
+.shuffleButton:active {
+  transform: translateY(0);
 }
 
 @media (max-width: 768px) {
+  .wrapper {
+    padding-top: 80px;
+    padding-left: 12px;
+    padding-right: 12px;
+    gap: 10px;
+  }
+
   .card {
     padding: 16px;
   }
 
   .shuffleButton {
     max-width: 100%;
-  }
-
-  .wrapper {
-    margin-top: -10px;
   }
 }
