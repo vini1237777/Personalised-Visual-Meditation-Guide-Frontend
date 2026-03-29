@@ -1,5 +1,4 @@
 .wrapper {
-  width: 55vw;
   min-height: 100vh;
   box-sizing: border-box;
   display: flex;
@@ -91,6 +90,10 @@
     padding-left: 12px;
     padding-right: 12px;
     gap: 10px;
+  }
+
+  .title {
+    margin-top: 80px;
   }
 
   .card {

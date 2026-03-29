@@ -5,8 +5,8 @@
   background: black;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   position: fixed;
-  width: 100vw;
-  right: 0;
+  width: 100%;
+  margin-left: -8.2px;
 }
 
 .container {
