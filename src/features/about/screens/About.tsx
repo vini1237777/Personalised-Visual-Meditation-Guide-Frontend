@@ -1,6 +1,6 @@
 import styles from "./About.module.css";
 import { ABOUT_TEXT, contentListArray } from "../constants/about.text";
-import bgVideo from "../../../assets/bg-videos/bg2.mp4";
+import { BG_VIDEOS } from "../../../assets/bg-videos/videoUrls";
 
 const toText = (v: string | string[] | null | undefined) =>
   Array.isArray(v) ? v.join(" ") : (v ?? "");
@@ -15,7 +15,7 @@ export default function About() {
   return (
     <main className={styles.page}>
       <video className={styles.videoBg} autoPlay loop muted playsInline>
-        <source src={bgVideo} type="video/mp4" />
+        <source src={BG_VIDEOS.bg2} type="video/mp4" />
       </video>
 
       <div className={styles.overlay} />
