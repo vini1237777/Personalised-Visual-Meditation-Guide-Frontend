@@ -3,6 +3,7 @@ import { formatUserName } from "../../../shared/lib/formatUserName";
 import { HeroSection } from "./HeroSection";
 import { useLandingState } from "../hooks/useLandingState";
 import { BG_VIDEOS } from "../../../assets/bg-videos/videoUrls";
+import { useVideoBackground } from "../../../shared/custom-hooks/Usevideobackground";
 import MoodSelector from "./MoodSelector";
 import styles from "./LandingPage.module.css";
 import MeditationPage from "../meditation/ui/MeditationPage";
@@ -13,15 +14,21 @@ import Loader from "shared/ui/Loader";
 export default function LandingPage() {
   const { user, isLoggedIn, setUser } = useAuth();
   const { state, dispatch } = useLandingState();
+  const { videoRef, ready } = useVideoBackground(BG_VIDEOS.bg1);
 
   const showHero = isLoggedIn && Boolean(user) && state.view === "hero";
   const displayName = formatUserName(user);
 
   return (
     <div className={styles.landingPage}>
-      <video className={styles.videoBg} autoPlay loop muted playsInline>
-        <source src={BG_VIDEOS.bg1} type="video/mp4" />
-      </video>
+      <div className={styles.poster} />
+      <video
+        ref={videoRef}
+        className={styles.videoBg}
+        loop
+        playsInline
+        style={{ opacity: ready ? 1 : 0, transition: "opacity 0.8s ease" }}
+      />
 
       <div className={styles.overlay} />
 
