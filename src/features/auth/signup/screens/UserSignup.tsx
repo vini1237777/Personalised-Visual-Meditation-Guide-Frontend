@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 
 import styles from "./UserSignup.module.css";
 import { UserService } from "services/userServices";
-import bgVideo from "../../../../assets/bg-videos/bg1.mp4";
+import { BG_VIDEOS } from "../../../../assets/bg-videos/videoUrls";
 
 type SignupForm = {
   fullName: string;
@@ -112,15 +112,12 @@ export default function UserSignup() {
 
   return (
     <div className={styles.page}>
-      {/* ── video background ── */}
       <video className={styles.videoBg} autoPlay loop muted playsInline>
-        <source src={bgVideo} type="video/mp4" />
+        <source src={BG_VIDEOS.bg4} type="video/mp4" />
       </video>
 
-      {/* ── dark overlay ── */}
       <div className={styles.overlay} />
 
-      {/* ── page content ── */}
       <div className={styles.content}>
         <header className={styles.hero}>
           <h1 className={styles.heroTitle}>Meditation App</h1>
