@@ -59,8 +59,8 @@ export default function SoulSyncInfoCard({
             <div className={styles.item}>
               <p className={styles.itemTitle}>AI Integration</p>
               <p className={styles.itemBody}>
-                LangGraph, Gemini API — multi-step workflow orchestration with
-                shared state across AI nodes
+                Gemini API — structured prompting with mood-aware context for
+                personalized session generation
               </p>
             </div>
           </div>
@@ -93,10 +93,11 @@ export default function SoulSyncInfoCard({
               </p>
             </div>
             <div className={styles.item}>
-              <p className={styles.itemTitle}>LangGraph Orchestration</p>
+              <p className={styles.itemTitle}>Context-Aware Prompting</p>
               <p className={styles.itemBody}>
-                Multi-step AI workflows with structured state, validation at
-                each node, and reliable output across complex flows.
+                Each API call includes user mood, session history, and
+                preferences — building a rich prompt context for tailored
+                responses.
               </p>
             </div>
             <div className={styles.item}>
