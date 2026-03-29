@@ -135,7 +135,6 @@ export default function Navbar() {
           </NavLink>
 
           <nav className={styles.nav}>
-            {/* Features */}
             <NavLink
               to="#"
               className={() =>
@@ -145,39 +144,6 @@ export default function Navbar() {
             >
               Features
             </NavLink>
-
-            {!isLoggedIn ? (
-              <>
-                <NavLink
-                  to="/auth/login"
-                  className={styles.link}
-                  onClick={onNavClick}
-                >
-                  Login
-                </NavLink>
-                <NavLink
-                  to="/auth/register"
-                  className={({ isActive }) =>
-                    isActive ? `${styles.link} ${styles.active}` : styles.link
-                  }
-                  onClick={onNavClick}
-                >
-                  Sign up
-                </NavLink>
-              </>
-            ) : (
-              <NavLink
-                to="#"
-                className={styles.link}
-                onClick={(e) => {
-                  e.preventDefault();
-                  closeMenus();
-                  handleLogout();
-                }}
-              >
-                Logout
-              </NavLink>
-            )}
 
             {showHome && (
               <NavLink
@@ -213,6 +179,39 @@ export default function Navbar() {
             </NavLink>
 
             {GithubTrigger}
+
+            {!isLoggedIn ? (
+              <>
+                <NavLink
+                  to="/auth/login"
+                  className={styles.link}
+                  onClick={onNavClick}
+                >
+                  Login
+                </NavLink>
+                <NavLink
+                  to="/auth/register"
+                  className={({ isActive }) =>
+                    isActive ? `${styles.link} ${styles.active}` : styles.link
+                  }
+                  onClick={onNavClick}
+                >
+                  Sign up
+                </NavLink>
+              </>
+            ) : (
+              <NavLink
+                to="#"
+                className={styles.link}
+                onClick={(e) => {
+                  e.preventDefault();
+                  closeMenus();
+                  handleLogout();
+                }}
+              >
+                Logout
+              </NavLink>
+            )}
           </nav>
 
           <button
@@ -235,7 +234,6 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* Mobile panel */}
         <div className={`${styles.mobilePanel} ${menuOpen ? styles.open : ""}`}>
           {showHome && (
             <NavLink
