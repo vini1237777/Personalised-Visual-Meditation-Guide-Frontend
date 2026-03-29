@@ -1,9 +1,9 @@
 import styles from "./About.module.css";
 import { ABOUT_TEXT, contentListArray } from "../constants/about.text";
-import visualMeditationImg from "../../../assets/images/visualMeditation.png";
+import bgVideo from "../../../assets/bg-videos/bg2.mp4";
 
 const toText = (v: string | string[] | null | undefined) =>
-  Array.isArray(v) ? v.join(" ") : v ?? "";
+  Array.isArray(v) ? v.join(" ") : (v ?? "");
 
 const toArray = (v: string | string[] | null | undefined): string[] => {
   if (Array.isArray(v)) return v;
@@ -14,11 +14,13 @@ const toArray = (v: string | string[] | null | undefined): string[] => {
 export default function About() {
   return (
     <main className={styles.page}>
-      <section
-        className={styles.visual}
-        style={{ backgroundImage: `url(${visualMeditationImg})` }}
-        aria-label="Visual Meditation Illustration"
-      />
+      <video className={styles.videoBg} autoPlay loop muted playsInline>
+        <source src={bgVideo} type="video/mp4" />
+      </video>
+
+      <div className={styles.overlay} />
+
+      <section className={styles.visual} />
 
       <section className={styles.content}>
         <div className={styles.card}>
