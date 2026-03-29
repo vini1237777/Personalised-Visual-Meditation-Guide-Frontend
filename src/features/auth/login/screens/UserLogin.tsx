@@ -7,6 +7,7 @@ import { useAuth } from "../../../../app/providers/AuthProvider";
 import type { User } from "../../../user/model/user.types";
 import { UserService } from "../../../../services/userServices";
 import { ApiError } from "../../../../shared/api/http";
+import bgVideo from "../../../../assets/bg-videos/bg1.mp4";
 
 type LoginForm = {
   email: string;
@@ -35,7 +36,6 @@ export default function UserLogin() {
   const location = useLocation();
   const { setUser } = useAuth();
 
-  // ✅ Autofill here
   const [form, setForm] = useState<LoginForm>({
     email: "v@gmail.com",
     password: "v@123456",
@@ -58,7 +58,6 @@ export default function UserLogin() {
     (key: keyof LoginForm) => (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
       setForm((prev) => ({ ...prev, [key]: value }));
-
       setErrors((prev) => {
         const next = { ...prev };
         if (key === "email") next.email = validateEmail(value);
@@ -81,7 +80,6 @@ export default function UserLogin() {
       toast.error("Fix the highlighted fields first.");
       return;
     }
-
     try {
       setIsSubmitting(true);
       try {
@@ -89,12 +87,10 @@ export default function UserLogin() {
           email: form.email,
           password: form.password,
         });
-
         if (res?.status !== 200) {
           toast.error("Login failed. Please try again.");
           return;
         }
-
         const data = res?.data ?? {};
         const loggedInUser: User = {
           email: data.email ?? form.email,
@@ -102,10 +98,8 @@ export default function UserLogin() {
           category: data.category ?? "",
           id: data.id ?? "",
         };
-
         setUser(loggedInUser);
         toast.success("Successfully logged in");
-
         const from = (location.state as any)?.from?.pathname ?? "/";
         navigate(from, { replace: true });
       } catch (e) {
@@ -121,11 +115,17 @@ export default function UserLogin() {
 
   return (
     <div className={styles.page}>
+      <video className={styles.videoBg} autoPlay loop muted playsInline>
+        <source src={bgVideo} type="video/mp4" />
+      </video>
+
+      <div className={styles.overlay} />
+
       <div className={styles.card}>
         <div className={styles.titleRow}>
           <h2 className={styles.title}>Login</h2>
           <p className={styles.subtitle}>
-            Don’t have an account?{" "}
+            Don't have an account?{" "}
             <span
               className={styles.link}
               onClick={() => navigate("/auth/register")}
