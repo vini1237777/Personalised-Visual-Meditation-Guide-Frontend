@@ -2,8 +2,7 @@ import { LANDING_TEXT } from "../landing.text";
 import { formatUserName } from "../../../shared/lib/formatUserName";
 import { HeroSection } from "./HeroSection";
 import { useLandingState } from "../hooks/useLandingState";
-import buddhaImage from "../../../assets/images/buddha.jpg";
-import buddhaMobile from "../../../assets/images/buddhaMobile.png";
+import bgVideo from "../../../assets/bg-videos/bg3.mp4";
 import MoodSelector from "./MoodSelector";
 import styles from "./LandingPage.module.css";
 import MeditationPage from "../meditation/ui/MeditationPage";
@@ -19,12 +18,13 @@ export default function LandingPage() {
   const displayName = formatUserName(user);
 
   return (
-    <div
-      className={styles.landingPage}
-      style={{
-        backgroundImage: `url(${state.isMobile ? buddhaMobile : buddhaImage})`,
-      }}
-    >
+    <div className={styles.landingPage}>
+      <video className={styles.videoBg} autoPlay loop muted playsInline>
+        <source src={bgVideo} type="video/mp4" />
+      </video>
+
+      <div className={styles.overlay} />
+
       {!state.showAnimation && !state.isDemoMode && showHero && (
         <div className={styles.welcomeText}>
           {LANDING_TEXT.welcome}
