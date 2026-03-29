@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 
 import styles from "./UserSignup.module.css";
 import { UserService } from "services/userServices";
+import bgVideo from "../../../../assets/bg-videos/bg1.mp4";
 
 type SignupForm = {
   fullName: string;
@@ -53,20 +54,10 @@ export default function UserSignup() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  // const canSubmit = useMemo(() => {
-  //   return (
-  //     !isSubmitting &&
-  //     Object.values(form).every(Boolean) &&
-  //     Object.values(errors).every((e) => !e)
-  //   );
-  // }, [form, errors, isSubmitting]);
-
   const onChange =
     (key: keyof SignupForm) => (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
-
       setForm((prev) => ({ ...prev, [key]: value }));
-
       setErrors((prev) => {
         const next = { ...prev };
         if (key === "fullName") next.fullName = validateFullName(value);
@@ -98,21 +89,17 @@ export default function UserSignup() {
       toast.error("Please fix the highlighted fields.");
       return;
     }
-
     try {
       setIsSubmitting(true);
-
       const res = await UserService.register({
         fullName: form.fullName,
         email: form.email,
         password: form.password,
       });
-
       if (res.status !== 200 && res.status !== 201) {
         toast.error("Signup failed. Please try again.");
         return;
       }
-
       toast.success("Account created. Please login.");
       navigate("/auth/login");
     } catch (err: any) {
@@ -125,6 +112,15 @@ export default function UserSignup() {
 
   return (
     <div className={styles.page}>
+      {/* ── video background ── */}
+      <video className={styles.videoBg} autoPlay loop muted playsInline>
+        <source src={bgVideo} type="video/mp4" />
+      </video>
+
+      {/* ── dark overlay ── */}
+      <div className={styles.overlay} />
+
+      {/* ── page content ── */}
       <div className={styles.content}>
         <header className={styles.hero}>
           <h1 className={styles.heroTitle}>Meditation App</h1>
@@ -136,7 +132,6 @@ export default function UserSignup() {
         <div className={styles.card}>
           <div className={styles.cardHeader}>
             <h2 className={styles.title}>Create account</h2>
-
             <p className={styles.subtitle}>
               Already a member?{" "}
               <button
@@ -157,7 +152,6 @@ export default function UserSignup() {
               error={errors.fullName}
               isDisabled
             />
-
             <Field
               label="Email"
               type="email"
@@ -166,7 +160,6 @@ export default function UserSignup() {
               error={errors.email}
               isDisabled
             />
-
             <Field
               label="Password"
               type={showPassword ? "text" : "password"}
@@ -175,7 +168,6 @@ export default function UserSignup() {
               error={errors.password}
               isDisabled
             />
-
             <Field
               label="Confirm Password"
               type={showPassword ? "text" : "password"}
@@ -198,12 +190,7 @@ export default function UserSignup() {
               </label>
             </div>
 
-            <button
-              className={styles.button}
-              onClick={handleSignup}
-              // disabled={!canSubmit}
-              disabled
-            >
+            <button className={styles.button} onClick={handleSignup} disabled>
               {isSubmitting ? "Creating..." : "Sign up"}
             </button>
           </div>
@@ -231,7 +218,6 @@ function Field({
   return (
     <div className={styles.row}>
       <label className={styles.label}>{label}</label>
-
       <div className={styles.control}>
         <input
           type={type}
