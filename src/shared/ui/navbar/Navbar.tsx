@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { useAuth } from "../../../app/providers/AuthProvider";
 import styles from "./Navbar.module.css";
+import SoulSyncInfoCard from "../card/InformationCard";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ export default function Navbar() {
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [githubOpen, setGithubOpen] = useState(false);
+  const [infoCardOpen, setInfoCardOpen] = useState(false);
 
   const headerRef = useRef<HTMLElement | null>(null);
   const githubWrapRef = useRef<HTMLDivElement | null>(null);
@@ -23,16 +25,27 @@ export default function Navbar() {
     navigate("/auth/login");
   };
 
-  const closeAll = () => {
+  const closeMenus = () => {
     setMenuOpen(false);
     setGithubOpen(false);
+  };
+
+  const handleBrandClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    closeMenus();
+  };
+
+  const handleFeaturesClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    closeMenus();
+    setInfoCardOpen((prev) => !prev);
   };
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       const t = e.target as Node;
       if (!headerRef.current) return;
-      if (!headerRef.current.contains(t)) closeAll();
+      if (!headerRef.current.contains(t)) closeMenus();
     };
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
@@ -48,7 +61,7 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  const onNavClick = () => closeAll();
+  const onNavClick = () => closeMenus();
 
   const GithubTrigger = (
     <div ref={githubWrapRef} className={styles.githubWrap}>
@@ -82,9 +95,7 @@ export default function Navbar() {
             Frontend
           </a>
         </div>
-
         <div className={styles.githubDivider} />
-
         <div className={styles.githubSection}>
           <p className={styles.githubTitle}>Backend Repo</p>
           <a
@@ -109,17 +120,65 @@ export default function Navbar() {
 
   return (
     <>
+      {infoCardOpen && (
+        <SoulSyncInfoCard open={infoCardOpen} setIsOpen={setInfoCardOpen} />
+      )}
+
       <header ref={headerRef} className={styles.header}>
         <div className={styles.container}>
           <NavLink
             to={isLoggedIn ? "/" : "/auth/login"}
             className={styles.brand}
-            onClick={onNavClick}
+            onClick={handleBrandClick}
           >
             SoulSync
           </NavLink>
 
           <nav className={styles.nav}>
+            {/* Features */}
+            <NavLink
+              to="#"
+              className={() =>
+                infoCardOpen ? `${styles.link} ${styles.active}` : styles.link
+              }
+              onClick={handleFeaturesClick}
+            >
+              Features
+            </NavLink>
+
+            {!isLoggedIn ? (
+              <>
+                <NavLink
+                  to="/auth/login"
+                  className={styles.link}
+                  onClick={onNavClick}
+                >
+                  Login
+                </NavLink>
+                <NavLink
+                  to="/auth/register"
+                  className={({ isActive }) =>
+                    isActive ? `${styles.link} ${styles.active}` : styles.link
+                  }
+                  onClick={onNavClick}
+                >
+                  Sign up
+                </NavLink>
+              </>
+            ) : (
+              <NavLink
+                to="#"
+                className={styles.link}
+                onClick={(e) => {
+                  e.preventDefault();
+                  closeMenus();
+                  handleLogout();
+                }}
+              >
+                Logout
+              </NavLink>
+            )}
+
             {showHome && (
               <NavLink
                 to="/"
@@ -154,42 +213,6 @@ export default function Navbar() {
             </NavLink>
 
             {GithubTrigger}
-
-            {!isLoggedIn ? (
-              <>
-                <NavLink
-                  to="/auth/login"
-                  className={({ isActive }) =>
-                    isActive ? `${styles.link} ${styles.active}` : styles.link
-                  }
-                  onClick={onNavClick}
-                >
-                  Login
-                </NavLink>
-
-                <NavLink
-                  to="/auth/register"
-                  className={({ isActive }) =>
-                    isActive ? `${styles.link} ${styles.active}` : styles.link
-                  }
-                  onClick={onNavClick}
-                >
-                  Sign up
-                </NavLink>
-              </>
-            ) : (
-              <NavLink
-                to="#"
-                className={styles.link}
-                onClick={(e) => {
-                  e.preventDefault();
-                  closeAll();
-                  handleLogout();
-                }}
-              >
-                Logout
-              </NavLink>
-            )}
           </nav>
 
           <button
@@ -212,6 +235,7 @@ export default function Navbar() {
           </button>
         </div>
 
+        {/* Mobile panel */}
         <div className={`${styles.mobilePanel} ${menuOpen ? styles.open : ""}`}>
           {showHome && (
             <NavLink
@@ -227,6 +251,18 @@ export default function Navbar() {
               Home
             </NavLink>
           )}
+
+          <NavLink
+            to="#"
+            className={() =>
+              infoCardOpen
+                ? `${styles.mobileLink} ${styles.active}`
+                : styles.mobileLink
+            }
+            onClick={handleFeaturesClick}
+          >
+            Features
+          </NavLink>
 
           <NavLink
             to="/about"
@@ -277,17 +313,16 @@ export default function Navbar() {
               href="https://github.com/vini1237777/Personalised-Visual-Meditation-Guide-Frontend"
               target="_blank"
               rel="noreferrer"
-              onClick={closeAll}
+              onClick={closeMenus}
             >
               Frontend Repo →
             </a>
-
             <a
               className={styles.mobileGithubItem}
               href="https://github.com/vini1237777/Personalised-Visual-Meditation-Guide-Backend"
               target="_blank"
               rel="noreferrer"
-              onClick={closeAll}
+              onClick={closeMenus}
             >
               Backend Repo →
             </a>
@@ -306,7 +341,6 @@ export default function Navbar() {
               >
                 Login
               </NavLink>
-
               <NavLink
                 to="/auth/register"
                 className={({ isActive }) =>
@@ -325,7 +359,7 @@ export default function Navbar() {
               className={styles.mobileLink}
               onClick={(e) => {
                 e.preventDefault();
-                closeAll();
+                closeMenus();
                 handleLogout();
               }}
             >

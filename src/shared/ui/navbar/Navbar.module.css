@@ -5,7 +5,7 @@
   background: black;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   position: fixed;
-  width: 100%;
+  width: 100vw;
   right: 0;
 }
 
@@ -16,11 +16,10 @@
   gap: 28px;
 
   padding: 14px 18px;
-  max-width: 1180px;
 }
 
 .brand {
-  display: inline-flex;
+  display: flex;
   align-items: baseline;
   gap: 10px;
 
@@ -53,7 +52,10 @@
   padding: 10px 10px;
   border-radius: 12px;
 
-  transition: color 160ms ease, background 160ms ease, transform 160ms ease;
+  transition:
+    color 160ms ease,
+    background 160ms ease,
+    transform 160ms ease;
 }
 
 .link:hover {
@@ -99,7 +101,9 @@
   font-weight: 800;
   font-size: 13px;
 
-  transition: background 160ms ease, border-color 160ms ease;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease;
 }
 
 .userChip:hover {
@@ -134,7 +138,9 @@
   font-weight: 800;
   font-size: 13px;
 
-  transition: transform 160ms ease, background 160ms ease,
+  transition:
+    transform 160ms ease,
+    background 160ms ease,
     border-color 160ms ease;
 }
 
@@ -160,7 +166,10 @@
   font-size: 13px;
 
   box-shadow: 0 12px 28px rgba(22, 163, 74, 0.22);
-  transition: transform 160ms ease, filter 160ms ease, box-shadow 160ms ease;
+  transition:
+    transform 160ms ease,
+    filter 160ms ease,
+    box-shadow 160ms ease;
 }
 
 .primaryBtn:hover {
@@ -220,7 +229,9 @@
   opacity: 0;
   pointer-events: none;
   transform: translateY(8px);
-  transition: opacity 180ms ease, transform 180ms ease;
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
 }
 
 .githubCardOpen {
@@ -253,7 +264,9 @@
   padding: 6px 8px;
   border-radius: 10px;
   background: transparent;
-  transition: transform 160ms ease, opacity 160ms ease;
+  transition:
+    transform 160ms ease,
+    opacity 160ms ease;
 }
 
 .githubItem:hover {
@@ -302,7 +315,9 @@
   height: 2px;
   background: rgba(255, 255, 255, 0.85);
   border-radius: 999px;
-  transition: transform 180ms ease, opacity 180ms ease;
+  transition:
+    transform 180ms ease,
+    opacity 180ms ease;
 }
 
 .barsOpen span:nth-child(1) {
@@ -323,7 +338,10 @@
   opacity: 0;
   transform: translateY(-6px);
 
-  transition: max-height 220ms ease, opacity 200ms ease, transform 200ms ease;
+  transition:
+    max-height 220ms ease,
+    opacity 200ms ease,
+    transform 200ms ease;
 
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   background: rgba(20, 20, 20, 0.92);
@@ -345,7 +363,9 @@
   color: rgba(233, 213, 255, 0.78);
 
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  transition: background 160ms ease, color 160ms ease;
+  transition:
+    background 160ms ease,
+    color 160ms ease;
 }
 
 .mobileLink:hover {
@@ -358,7 +378,10 @@
   overflow: hidden;
   opacity: 0;
   transform: translateY(-4px);
-  transition: max-height 200ms ease, opacity 200ms ease, transform 200ms ease;
+  transition:
+    max-height 200ms ease,
+    opacity 200ms ease,
+    transform 200ms ease;
 
   background: rgba(44, 41, 41, 0.85);
 }
@@ -410,8 +433,11 @@
 
   transform-origin: left center;
   will-change: transform;
-  transition: transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1), color 220ms ease,
-    letter-spacing 220ms ease, filter 220ms ease;
+  transition:
+    transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    color 220ms ease,
+    letter-spacing 220ms ease,
+    filter 220ms ease;
 }
 
 .brand::after {
