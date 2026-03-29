@@ -1,8 +1,8 @@
-const S3 = "https://soulsync-videos.s3.ap-south-1.amazonaws.com";
+const CDN = "https://dcfmv8k1hpguy.cloudfront.net";
 
 export const BG_VIDEOS = {
-  bg1: `${S3}/bg1-small.mp4`,
-  bg2: `${S3}/bg2-small.mp4`,
-  bg3: `${S3}/bg3-small.mp4`,
-  bg4: `${S3}/bg4-small.mp4`,
+  bg1: `${CDN}/bg1-small.mp4`,
+  bg2: `${CDN}/bg2-small.mp4`,
+  bg3: `${CDN}/bg3-small.mp4`,
+  bg4: `${CDN}/bg4-small.mp4`,
 };
