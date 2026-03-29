@@ -29,3 +29,6 @@ yarn-debug.log*
 yarn-error.log*
 
 .env
+
+
+src/assets/bg-videos/src/assets/bg-videos/*.mp4
