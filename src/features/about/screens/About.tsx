@@ -1,7 +1,7 @@
 import styles from "./About.module.css";
 import { ABOUT_TEXT, contentListArray } from "../constants/about.text";
 import { BG_VIDEOS } from "../../../assets/bg-videos/videoUrls";
-import { useState } from "react";
+import { useVideoBackground } from "../../../shared/custom-hooks/Usevideobackground";
 
 const toText = (v: string | string[] | null | undefined) =>
   Array.isArray(v) ? v.join(" ") : (v ?? "");
@@ -13,25 +13,20 @@ const toArray = (v: string | string[] | null | undefined): string[] => {
 };
 
 export default function About() {
-  const [videoReady, setVideoReady] = useState(false);
+  const { videoRef, ready } = useVideoBackground(BG_VIDEOS.bg2);
 
   return (
     <main className={styles.page}>
+      <div className={styles.poster} />
+
       <video
+        ref={videoRef}
         className={styles.videoBg}
-        autoPlay
         loop
         muted
         playsInline
-        onCanPlay={() => setVideoReady(true)}
-        poster="../../../assets/images/bg3.jpg"
-        style={{
-          opacity: videoReady ? 1 : 0,
-          transition: "opacity 0.6s ease",
-        }}
-      >
-        <source src={BG_VIDEOS.bg2} type="video/mp4" />
-      </video>
+        style={{ opacity: ready ? 1 : 0, transition: "opacity 0.8s ease" }}
+      />
 
       <div className={styles.overlay} />
 
