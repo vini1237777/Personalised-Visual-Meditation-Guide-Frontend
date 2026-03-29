@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -14,7 +14,30 @@
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link
+      rel="preload"
+      href="https://soulsync-videos.s3.ap-south-1.amazonaws.com/bg4.mp4"
+      as="video"
+      type="video/mp4"
+    />
+    <link
+      rel="preload"
+      href="https://soulsync-videos.s3.ap-south-1.amazonaws.com/bg2.mp4"
+      as="video"
+      type="video/mp4"
+    />
+    <link
+      rel="preload"
+      href="https://soulsync-videos.s3.ap-south-1.amazonaws.com/bg3.mp4"
+      as="video"
+      type="video/mp4"
+    />
+    <link
+      rel="preload"
+      href="https://soulsync-videos.s3.ap-south-1.amazonaws.com/bg1.mp4"
+      as="video"
+      type="video/mp4"
+    />
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
