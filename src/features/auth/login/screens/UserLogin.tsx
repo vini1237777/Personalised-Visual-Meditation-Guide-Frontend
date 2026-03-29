@@ -8,6 +8,7 @@ import type { User } from "../../../user/model/user.types";
 import { UserService } from "../../../../services/userServices";
 import { ApiError } from "../../../../shared/api/http";
 import { BG_VIDEOS } from "../../../../assets/bg-videos/videoUrls";
+import { useVideoBackground } from "../../../../shared/custom-hooks/Usevideobackground";
 
 type LoginForm = {
   email: string;
@@ -36,6 +37,8 @@ export default function UserLogin() {
   const location = useLocation();
   const { setUser } = useAuth();
 
+  const { videoRef, ready } = useVideoBackground(BG_VIDEOS.bg4);
+
   const [form, setForm] = useState<LoginForm>({
     email: "v@gmail.com",
     password: "v@123456",
@@ -43,8 +46,6 @@ export default function UserLogin() {
 
   const [errors, setErrors] = useState<FieldErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const [videoReady, setVideoReady] = useState(false);
 
   const canSubmit = useMemo(() => {
     return (
@@ -117,22 +118,17 @@ export default function UserLogin() {
 
   return (
     <div className={styles.page}>
+      {/* poster shows instantly, video fades in over it once ready */}
+      <div className={styles.poster} />
+
       <video
+        ref={videoRef}
         className={styles.videoBg}
-        autoPlay
         loop
         muted
         playsInline
-        preload="none"
-        poster="../../../../assets/images/bg1.jpg"
-        onCanPlay={() => setVideoReady(true)}
-        style={{
-          opacity: videoReady ? 1 : 0,
-          transition: "opacity 0.6s ease",
-        }}
-      >
-        <source src={BG_VIDEOS.bg4} type="video/mp4" />
-      </video>
+        style={{ opacity: ready ? 1 : 0, transition: "opacity 0.8s ease" }}
+      />
 
       <div className={styles.overlay} />
 
