@@ -32,3 +32,4 @@ yarn-error.log*
 
 
 src/assets/bg-videos/src/assets/bg-videos/*.mp4
+src/assets/bg-videos/*.mp4
