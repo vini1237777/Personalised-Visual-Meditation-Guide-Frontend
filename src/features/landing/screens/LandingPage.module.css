@@ -38,7 +38,6 @@
 
 /* all direct children above video */
 .landingPage > *:not(.poster):not(.videoBg):not(.overlay) {
-  position: relative;
   z-index: 2;
 }
 
