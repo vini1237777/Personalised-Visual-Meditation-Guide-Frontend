@@ -17,7 +17,9 @@ import {
   streakDays,
 } from "features/landing/journal/journal";
 
-type View = "list" | "cards";
+type View = "list" | "cards" | "calendar";
+const VIEW_LABEL: Record<View, string> = { list: "List", cards: "Cards", calendar: "Calendar" };
+const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const VIEW_KEY = "soulsync.journalView";
 
 function mostOften(words: string[]) {
@@ -65,7 +67,8 @@ export default function JournalPage() {
   const [range, setRange] = useState<Range>("week");
   const [view, setView] = useState<View>(() => {
     try {
-      return localStorage.getItem(VIEW_KEY) === "cards" ? "cards" : "list";
+      const saved = localStorage.getItem(VIEW_KEY);
+      return saved === "cards" || saved === "calendar" ? saved : "list";
     } catch {
       return "list";
     }
@@ -109,6 +112,49 @@ export default function JournalPage() {
     }
     return out;
   }, [list]);
+
+  // Calendar: one month at a time, tap a day to see its sessions.
+  const [month, setMonth] = useState(() => {
+    const d = new Date();
+    return new Date(d.getFullYear(), d.getMonth(), 1);
+  });
+  const [picked, setPicked] = useState(() => new Date().toDateString());
+
+  const byDay = useMemo(() => {
+    const map = new Map<string, CheckIn[]>();
+    for (const c of all) {
+      const key = new Date(c.at).toDateString();
+      map.set(key, [...(map.get(key) ?? []), c]);
+    }
+    return map;
+  }, [all]);
+
+  const cells = useMemo(() => {
+    const first = month.getDay();
+    const days = new Date(month.getFullYear(), month.getMonth() + 1, 0).getDate();
+    const total = Math.ceil((first + days) / 7) * 7;
+    return Array.from({ length: total }, (_, i) => {
+      const n = i - first + 1;
+      if (n < 1 || n > days) return null;
+      const date = new Date(month.getFullYear(), month.getMonth(), n);
+      return { n, key: date.toDateString(), items: byDay.get(date.toDateString()) ?? [] };
+    });
+  }, [month, byDay]);
+
+  const monthItems = useMemo(
+    () => all.filter((c) => {
+      const d = new Date(c.at);
+      return d.getFullYear() === month.getFullYear() && d.getMonth() === month.getMonth();
+    }),
+    [all, month],
+  );
+  const monthLeave = mostOften(monthItems.filter((c) => c.after).map((c) => moodWord(c.after as string)));
+  const monthName = month.toLocaleDateString([], { month: "long", year: "numeric" });
+  const now = new Date();
+  const atThisMonth = month.getFullYear() === now.getFullYear() && month.getMonth() === now.getMonth();
+  const todayKey = now.toDateString();
+  const pickedItems = byDay.get(picked) ?? [];
+  const shiftMonth = (by: number) => setMonth((m) => new Date(m.getFullYear(), m.getMonth() + by, 1));
 
   const better = list.filter(feltBetter).length;
   const week = lastSevenDays(all);
@@ -156,15 +202,127 @@ export default function JournalPage() {
       </button>
     );
 
+  const entryRow = (c: CheckIn) => {
+    const mood = moodOf(c.before.emojis[0]);
+    return (
+      <article key={c.id} className={styles.entry}>
+        <div className={styles.pair} aria-label={story(c)}>
+          <span className={styles.face}>{c.before.emojis[0]}</span>
+          <span className={styles.arrow} aria-hidden="true">→</span>
+          <span
+            className={`${styles.face} ${c.after ? "" : styles.faceEmpty}`}
+            title={c.after ? undefined : "No check out yet"}
+          >
+            {c.after ?? "?"}
+          </span>
+        </div>
+        <div className={styles.middle}>
+          <div className={styles.sessionRow}>
+            <h3 className={styles.session}>{SESSION_NAME[mood] ?? "Calm session"}</h3>
+            {feltBetter(c) && <span className={styles.better}>Felt better</span>}
+          </div>
+          <p className={styles.story}>{story(c)}</p>
+          <div className={styles.bubbles}>
+            {feelingsOf(c).map((f) => (
+              <span key={f} className={styles.bubble} style={{ background: BUBBLE[mood] }}>
+                {f}
+              </span>
+            ))}
+          </div>
+          {noteBlock(c)}
+        </div>
+        <span className={styles.time}>{timeOf(c.at)}</span>
+      </article>
+    );
+  };
+
+  const calendar = (
+    <div className={styles.calendar}>
+      <section className={styles.calMain} aria-label={monthName}>
+        <div className={styles.calHead}>
+          <h3 className={styles.calMonth}>{monthName}</h3>
+          <div className={styles.calNav}>
+            <button type="button" className={styles.calArrow} onClick={() => shiftMonth(-1)} aria-label="Previous month">
+              ‹
+            </button>
+            <button
+              type="button"
+              className={styles.calArrow}
+              onClick={() => shiftMonth(1)}
+              disabled={atThisMonth}
+              aria-label="Next month"
+            >
+              ›
+            </button>
+          </div>
+        </div>
+        <p className={styles.calSummary}>
+          {monthItems.length === 0
+            ? "No check ins this month."
+            : `${monthItems.length} ${monthItems.length === 1 ? "check in" : "check ins"} this month${
+                monthLeave ? `. You left ${monthLeave} most often` : ""
+              }.`}
+        </p>
+        <div className={styles.calWeekdays} aria-hidden="true">
+          {WEEKDAYS.map((w) => (
+            <span key={w}>{w}</span>
+          ))}
+        </div>
+        <div className={styles.calGrid}>
+          {cells.map((cell, i) =>
+            cell ? (
+              <button
+                key={cell.key}
+                type="button"
+                className={`${styles.calDay} ${cell.items.length ? styles.calHas : ""} ${
+                  cell.key === picked ? styles.calPicked : ""
+                } ${cell.key === todayKey ? styles.calToday : ""}`}
+                onClick={() => setPicked(cell.key)}
+                aria-pressed={cell.key === picked}
+                aria-label={`${cell.n} ${monthName}: ${
+                  cell.items.length ? `${cell.items.length} ${cell.items.length === 1 ? "check in" : "check ins"}` : "no check in"
+                }`}
+              >
+                <span className={styles.calNum}>{cell.n}</span>
+                {cell.items.length > 0 && (
+                  <span className={styles.calFace}>{cell.items[0].after ?? cell.items[0].before.emojis[0]}</span>
+                )}
+                {cell.items.length > 1 && <span className={styles.calMore}>+{cell.items.length - 1}</span>}
+              </button>
+            ) : (
+              <span key={`blank-${i}`} className={styles.calBlank} />
+            ),
+          )}
+        </div>
+      </section>
+
+      <aside className={styles.calDetail} aria-live="polite">
+        <h3 className={styles.calDetailTitle}>
+          {new Date(picked).toLocaleDateString([], { weekday: "long", day: "numeric", month: "long" })}
+        </h3>
+        {pickedItems.length === 0 ? (
+          <p className={styles.calNone}>No check in on this day.</p>
+        ) : (
+          pickedItems.map((c) => <div key={c.id}>{entryRow(c)}</div>)
+        )}
+      </aside>
+    </div>
+  );
+
   const toolbar = (
     <div className={styles.toolbar}>
       <div className={styles.toolbarText}>
-        <h2 className={styles.entriesTitle}>{current.label === "All" ? "All check ins" : current.label}</h2>
-        <span className={styles.count}>
-          {list.length === 0 ? "Nothing here yet" : `${list.length} ${list.length === 1 ? "check in" : "check ins"}`}
-        </span>
+        <h2 className={styles.entriesTitle}>
+          {view === "calendar" ? "Calendar" : current.label === "All" ? "All check ins" : current.label}
+        </h2>
+        {view !== "calendar" && (
+          <span className={styles.count}>
+            {list.length === 0 ? "Nothing here yet" : `${list.length} ${list.length === 1 ? "check in" : "check ins"}`}
+          </span>
+        )}
       </div>
       <div className={styles.tools}>
+        {view !== "calendar" && (
         <div className={styles.segment} role="group" aria-label="Show check ins from">
           {RANGES.map((r) => (
             <button
@@ -178,8 +336,9 @@ export default function JournalPage() {
             </button>
           ))}
         </div>
+        )}
         <div className={styles.segment} role="group" aria-label="Journal view">
-          {(["list", "cards"] as View[]).map((v) => (
+          {(["list", "cards", "calendar"] as View[]).map((v) => (
             <button
               key={v}
               type="button"
@@ -187,7 +346,7 @@ export default function JournalPage() {
               aria-pressed={view === v}
               onClick={() => chooseView(v)}
             >
-              {v === "list" ? "List" : "Cards"}
+              {VIEW_LABEL[v]}
             </button>
           ))}
         </div>
@@ -246,7 +405,9 @@ export default function JournalPage() {
 
         <main className={`${styles.card} ${styles.entries}`}>
           {toolbar}
-          {groups.length === 0 ? (
+          {all.length > 0 && view === "calendar" ? (
+            calendar
+          ) : groups.length === 0 ? (
             <div className={styles.empty}>
               <p>Share how you feel on the home page and your first session will show up here.</p>
               <Link to="/" className={styles.cta}>
@@ -263,10 +424,14 @@ export default function JournalPage() {
                       <span>{dayHeading(c.at)}</span>
                       <span>{timeOf(c.at)}</span>
                     </div>
-                    <div className={styles.tileFaces} aria-label={`${moodWord(c.before.emojis[0])} to ${c.after ? moodWord(c.after) : "not checked out"}`}>
-                      <span>{c.before.emojis[0]}</span>
-                      <span className={styles.arrow}>→</span>
-                      <span>{c.after ?? "?"}</span>
+                    <div className={`${styles.tileFaces} ${styles.pair}`} aria-label={story(c)}>
+                      <span className={styles.face}>{c.before.emojis[0]}</span>
+                      <span className={styles.arrow} aria-hidden="true">→</span>
+                      {c.after ? (
+                        <span className={styles.face}>{c.after}</span>
+                      ) : (
+                        <span className={`${styles.face} ${styles.faceEmpty}`} title="No check out yet">?</span>
+                      )}
                     </div>
                     <h3 className={styles.session}>{SESSION_NAME[mood] ?? "Calm session"}</h3>
                     <p className={styles.story}>
@@ -289,32 +454,7 @@ export default function JournalPage() {
               <section key={g.heading} className={styles.group}>
                 <h2 className={styles.dayHeading}>{g.heading}</h2>
                 {g.items.map((c) => {
-                  const mood = moodOf(c.before.emojis[0]);
-                  return (
-                    <article key={c.id} className={styles.entry}>
-                      <div className={styles.pair} aria-label={story(c)}>
-                        <span className={styles.face}>{c.before.emojis[0]}</span>
-                        <span className={styles.arrow} aria-hidden="true">→</span>
-                        <span className={`${styles.face} ${c.after ? "" : styles.faceEmpty}`}>{c.after ?? "?"}</span>
-                      </div>
-                      <div className={styles.middle}>
-                        <div className={styles.sessionRow}>
-                          <h3 className={styles.session}>{SESSION_NAME[mood] ?? "Calm session"}</h3>
-                          {feltBetter(c) && <span className={styles.better}>Felt better</span>}
-                        </div>
-                        <p className={styles.story}>{story(c)}</p>
-                        <div className={styles.bubbles}>
-                          {feelingsOf(c).map((f) => (
-                            <span key={f} className={styles.bubble} style={{ background: BUBBLE[mood] }}>
-                              {f}
-                            </span>
-                          ))}
-                        </div>
-                        {noteBlock(c)}
-                      </div>
-                      <span className={styles.time}>{timeOf(c.at)}</span>
-                    </article>
-                  );
+                  return entryRow(c);
                 })}
               </section>
             ))
