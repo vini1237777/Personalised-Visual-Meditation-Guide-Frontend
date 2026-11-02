@@ -168,3 +168,38 @@
     width: 240px;
   }
 }
+
+/* Motion */
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes fieldIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+.card {
+  animation: cardIn 600ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+.titleRow { animation: fieldIn 500ms cubic-bezier(0.22, 1, 0.36, 1) 150ms backwards; }
+.field { animation: fieldIn 500ms cubic-bezier(0.22, 1, 0.36, 1) backwards; }
+.field:nth-of-type(1) { animation-delay: 230ms; }
+.field:nth-of-type(2) { animation-delay: 300ms; }
+.field:nth-of-type(3) { animation-delay: 370ms; }
+
+.input {
+  transition: border-color 180ms ease, box-shadow 220ms ease, transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.input:focus {
+  transform: translateY(-1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

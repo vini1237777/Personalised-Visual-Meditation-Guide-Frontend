@@ -187,3 +187,50 @@
     width: 100%;
   }
 }
+
+/* Motion */
+@keyframes cardIn {
+  from { opacity: 0; transform: translateX(28px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes rowIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(4px); }
+  75% { transform: translateX(-2px); }
+}
+
+.card {
+  animation: cardIn 650ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+.header { animation: rowIn 500ms cubic-bezier(0.22, 1, 0.36, 1) 180ms backwards; }
+.row { animation: rowIn 500ms cubic-bezier(0.22, 1, 0.36, 1) backwards; }
+.row:nth-of-type(2) { animation-delay: 260ms; }
+.row:nth-of-type(3) { animation-delay: 330ms; }
+.row:nth-of-type(4) { animation-delay: 400ms; }
+.actions { animation: rowIn 500ms cubic-bezier(0.22, 1, 0.36, 1) 470ms backwards; }
+
+.inputError {
+  animation: shake 320ms ease backwards;
+}
+
+.button {
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
+}
+.button:not(:disabled):hover {
+  transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

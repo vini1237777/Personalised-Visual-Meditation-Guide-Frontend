@@ -141,3 +141,30 @@
   font-weight: 700;
   text-align: center;
 }
+
+/* Motion */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+
+.overlay { animation: fadeIn 400ms ease backwards; }
+.title { animation: riseIn 600ms cubic-bezier(0.22, 1, 0.36, 1) 150ms backwards; }
+.videoContainer { animation: riseIn 700ms cubic-bezier(0.22, 1, 0.36, 1) 280ms backwards; }
+.seeDemoButton {
+  animation: riseIn 600ms cubic-bezier(0.22, 1, 0.36, 1) 400ms backwards;
+  transition: background 0.2s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.seeDemoButton:hover { transform: translateY(-2px); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

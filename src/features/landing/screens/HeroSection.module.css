@@ -56,3 +56,40 @@
     width: 90%;
   }
 }
+
+/* Motion: headline, text and button arrive one after another */
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(22px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes softGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.45); }
+  50% { box-shadow: 0 0 0 12px rgba(76, 175, 80, 0); }
+}
+
+.headline { animation: riseIn 800ms cubic-bezier(0.22, 1, 0.36, 1) 350ms backwards; }
+.subheadline { animation: riseIn 800ms cubic-bezier(0.22, 1, 0.36, 1) 500ms backwards; }
+
+.ctaButton {
+  animation:
+    riseIn 800ms cubic-bezier(0.22, 1, 0.36, 1) 650ms backwards,
+    softGlow 2.8s ease-in-out 1.8s infinite;
+  transition: background-color 0.3s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ctaButton:hover {
+  transform: translateY(-3px);
+  animation-play-state: running, paused;
+}
+
+.ctaButton:active {
+  transform: translateY(0) scale(0.97);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
