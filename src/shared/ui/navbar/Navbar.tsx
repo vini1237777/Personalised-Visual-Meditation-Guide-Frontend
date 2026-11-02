@@ -135,16 +135,6 @@ export default function Navbar() {
           </NavLink>
 
           <nav className={styles.nav}>
-            <NavLink
-              to="#"
-              className={() =>
-                infoCardOpen ? `${styles.link} ${styles.active}` : styles.link
-              }
-              onClick={handleFeaturesClick}
-            >
-              Features
-            </NavLink>
-
             {showHome && (
               <NavLink
                 to="/"
@@ -155,6 +145,18 @@ export default function Navbar() {
                 onClick={onNavClick}
               >
                 Home
+              </NavLink>
+            )}
+
+            {showHome && (
+              <NavLink
+                to="/journal"
+                className={({ isActive }) =>
+                  isActive ? `${styles.link} ${styles.active}` : styles.link
+                }
+                onClick={onNavClick}
+              >
+                Journal
               </NavLink>
             )}
 
@@ -179,6 +181,16 @@ export default function Navbar() {
             </NavLink>
 
             {GithubTrigger}
+
+            <NavLink
+              to="#"
+              className={() =>
+                infoCardOpen ? `${styles.link} ${styles.active}` : styles.link
+              }
+              onClick={handleFeaturesClick}
+            >
+              Features
+            </NavLink>
 
             {!isLoggedIn ? (
               <>
@@ -250,17 +262,19 @@ export default function Navbar() {
             </NavLink>
           )}
 
-          <NavLink
-            to="#"
-            className={() =>
-              infoCardOpen
-                ? `${styles.mobileLink} ${styles.active}`
-                : styles.mobileLink
-            }
-            onClick={handleFeaturesClick}
-          >
-            Features
-          </NavLink>
+          {showHome && (
+            <NavLink
+              to="/journal"
+              className={({ isActive }) =>
+                isActive
+                  ? `${styles.mobileLink} ${styles.active}`
+                  : styles.mobileLink
+              }
+              onClick={onNavClick}
+            >
+              Journal
+            </NavLink>
+          )}
 
           <NavLink
             to="/about"
@@ -325,6 +339,18 @@ export default function Navbar() {
               Backend Repo →
             </a>
           </div>
+
+          <NavLink
+            to="#"
+            className={() =>
+              infoCardOpen
+                ? `${styles.mobileLink} ${styles.active}`
+                : styles.mobileLink
+            }
+            onClick={handleFeaturesClick}
+          >
+            Features
+          </NavLink>
 
           {!isLoggedIn ? (
             <>

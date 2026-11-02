@@ -1,12 +1,15 @@
-/* Same language as the mood picker: white card, round faces, blue ring */
+/* See-through glass card like the journal and login cards, round faces, blue ring */
 .card {
   box-sizing: border-box;
   width: min(640px, 92vw);
   margin: 18px auto 40px;
   padding: 20px 22px 22px;
   border-radius: 20px;
-  background: #fff;
-  color: #1f2937;
+  background: rgba(0, 0, 0, 0.42);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: #fff;
   text-align: center;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
   animation: rise 600ms cubic-bezier(0.22, 1, 0.36, 1) 300ms backwards;
@@ -27,12 +30,12 @@
   margin: 6px 0 0;
   font-size: 0.95rem;
   font-weight: 400;
-  color: #6b7280;
+  color: rgba(255, 255, 255, 0.78);
   line-height: 1.5;
 }
 
 .sub strong {
-  color: #111827;
+  color: #fff;
 }
 
 .faces {
@@ -49,7 +52,7 @@
   font-size: 1.6rem;
   border: 2px solid transparent;
   border-radius: 50%;
-  background: #f9f9f9;
+  background: rgba(255, 255, 255, 0.12);
   cursor: pointer;
   transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), background 0.2s ease;
 }
@@ -59,8 +62,8 @@
 }
 
 .faceActive {
-  border-color: #2563eb;
-  background: #e0ecff;
+  border-color: #8fb4ff;
+  background: rgba(37, 99, 235, 0.35);
   transform: scale(1.1);
 }
 
@@ -75,7 +78,71 @@
 
 .arrow {
   font-size: 1.4rem;
-  color: #4caf50;
+  color: #8be08f;
+}
+
+.noteBox {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+  animation: rise 500ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+.noteLabel {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.noteLabel span {
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.note {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.95rem;
+  resize: vertical;
+}
+
+.note::placeholder {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.note:focus {
+  outline: none;
+  border-color: #8fb4ff;
+}
+
+.saveButton {
+  align-self: center;
+  background: #4caf50;
+  color: #fff;
+  border: 0;
+  border-radius: 8px;
+  padding: 10px 22px;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.saveButton:hover:not(:disabled) {
+  background: #45a049;
+}
+
+.saveButton:disabled {
+  opacity: 0.6;
+  cursor: default;
 }
 
 .afterEmoji {

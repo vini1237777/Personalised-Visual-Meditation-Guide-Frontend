@@ -8,12 +8,20 @@ import {
   finishCheckIn,
   moodOf,
   moodWord,
+  saveNote,
 } from "./journal";
 
 // Shown under a session: "How do you feel now?" and the shift since you came in.
 export default function CheckOut({ checkIn, className = "" }: { checkIn: CheckIn | null; className?: string }) {
   const [after, setAfter] = useState<string | null>(checkIn?.after ?? null);
+  const [note, setNote] = useState(checkIn?.note ?? "");
+  const [noteSaved, setNoteSaved] = useState(Boolean(checkIn?.note));
   if (!checkIn) return null;
+
+  const keepNote = () => {
+    saveNote(checkIn.id, note);
+    setNoteSaved(true);
+  };
 
   const before = describeBefore(checkIn.before);
 
@@ -47,7 +55,7 @@ export default function CheckOut({ checkIn, className = "" }: { checkIn: CheckIn
             You came in feeling <strong>{before}</strong> and you are leaving{" "}
             <strong>{moodWord(after)}</strong>.{" "}
             {GOOD_MOODS.has(moodOf(after))
-              ? "Saved to your journal on the home page."
+              ? "Saved to your journal."
               : "Come back whenever you need another pause. It is saved to your journal."}
           </p>
         </>
@@ -68,6 +76,34 @@ export default function CheckOut({ checkIn, className = "" }: { checkIn: CheckIn
           </button>
         ))}
       </div>
+
+      {after && (
+        <div className={styles.noteBox}>
+          <label htmlFor={`note-${checkIn.id}`} className={styles.noteLabel}>
+            Anything you want to remember? <span>(optional)</span>
+          </label>
+          <textarea
+            id={`note-${checkIn.id}`}
+            className={styles.note}
+            rows={3}
+            maxLength={500}
+            value={note}
+            placeholder="A thought, a feeling, what helped..."
+            onChange={(e) => {
+              setNote(e.target.value);
+              setNoteSaved(false);
+            }}
+          />
+          <button
+            type="button"
+            className={styles.saveButton}
+            onClick={keepNote}
+            disabled={noteSaved || !note.trim()}
+          >
+            {noteSaved ? "Saved to my journal" : "Save to my journal"}
+          </button>
+        </div>
+      )}
     </section>
   );
 }

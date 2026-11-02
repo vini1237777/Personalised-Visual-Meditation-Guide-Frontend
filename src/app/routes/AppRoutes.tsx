@@ -5,6 +5,7 @@ import { Contact } from "../../features/contact";
 import { UserLogin, UserSignup } from "../../features/auth";
 import Navbar from "../../shared/ui/navbar/Navbar";
 import ProtectedRoute from "./ProtectedRoute";
+import JournalPage from "../../features/journal/JournalPage";
 
 export default function AppRoutes() {
   return (
@@ -16,6 +17,7 @@ export default function AppRoutes() {
         <Route path="/contact" element={<Contact />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<LandingPage />} />
+          <Route path="/journal" element={<JournalPage />} />
         </Route>
       </Route>
     </Routes>
