@@ -72,5 +72,5 @@ export const contentListArray = Object.values(contentList).flatMap(
 export const ABOUT_TEXT = {
   title: "About SoulSync",
   description:
-    "SoulSync is a personalised visual meditation guide that helps you choose a mood and receive a calming meditation experience. The goal is to keep the experience simple, fast, and safe — with clean UI boundaries and scalable architecture.",
+    "SoulSync is a personalised visual meditation guide that helps you choose a mood and receive a calming meditation experience. The goal is to keep it simple, fast and safe, with clean UI boundaries and a scalable architecture.",
 } as const;

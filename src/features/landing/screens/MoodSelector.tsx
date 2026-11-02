@@ -31,7 +31,6 @@ export default function MoodSelector({
 }: MoodSelectorProps) {
   const {
     selectedEmojis,
-    activeEmoji,
     selectedFeelings,
     isCollapsed,
     categoryData,
@@ -61,6 +60,13 @@ export default function MoodSelector({
         ✖
       </button>
 
+      <h2 className={styles.prompt}>How are you feeling right now?</h2>
+      <p className={styles.promptHint}>
+        {selectedEmojis.length === 0
+          ? "Pick a face to begin."
+          : "Now tap the words that fit. You can pick more than one."}
+      </p>
+
       <div className={styles.emojiOptions}>
         {Object.keys(EMOJI_MAP).map((emoji) => (
           <button
@@ -71,6 +77,8 @@ export default function MoodSelector({
             }`}
             onClick={() => toggleEmoji(emoji)}
             aria-pressed={selectedEmojis.includes(emoji)}
+            aria-label={EMOJI_MAP[emoji].category}
+            title={EMOJI_MAP[emoji].category}
           >
             {emoji}
           </button>
@@ -95,7 +103,14 @@ export default function MoodSelector({
                 } ${selectedFeelings.includes(feeling) ? styles.selected : ""}`}
                 style={{ top: y, left: x }}
                 onClick={() => toggleFeeling(feeling)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    toggleFeeling(feeling);
+                  }
+                }}
                 role="button"
+                tabIndex={0}
                 aria-pressed={selectedFeelings.includes(feeling)}
               >
                 {feeling}
@@ -105,19 +120,19 @@ export default function MoodSelector({
         </div>
       )}
 
-      <div className={styles.outputBox}>
-        <p>
-          <strong>Selected Emojis:</strong>{" "}
-          {selectedEmojis.length > 0 ? selectedEmojis.join(" ") : "None"}
-        </p>
-        <p>
-          <strong>Active Wheel:</strong> {activeEmoji || "None"}
-        </p>
-        <p>
-          <strong>Feelings:</strong>{" "}
-          {selectedFeelings.length > 0 ? selectedFeelings.join(", ") : "None"}
-        </p>
-      </div>
+      {selectedEmojis.length > 0 && (
+        <div className={styles.outputBox} aria-live="polite">
+          <p>
+            {selectedFeelings.length > 0 ? (
+              <>
+                You feel <strong>{selectedFeelings.join(", ")}</strong> {selectedEmojis.join(" ")}
+              </>
+            ) : (
+              <>Choose at least one word above to continue.</>
+            )}
+          </p>
+        </div>
+      )}
 
       {selectedEmojis.length > 0 && !isCollapsed && (
         <div className={styles.continueWrapper}>
@@ -143,18 +158,12 @@ export default function MoodSelector({
                 }
 
                 if (!liveVideoUrl) {
-                  toast(
-                    "Live AI is paused, showing curated session. Click SEE DEMO",
-                    {
-                      icon: "🌿",
-                    }
-                  );
                   onOpenDemoMeditation();
                   return;
                 }
 
                 onMeditationReady(liveVideoUrl);
-              }, 8000);
+              }, 4000);
             }}
           >
             Continue

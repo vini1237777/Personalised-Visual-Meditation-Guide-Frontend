@@ -56,7 +56,10 @@ function reducer(state: LandingState, action: LandingAction): LandingState {
         view: "meditation",
         meditationVideoUrl: null,
         isLoading: false,
-        showAnimation: state.isDemoMode,
+        // Live generation is paused, so open a library session right away
+        // instead of sending the user back to pick their mood again.
+        showAnimation: true,
+        isDemoMode: true,
       };
 
     case "SET_DEMO_MODE":

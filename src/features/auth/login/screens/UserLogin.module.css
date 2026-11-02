@@ -203,3 +203,34 @@
     transition: none !important;
   }
 }
+
+/* Improvements */
+.title {
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  margin-bottom: 6px;
+}
+
+.input {
+  box-sizing: border-box;
+}
+
+.card {
+  box-sizing: border-box;
+  padding: 24px 28px 28px;
+  background: rgba(0, 0, 0, 0.28);
+  border-radius: 16px;
+}
+
+@media (max-width: 900px) {
+  .card {
+    width: min(520px, 100%);
+    padding: 20px 18px 24px;
+  }
+  .button {
+    width: 100%;
+  }
+}
+
+.page {
+  box-sizing: border-box;
+}

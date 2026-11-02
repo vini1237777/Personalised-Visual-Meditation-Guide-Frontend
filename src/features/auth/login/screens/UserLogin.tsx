@@ -132,9 +132,15 @@ export default function UserLogin() {
 
       <div className={styles.overlay} />
 
-      <div className={styles.card}>
+      <form
+        className={styles.card}
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (canSubmit) handleSubmit();
+        }}
+      >
         <div className={styles.titleRow}>
-          <h2 className={styles.title}>Login</h2>
+          <h2 className={styles.title}>Welcome back</h2>
           <p className={styles.subtitle}>
             Don't have an account?{" "}
             <span
@@ -191,14 +197,13 @@ export default function UserLogin() {
         </div>
 
         <button
-          type="button"
+          type="submit"
           className={styles.button}
-          onClick={handleSubmit}
           disabled={!canSubmit}
         >
-          {isSubmitting ? "Logging in..." : "Submit"}
+          {isSubmitting ? "Logging in..." : "Log in"}
         </button>
-      </div>
+      </form>
     </div>
   );
 }

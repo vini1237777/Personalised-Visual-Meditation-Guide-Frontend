@@ -260,3 +260,36 @@
     transition: none !important;
   }
 }
+
+/* Improvements */
+.pageTitle {
+  text-decoration: none;
+  font-size: 28px;
+}
+
+.pageDesc {
+  font-size: 15px;
+  line-height: 1.5;
+  margin-top: 6px;
+}
+
+.pairList {
+  gap: 10px;
+}
+
+.pairRow {
+  padding-left: 12px;
+  border-left: 3px solid rgba(76, 175, 80, 0.8);
+}
+
+.pairLabel {
+  font-weight: 700;
+}
+
+.pairColon {
+  display: none;
+}
+
+.text {
+  line-height: 1.55;
+}

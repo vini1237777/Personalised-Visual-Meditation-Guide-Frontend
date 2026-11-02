@@ -56,7 +56,7 @@ export default function Contact() {
     setTouched({ name: true, email: true, message: true });
 
     if (!isValid) {
-      toast.error("Fix the highlighted fields.");
+      toast.error("Please fill in the highlighted fields.");
       return;
     }
 
@@ -141,7 +141,7 @@ export default function Contact() {
         </div>
 
         <div className={styles.actions}>
-          <button className={styles.button} type="submit" disabled={!isValid}>
+          <button className={styles.button} type="submit">
             {CONTACT_TEXT.submit}
           </button>
         </div>

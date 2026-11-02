@@ -4,7 +4,7 @@ export const CONTACT_TEXT = {
   emailLabel: "Email",
   messageLabel: "Message",
   submit: "Send",
-  success: "Message sent (demo).",
+  success: "Thanks for writing! This is a demo, so messages are not stored yet.",
   invalidEmail: "Please enter a valid email.",
   required: "This field is required.",
   subtitle:
