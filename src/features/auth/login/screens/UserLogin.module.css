@@ -217,8 +217,11 @@
 .card {
   box-sizing: border-box;
   padding: 24px 28px 28px;
-  background: rgba(0, 0, 0, 0.28);
-  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.42);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 20px;
 }
 
 @media (max-width: 900px) {
@@ -233,4 +236,27 @@
 
 .page {
   box-sizing: border-box;
+}
+
+/* Two halves: what SoulSync does on the left, the form on the right */
+.split {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 520px);
+  gap: 60px;
+  align-items: center;
+}
+
+.split .card {
+  width: 100%;
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .page { overflow-y: auto; align-items: flex-start; }
+  .split { grid-template-columns: minmax(0, 1fr); gap: 24px; justify-items: center; }
 }

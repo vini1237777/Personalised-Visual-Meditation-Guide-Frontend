@@ -3,6 +3,7 @@ import { BackButton } from "shared/ui/BackButton/BackButton";
 import type { DemoMeditationProps } from "../../meditation/model/meditation.types";
 import styles from "./DemoMeditation.module.css";
 import CheckOut from "../../journal/CheckOut";
+import { BUBBLE, SESSION_NAME } from "../../journal/journal";
 import { BreathingPanda } from "./BreathingPanda/BreathingPanda";
 
 import video_6bzzjltmlliyu from "../../../../assets/videos/6bzzjltmllyu-download.mp4";
@@ -98,46 +99,60 @@ export default function DemoMeditation({
 
   const showVideo = !isLoading && failCount < 3;
 
+  const mood = category ?? "";
+  const sessionName = SESSION_NAME[mood] ?? "Calm session";
+
   return (
     <div className={styles.wrapper}>
       <BackButton label="Back to Mood Selector" onClick={onBack} />
 
-      <h2 className={styles.title}>🌸 Demo Meditation</h2>
+      <div className={styles.inner}>
+        <header className={styles.head}>
+          <div className={styles.titleRow}>
+            <h2 className={styles.title}>{sessionName}</h2>
+            {!!mood && (
+              <span className={styles.bubble} style={{ background: BUBBLE[mood] }}>
+                {mood}
+              </span>
+            )}
+          </div>
+          <p className={styles.text}>
+            Live AI is resting right now, so here is a calm clip picked for how you feel.
+          </p>
+        </header>
 
-      {!!category && <p className={styles.category}>Category: {category}</p>}
+        <div className={styles.layout}>
+          <section className={styles.card} aria-label="Your session">
+            <div className={styles.demoBox}>
+              {showVideo ? (
+                <video
+                  key={videoUrl}
+                  className={styles.video}
+                  controls
+                  preload="metadata"
+                  onError={handleVideoError}
+                >
+                  <source src={videoUrl} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              ) : (
+                <div className={styles.panda}>
+                  <BreathingPanda />
+                </div>
+              )}
+            </div>
 
-      <div className={styles.card}>
-        <p className={styles.text}>
-          Live AI is paused right now, here’s a curated demo session.
-        </p>
+            <div className={styles.cardFoot}>
+              <span className={styles.hint}>Press play, sit back and breathe slowly.</span>
+              <button type="button" className={styles.shuffleButton} onClick={shuffle}>
+                Try another clip
+              </button>
+            </div>
+          </section>
 
-        <div className={styles.demoBox}>
-          {showVideo ? (
-            <video
-              key={videoUrl}
-              className={styles.video}
-              controls
-              preload="metadata"
-              onError={handleVideoError}
-            >
-              <source src={videoUrl} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-          ) : (
-            <BreathingPanda />
-          )}
+          <CheckOut checkIn={checkIn ?? null} className={styles.checkout} />
         </div>
-
-        <button
-          type="button"
-          className={styles.shuffleButton}
-          onClick={shuffle}
-        >
-          Shuffle another calm clip
-        </button>
       </div>
-
-      <CheckOut checkIn={checkIn ?? null} />
     </div>
   );
 }

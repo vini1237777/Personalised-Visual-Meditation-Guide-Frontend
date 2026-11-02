@@ -20,7 +20,7 @@ export default function MeditationPage({
 
   return (
     <div className={styles.overlay}>
-      <div className={styles.page}>
+      <div className={`${styles.page} ${!hasVideo && showAnimation ? styles.wide : ""}`}>
         {!(showAnimation && !hasVideo) && (
           <BackButton label="Back to Mood Selector" onClick={onBackToMood} />
         )}

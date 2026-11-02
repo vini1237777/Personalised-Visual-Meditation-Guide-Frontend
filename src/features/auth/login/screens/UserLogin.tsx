@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 
+import AuthIntro from "shared/ui/AuthIntro/AuthIntro";
 import styles from "./UserLogin.module.css";
 import { useAuth } from "../../../../app/providers/AuthProvider";
 import type { User } from "../../../user/model/user.types";
@@ -132,6 +133,13 @@ export default function UserLogin() {
 
       <div className={styles.overlay} />
 
+      <div className={styles.split}>
+      <AuthIntro
+        title="SoulSync"
+        subtitle="Meditation that starts with how you feel."
+        footer="The demo account is already filled in. Just press Log in to try it."
+      />
+
       <form
         className={styles.card}
         onSubmit={(e) => {
@@ -204,6 +212,7 @@ export default function UserLogin() {
           {isSubmitting ? "Logging in..." : "Log in"}
         </button>
       </form>
+      </div>
     </div>
   );
 }

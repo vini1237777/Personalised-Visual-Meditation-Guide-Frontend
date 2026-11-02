@@ -4,16 +4,17 @@ import { capitalize, lastSevenDays, loadJournal, moodWord, streakDays, whenLabel
 
 // A quiet record on the home page: the last week at a glance and how the
 // latest sessions changed your mood.
-export default function RecentCheckIns() {
+export default function RecentCheckIns({ side = false }: { side?: boolean }) {
   const list = loadJournal();
   if (list.length === 0) return null;
 
   const streak = streakDays(list);
   const week = lastSevenDays(list);
   const recent = list.slice(0, 3);
+  const lastNote = list.find((c) => c.note)?.note;
 
   return (
-    <aside className={styles.journal} aria-label="Your journal">
+    <aside className={`${styles.journal} ${side ? styles.side : ""}`} aria-label="Your journal">
       <p className={styles.head}>
         Your journal
         {streak >= 2 && <span className={styles.streak}>{streak} days in a row</span>}
@@ -54,6 +55,12 @@ export default function RecentCheckIns() {
           </li>
         ))}
       </ul>
+
+      {side && lastNote && (
+        <p className={styles.lastNote}>
+          “{lastNote}” <span>Your last note</span>
+        </p>
+      )}
 
       <Link to="/journal" className={styles.open}>
         Open my journal →

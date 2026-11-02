@@ -174,3 +174,10 @@
   overflow-y: auto;
   align-items: flex-start;
 }
+
+/* The demo session lays out in two columns, so it gets the full width */
+.page.wide {
+  max-width: none;
+  width: 100%;
+  align-items: stretch;
+}

@@ -260,3 +260,36 @@
     left: 0;
   }
 }
+
+/* Two halves: what SoulSync does on the left, the form on the right */
+.content {
+  max-width: 1180px;
+  padding: 0 24px;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 520px);
+  gap: 60px;
+  align-items: center;
+  text-align: left;
+}
+
+.content .card {
+  width: 100%;
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .page { overflow-y: auto; place-items: start center; padding: 90px 0 40px; box-sizing: border-box; }
+  .content { grid-template-columns: minmax(0, 1fr); gap: 24px; justify-items: center; }
+}
+
+/* Same dark glass as the login card */
+.content .card {
+  box-sizing: border-box;
+  padding: 24px 28px 28px;
+  background: rgba(0, 0, 0, 0.42);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 20px;
+}

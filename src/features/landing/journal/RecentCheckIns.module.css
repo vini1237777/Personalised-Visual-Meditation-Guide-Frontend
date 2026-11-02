@@ -128,10 +128,57 @@
   text-decoration: underline;
 }
 
+/* On the right side of the home page */
+.side {
+  margin: 0;
+  width: 100%;
+  padding: 22px 24px;
+  border-radius: 18px;
+  background: rgba(0, 0, 0, 0.42);
+  border-color: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.side .head {
+  font-size: 20px;
+}
+
+.side .dot {
+  width: 44px;
+  height: 44px;
+  font-size: 22px;
+}
+
+.side .row {
+  padding: 9px 0;
+}
+
+.lastNote {
+  margin: 12px 0 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 15px;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.45;
+}
+
+.lastNote span {
+  font-style: normal;
+  color: rgba(255, 255, 255, 0.7);
+}
+
 @media (max-width: 768px) {
   .journal {
     margin: 22px auto 0;
     width: min(380px, 92vw);
+  }
+
+  .side {
+    margin: 0 auto;
+    width: min(440px, 100%);
   }
 }
 

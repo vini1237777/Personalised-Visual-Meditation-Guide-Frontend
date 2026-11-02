@@ -79,6 +79,50 @@
   }
 }
 
+/* Home in two columns: greeting and button on the left, journal on the right */
+.homeGrid {
+  width: 100%;
+  box-sizing: border-box;
+  padding-right: 100px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 440px;
+  gap: 60px;
+  align-items: center;
+}
+
+.homeGrid.single {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.homeLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.homeGrid .welcomeText {
+  margin-top: 0;
+}
+
+@media (max-width: 900px) {
+  .homeGrid {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 0 16px;
+    gap: 24px;
+    justify-items: center;
+  }
+
+  .homeLeft {
+    align-items: center;
+  }
+
+  .homeGrid .welcomeText {
+    padding-left: 0;
+    text-align: center;
+  }
+}
+
 /* Motion: greeting drifts in after the video settles */
 @keyframes greetIn {
   from { opacity: 0; transform: translateY(18px); letter-spacing: 0.04em; }

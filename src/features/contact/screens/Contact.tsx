@@ -67,10 +67,29 @@ export default function Contact() {
 
   return (
     <main className={styles.page}>
+      <div className={styles.split}>
+      <section className={styles.intro}>
+        <h1 className={styles.heroTitle}>{CONTACT_TEXT.title}</h1>
+        <p className={styles.lead}>{CONTACT_TEXT.subtitle}</p>
+        <ul className={styles.reasons}>
+          {CONTACT_TEXT.reasons.map((r) => (
+            <li key={r.title} className={styles.reason}>
+              <span className={styles.reasonIcon} aria-hidden="true">
+                {r.icon}
+              </span>
+              <span>
+                <strong className={styles.reasonTitle}>{r.title}</strong>
+                <span className={styles.reasonText}>{r.text}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
       <form className={styles.card} onSubmit={onSubmit} noValidate>
         <div className={styles.header}>
-          <h1 className={styles.title}>{CONTACT_TEXT.title}</h1>
-          <p className={styles.subtitle}>{CONTACT_TEXT.subtitle}</p>
+          <h2 className={styles.title}>{CONTACT_TEXT.formTitle}</h2>
+          <p className={styles.subtitle}>{CONTACT_TEXT.formSubtitle}</p>
         </div>
 
         <div className={styles.row}>
@@ -146,6 +165,7 @@ export default function Contact() {
           </button>
         </div>
       </form>
+      </div>
     </main>
   );
 }

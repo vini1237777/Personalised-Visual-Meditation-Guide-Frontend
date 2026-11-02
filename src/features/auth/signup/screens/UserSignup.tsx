@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
+import AuthIntro from "shared/ui/AuthIntro/AuthIntro";
 import styles from "./UserSignup.module.css";
 import { UserService } from "services/userServices";
 import { BG_VIDEOS } from "../../../../assets/bg-videos/videoUrls";
@@ -130,12 +131,11 @@ export default function UserSignup() {
       <div className={styles.overlay} />
 
       <div className={styles.content}>
-        <header className={styles.hero}>
-          <h1 className={styles.heroTitle}>Meditation App</h1>
-          <p className={styles.heroSubtitle}>
-            Welcome to the Meditation App! Find your peace and calm.
-          </p>
-        </header>
+        <AuthIntro
+          title="Meditation App"
+          subtitle="Welcome to the Meditation App! Find your peace and calm."
+          footer="Make an account and your journal stays with you."
+        />
 
         <div className={styles.card}>
           <div className={styles.cardHeader}>

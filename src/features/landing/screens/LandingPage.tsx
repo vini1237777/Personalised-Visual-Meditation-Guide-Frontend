@@ -10,7 +10,7 @@ import { useAuth } from "app/providers/AuthProvider";
 import Loader from "shared/ui/Loader";
 import { useRef, useState } from "react";
 import RecentCheckIns from "../journal/RecentCheckIns";
-import { CheckIn, startCheckIn } from "../journal/journal";
+import { CheckIn, loadJournal, startCheckIn } from "../journal/journal";
 import { EMOJI_MAP } from "../mood/config/emoji.config";
 
 export default function LandingPage() {
@@ -22,6 +22,7 @@ export default function LandingPage() {
   // The feeling picked today decides which session plays
   const [sessionMood, setSessionMood] = useState<string | null>(null);
 
+  const hasJournal = loadJournal().length > 0;
   const showHero = isLoggedIn && Boolean(user) && state.view === "hero";
   // No name here: the demo account is shared, so a friendly "hey there" fits everyone.
   const hour = new Date().getHours();
@@ -40,18 +41,17 @@ export default function LandingPage() {
 
       <div className={styles.overlay} />
 
-      {!state.showAnimation && !state.isDemoMode && showHero && (
-        <div className={styles.welcomeText}>{greeting}</div>
-      )}
-
       {showHero && (
-        <HeroSection
-          items={HERO_ITEMS}
-          onStart={() => dispatch({ type: "OPEN_MOOD" })}
-        />
+        <div className={`${styles.homeGrid} ${hasJournal ? "" : styles.single}`}>
+          <div className={styles.homeLeft}>
+            {!state.showAnimation && !state.isDemoMode && (
+              <div className={styles.welcomeText}>{greeting}</div>
+            )}
+            <HeroSection items={HERO_ITEMS} onStart={() => dispatch({ type: "OPEN_MOOD" })} />
+          </div>
+          {!state.showAnimation && !state.isDemoMode && <RecentCheckIns side />}
+        </div>
       )}
-
-      {showHero && !state.showAnimation && !state.isDemoMode && <RecentCheckIns />}
 
       {state.view === "mood" && (
         <MoodSelector

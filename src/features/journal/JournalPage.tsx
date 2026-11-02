@@ -9,11 +9,34 @@ import {
   SESSION_NAME,
   capitalize,
   feltBetter,
+  lastSevenDays,
   loadJournal,
   moodOf,
   moodWord,
+  saveNote,
   streakDays,
 } from "features/landing/journal/journal";
+
+type View = "list" | "cards";
+const VIEW_KEY = "soulsync.journalView";
+
+function mostOften(words: string[]) {
+  const count = new Map<string, number>();
+  words.forEach((w) => w && count.set(w, (count.get(w) ?? 0) + 1));
+  let best = "";
+  let n = 0;
+  count.forEach((v, k) => {
+    if (v > n) {
+      best = k;
+      n = v;
+    }
+  });
+  return best;
+}
+
+function timeOf(at: number) {
+  return new Date(at).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+}
 
 type Range = "week" | "month" | "all";
 
@@ -40,7 +63,33 @@ function times(n: number) {
 export default function JournalPage() {
   const { videoRef, ready } = useVideoBackground(BG_VIDEOS.bg1);
   const [range, setRange] = useState<Range>("week");
-  const all = useMemo(loadJournal, []);
+  const [view, setView] = useState<View>(() => {
+    try {
+      return localStorage.getItem(VIEW_KEY) === "cards" ? "cards" : "list";
+    } catch {
+      return "list";
+    }
+  });
+  const chooseView = (v: View) => {
+    setView(v);
+    try {
+      localStorage.setItem(VIEW_KEY, v);
+    } catch {
+      // the choice just won't be remembered
+    }
+  };
+  const [all, setAll] = useState<CheckIn[]>(loadJournal);
+  const [editing, setEditing] = useState<string | null>(null);
+  const [draft, setDraft] = useState("");
+  const startNote = (c: CheckIn) => {
+    setEditing(c.id);
+    setDraft(c.note ?? "");
+  };
+  const keepNote = (id: string) => {
+    saveNote(id, draft);
+    setAll(loadJournal());
+    setEditing(null);
+  };
   const streak = streakDays(all);
   const current = RANGES.find((r) => r.key === range)!;
 
@@ -62,6 +111,92 @@ export default function JournalPage() {
   }, [list]);
 
   const better = list.filter(feltBetter).length;
+  const week = lastSevenDays(all);
+  const arrive = mostOften(list.map((c) => moodWord(c.before.emojis[0])));
+  const leave = mostOften(list.filter((c) => c.after).map((c) => moodWord(c.after as string)));
+
+  const feelingsOf = (c: CheckIn) =>
+    c.before.feelings.length ? c.before.feelings : [capitalize(moodWord(c.before.emojis[0]))];
+
+  const story = (c: CheckIn) => {
+    const from = moodWord(c.before.emojis[0]);
+    if (!c.after) return `Came in ${from}. No check out yet.`;
+    const to = moodWord(c.after);
+    return from === to ? `Came in ${from} and stayed ${to}.` : `Came in ${from}, left ${to}.`;
+  };
+
+  const noteBlock = (c: CheckIn) =>
+    editing === c.id ? (
+      <div className={styles.noteEdit}>
+        <textarea
+          className={styles.noteInput}
+          value={draft}
+          maxLength={500}
+          rows={2}
+          autoFocus
+          placeholder="What do you want to remember about this session?"
+          onChange={(e) => setDraft(e.target.value)}
+        />
+        <div className={styles.noteActions}>
+          <button type="button" className={styles.saveBtn} onClick={() => keepNote(c.id)}>
+            Save note
+          </button>
+          <button type="button" className={styles.textBtn} onClick={() => setEditing(null)}>
+            Cancel
+          </button>
+        </div>
+      </div>
+    ) : c.note ? (
+      <button type="button" className={styles.noteShow} onClick={() => startNote(c)} title="Edit note">
+        “{c.note}”
+      </button>
+    ) : (
+      <button type="button" className={styles.textBtn} onClick={() => startNote(c)}>
+        + Add a note
+      </button>
+    );
+
+  const toolbar = (
+    <div className={styles.toolbar}>
+      <div className={styles.toolbarText}>
+        <h2 className={styles.entriesTitle}>{current.label === "All" ? "All check ins" : current.label}</h2>
+        <span className={styles.count}>
+          {list.length === 0 ? "Nothing here yet" : `${list.length} ${list.length === 1 ? "check in" : "check ins"}`}
+        </span>
+      </div>
+      <div className={styles.tools}>
+        <div className={styles.segment} role="group" aria-label="Show check ins from">
+          {RANGES.map((r) => (
+            <button
+              key={r.key}
+              type="button"
+              className={`${styles.segBtn} ${range === r.key ? styles.segOn : ""}`}
+              aria-pressed={range === r.key}
+              onClick={() => setRange(r.key)}
+            >
+              {r.label}
+            </button>
+          ))}
+        </div>
+        <div className={styles.segment} role="group" aria-label="Journal view">
+          {(["list", "cards"] as View[]).map((v) => (
+            <button
+              key={v}
+              type="button"
+              className={`${styles.segBtn} ${view === v ? styles.segOn : ""}`}
+              aria-pressed={view === v}
+              onClick={() => chooseView(v)}
+            >
+              {v === "list" ? "List" : "Cards"}
+            </button>
+          ))}
+        </div>
+        <Link to="/" className={styles.newBtn}>
+          New check in
+        </Link>
+      </div>
+    </div>
+  );
 
   return (
     <div className={styles.page}>
@@ -76,89 +211,116 @@ export default function JournalPage() {
       />
       <div className={styles.overlay} />
 
-      <main className={styles.card}>
-        <div className={styles.top}>
-          <div>
-            <h1 className={styles.title}>Your journal</h1>
-            <p className={styles.summary}>
-              {list.length === 0
-                ? "No check ins here yet."
-                : `${current.lead} you checked in ${times(list.length)}${
-                    better ? ` and left feeling better ${times(better)}` : ""
-                  }.`}
-            </p>
-          </div>
+      <div className={styles.layout}>
+        <aside className={`${styles.card} ${styles.panel}`}>
+          <h1 className={styles.title}>Your journal</h1>
+          <p className={styles.summary}>
+            {list.length === 0
+              ? "No check ins here yet."
+              : `${current.lead} you checked in ${times(list.length)}${
+                  better ? ` and left feeling better ${times(better)}` : ""
+                }.`}
+          </p>
           {streak >= 2 && <span className={styles.streak}>{streak} days in a row</span>}
-        </div>
 
-        <div className={styles.filters} role="group" aria-label="Show check ins from">
-          {RANGES.map((r) => (
-            <button
-              key={r.key}
-              type="button"
-              className={`${styles.filter} ${range === r.key ? styles.filterOn : ""}`}
-              aria-pressed={range === r.key}
-              onClick={() => setRange(r.key)}
-            >
-              {r.label}
-            </button>
-          ))}
-        </div>
+          <ol className={styles.week} aria-label="The last seven days">
+            {week.map((d) => (
+              <li key={d.key} className={styles.weekDay}>
+                <span
+                  className={`${styles.dot} ${d.emoji ? "" : styles.dotEmpty} ${d.isToday ? styles.dotToday : ""}`}
+                  aria-label={d.emoji ? `${d.label}: ${moodWord(d.emoji)}` : `${d.label}: no check in`}
+                >
+                  {d.emoji}
+                </span>
+                <span className={styles.weekLabel}>{d.label}</span>
+              </li>
+            ))}
+          </ol>
 
-        {groups.length === 0 ? (
-          <div className={styles.empty}>
-            <p>Share how you feel on the home page and your first session will show up here.</p>
-            <Link to="/" className={styles.cta}>
-              Share how I feel
-            </Link>
-          </div>
-        ) : (
-          groups.map((g) => (
-            <section key={g.heading} className={styles.group}>
-              <h2 className={styles.dayHeading}>{g.heading}</h2>
-              {g.items.map((c) => {
+          {arrive && (
+            <p className={styles.insight}>
+              You arrive {arrive} most often{leave ? `, and you leave ${leave} most often` : ""}.
+            </p>
+          )}
+        </aside>
+
+        <main className={`${styles.card} ${styles.entries}`}>
+          {toolbar}
+          {groups.length === 0 ? (
+            <div className={styles.empty}>
+              <p>Share how you feel on the home page and your first session will show up here.</p>
+              <Link to="/" className={styles.cta}>
+                Share how I feel
+              </Link>
+            </div>
+          ) : view === "cards" ? (
+            <div className={styles.grid}>
+              {list.map((c) => {
                 const mood = moodOf(c.before.emojis[0]);
-                const feelings = c.before.feelings.length
-                  ? c.before.feelings
-                  : [capitalize(moodWord(c.before.emojis[0]))];
                 return (
-                  <article key={c.id} className={styles.entry}>
-                    <span className={styles.face} aria-label={`Came in ${moodWord(c.before.emojis[0])}`}>
-                      {c.before.emojis[0]}
-                    </span>
-                    <div className={styles.middle}>
-                      <h3 className={styles.session}>{SESSION_NAME[mood] ?? "Calm session"}</h3>
-                      <div className={styles.bubbles}>
-                        {feelings.map((f) => (
-                          <span key={f} className={styles.bubble} style={{ background: BUBBLE[mood] }}>
-                            {f}
-                          </span>
-                        ))}
-                      </div>
-                      {c.note && <p className={styles.note}>“{c.note}”</p>}
+                  <article key={c.id} className={styles.tile}>
+                    <div className={styles.tileTop}>
+                      <span>{dayHeading(c.at)}</span>
+                      <span>{timeOf(c.at)}</span>
                     </div>
-                    <span className={styles.arrow} aria-hidden="true">
-                      →
-                    </span>
-                    {c.after ? (
-                      <span className={styles.face} aria-label={`Left ${moodWord(c.after)}`}>
-                        {c.after}
-                      </span>
-                    ) : (
-                      <span className={`${styles.face} ${styles.faceEmpty}`} title="No check out">
-                        ?
-                      </span>
-                    )}
-                    <span className={styles.time}>
-                      {new Date(c.at).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}
-                    </span>
+                    <div className={styles.tileFaces} aria-label={`${moodWord(c.before.emojis[0])} to ${c.after ? moodWord(c.after) : "not checked out"}`}>
+                      <span>{c.before.emojis[0]}</span>
+                      <span className={styles.arrow}>→</span>
+                      <span>{c.after ?? "?"}</span>
+                    </div>
+                    <h3 className={styles.session}>{SESSION_NAME[mood] ?? "Calm session"}</h3>
+                    <p className={styles.story}>
+                      {story(c)} {feltBetter(c) && <span className={styles.better}>Felt better</span>}
+                    </p>
+                    <div className={styles.bubbles}>
+                      {feelingsOf(c).map((f) => (
+                        <span key={f} className={styles.bubble} style={{ background: BUBBLE[mood] }}>
+                          {f}
+                        </span>
+                      ))}
+                    </div>
+                    {noteBlock(c)}
                   </article>
                 );
               })}
-            </section>
-          ))
-        )}
-      </main>
+            </div>
+          ) : (
+            groups.map((g) => (
+              <section key={g.heading} className={styles.group}>
+                <h2 className={styles.dayHeading}>{g.heading}</h2>
+                {g.items.map((c) => {
+                  const mood = moodOf(c.before.emojis[0]);
+                  return (
+                    <article key={c.id} className={styles.entry}>
+                      <div className={styles.pair} aria-label={story(c)}>
+                        <span className={styles.face}>{c.before.emojis[0]}</span>
+                        <span className={styles.arrow} aria-hidden="true">→</span>
+                        <span className={`${styles.face} ${c.after ? "" : styles.faceEmpty}`}>{c.after ?? "?"}</span>
+                      </div>
+                      <div className={styles.middle}>
+                        <div className={styles.sessionRow}>
+                          <h3 className={styles.session}>{SESSION_NAME[mood] ?? "Calm session"}</h3>
+                          {feltBetter(c) && <span className={styles.better}>Felt better</span>}
+                        </div>
+                        <p className={styles.story}>{story(c)}</p>
+                        <div className={styles.bubbles}>
+                          {feelingsOf(c).map((f) => (
+                            <span key={f} className={styles.bubble} style={{ background: BUBBLE[mood] }}>
+                              {f}
+                            </span>
+                          ))}
+                        </div>
+                        {noteBlock(c)}
+                      </div>
+                      <span className={styles.time}>{timeOf(c.at)}</span>
+                    </article>
+                  );
+                })}
+              </section>
+            ))
+          )}
+        </main>
+      </div>
     </div>
   );
 }

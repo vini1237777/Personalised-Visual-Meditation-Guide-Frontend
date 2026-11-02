@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { BreathingPanda } from "features/landing/demoMeditation/ui/BreathingPanda/BreathingPanda";
 import styles from "./Loader.module.css";
 
 const messages = [
@@ -15,9 +16,84 @@ type LoaderProps = {
   onSkip?: () => void;
 };
 
+const VOICE_KEY = "soulsync.pandaVoice";
+
+function voiceSaved(): boolean {
+  try {
+    return localStorage.getItem(VOICE_KEY) === "on";
+  } catch {
+    return false;
+  }
+}
+
+// The panda talks you through the breath with the browser's own voice.
+function speak(text: string) {
+  const synth = typeof window !== "undefined" ? window.speechSynthesis : undefined;
+  if (!synth) return;
+  synth.cancel();
+  const line = new SpeechSynthesisUtterance(text);
+  const voices = synth.getVoices().filter((v) => v.lang.startsWith("en"));
+  const soft = voices.find((v) => /samantha|karen|moira|female|zira|google uk english female/i.test(v.name));
+  if (soft ?? voices[0]) line.voice = (soft ?? voices[0]) as SpeechSynthesisVoice;
+  line.rate = 0.8;
+  line.pitch = 1.1;
+  line.volume = 0.9;
+  synth.speak(line);
+}
+
+// The panda's own breath: soft airy noise that swells on the way in and fades on the way out.
+let audio: AudioContext | null = null;
+
+function breathSound(kind: "in" | "out", seconds = 4) {
+  const Ctx = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+  if (!Ctx) return;
+  audio = audio ?? new Ctx();
+  const ctx = audio;
+  if (ctx.state === "suspended") void ctx.resume();
+
+  const length = Math.floor(ctx.sampleRate * seconds);
+  const buffer = ctx.createBuffer(1, length, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  let last = 0;
+  for (let i = 0; i < length; i++) {
+    // Brown noise sounds like air, white noise sounds like hiss.
+    last = (last + 0.02 * (Math.random() * 2 - 1)) / 1.02;
+    data[i] = last * 3.5;
+  }
+
+  const source = ctx.createBufferSource();
+  source.buffer = buffer;
+  const filter = ctx.createBiquadFilter();
+  filter.type = "bandpass";
+  filter.Q.value = 0.8;
+  const gain = ctx.createGain();
+  const now = ctx.currentTime;
+  const end = now + seconds - 0.2;
+
+  if (kind === "in") {
+    filter.frequency.setValueAtTime(450, now);
+    filter.frequency.linearRampToValueAtTime(1100, end);
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.linearRampToValueAtTime(0.5, now + seconds * 0.6);
+    gain.gain.linearRampToValueAtTime(0.0001, end);
+  } else {
+    filter.frequency.setValueAtTime(900, now);
+    filter.frequency.linearRampToValueAtTime(350, end);
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.linearRampToValueAtTime(0.6, now + 0.4);
+    gain.gain.exponentialRampToValueAtTime(0.0001, end);
+  }
+
+  source.connect(filter).connect(gain).connect(ctx.destination);
+  source.start(now);
+  source.stop(now + seconds);
+}
+
+const canSpeak = typeof window !== "undefined" && "speechSynthesis" in window;
+
 function BreathGuide({ onSkip }: { onSkip?: () => void }) {
   const [phase, setPhase] = useState<"ready" | "in" | "out">("ready");
-  const [count, setCount] = useState(4);
+  const [voiceOn, setVoiceOn] = useState(voiceSaved);
 
   useEffect(() => {
     const start = requestAnimationFrame(() => setPhase("in"));
@@ -29,29 +105,52 @@ function BreathGuide({ onSkip }: { onSkip?: () => void }) {
   }, []);
 
   useEffect(() => {
-    if (phase === "ready") return;
-    setCount(4);
-    const id = setInterval(() => setCount((c) => (c > 1 ? c - 1 : c)), 1000);
-    return () => clearInterval(id);
-  }, [phase]);
+    if (!voiceOn || phase === "ready") return;
+    breathSound(phase);
+    if (canSpeak) speak(phase === "in" ? "Breathe in slowly" : "And breathe out");
+  }, [phase, voiceOn]);
+
+  // Stop talking when the loader goes away.
+  useEffect(() => () => {
+    if (canSpeak) window.speechSynthesis.cancel();
+    void audio?.suspend();
+  }, []);
+
+  const toggleVoice = () => {
+    const next = !voiceOn;
+    setVoiceOn(next);
+    try {
+      localStorage.setItem(VOICE_KEY, next ? "on" : "off");
+    } catch {}
+    if (!next && canSpeak) window.speechSynthesis.cancel();
+    if (!next) void audio?.suspend();
+    else if (phase !== "ready") breathSound(phase);
+  };
 
   return (
     <div className={styles.container} role="status" aria-live="polite">
       <p className={styles.title}>Take one slow breath while your session gets ready</p>
 
-      <div className={`${styles.breathCircle} ${phase === "in" ? styles.inhale : ""} ${phase === "out" ? styles.exhale : ""}`}>
-        <span className={styles.count}>{phase === "ready" ? "" : count}</span>
+      <div className={styles.panda} aria-hidden="true">
+        <BreathingPanda />
       </div>
 
       <p className={styles.phase} key={phase}>
         {phase === "out" ? "Breathe out" : "Breathe in"}
       </p>
 
-      {onSkip && (
-        <button type="button" className={styles.skip} onClick={onSkip}>
-          Skip
-        </button>
-      )}
+      <div className={styles.actions}>
+        {(
+          <button type="button" className={styles.skip} onClick={toggleVoice} aria-pressed={voiceOn}>
+            {voiceOn ? "🔊 Sound on" : "🔇 Sound off"}
+          </button>
+        )}
+        {onSkip && (
+          <button type="button" className={styles.skip} onClick={onSkip}>
+            Skip
+          </button>
+        )}
+      </div>
     </div>
   );
 }
