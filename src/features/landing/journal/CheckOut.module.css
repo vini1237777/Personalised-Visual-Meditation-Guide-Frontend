@@ -165,3 +165,30 @@
   .card, .afterEmoji { animation: none; }
   .face { transition: none; }
 }
+
+/* Save button with a link to the journal beside it */
+.noteActions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px 18px;
+  margin-top: 4px;
+}
+
+.noteActions .saveButton {
+  margin: 0;
+}
+
+.journalLink {
+  color: #e9d5ff;
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.journalLink:hover {
+  color: #fff;
+  text-decoration: underline;
+}

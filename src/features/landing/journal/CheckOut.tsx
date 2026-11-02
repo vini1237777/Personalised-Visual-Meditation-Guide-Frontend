@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import styles from "./CheckOut.module.css";
 import { EMOJI_MAP } from "../mood/config/emoji.config";
 import {
@@ -94,14 +95,19 @@ export default function CheckOut({ checkIn, className = "" }: { checkIn: CheckIn
               setNoteSaved(false);
             }}
           />
-          <button
-            type="button"
-            className={styles.saveButton}
-            onClick={keepNote}
-            disabled={noteSaved || !note.trim()}
-          >
-            {noteSaved ? "Saved to my journal" : "Save to my journal"}
-          </button>
+          <div className={styles.noteActions}>
+            <button
+              type="button"
+              className={styles.saveButton}
+              onClick={keepNote}
+              disabled={noteSaved || !note.trim()}
+            >
+              {noteSaved ? "Saved to my journal" : "Save to my journal"}
+            </button>
+            <Link to="/journal" className={styles.journalLink}>
+              Open my journal →
+            </Link>
+          </div>
         </div>
       )}
     </section>
