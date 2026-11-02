@@ -1,3 +1,5 @@
+import type { CheckIn } from "../../journal/journal";
+
 export type MeditationPageProps = {
   meditationContent: string | null;
   category: string;
@@ -7,10 +9,12 @@ export type MeditationPageProps = {
   onDemoModeChange: (v: any) => void;
   onAnimationChange: (v: any) => void;
   onLoadingChange: (v: any) => void;
+  checkIn?: CheckIn | null;
 };
 
 export type DemoMeditationProps = {
   category: string;
   isLoading: boolean;
   onBack: () => void;
+  checkIn?: CheckIn | null;
 };

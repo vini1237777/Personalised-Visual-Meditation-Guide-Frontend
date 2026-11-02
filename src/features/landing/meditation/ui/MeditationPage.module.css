@@ -168,3 +168,9 @@
     transition: none !important;
   }
 }
+
+/* Room for the check in card under the session */
+.overlay {
+  overflow-y: auto;
+  align-items: flex-start;
+}

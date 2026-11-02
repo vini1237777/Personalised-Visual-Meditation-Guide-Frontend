@@ -28,6 +28,8 @@ export default function MoodSelector({
   onClose,
   onOpenDemoMeditation,
   meditationContent,
+  onCheckIn,
+  registerSkip,
 }: MoodSelectorProps) {
   const {
     selectedEmojis,
@@ -145,11 +147,18 @@ export default function MoodSelector({
                 return;
               }
 
+              onCheckIn?.({ emojis: selectedEmojis, feelings: selectedFeelings });
               onLoadingChange(true);
 
               const liveVideoUrl = (meditationContent ?? "").trim();
 
-              setTimeout(() => {
+              // The wait is one guided breath (in 4s, out 4s). Skip ends it early.
+              let done = false;
+              const proceed = () => {
+                if (done) return;
+                done = true;
+                clearTimeout(timer);
+                registerSkip?.(null);
                 onLoadingChange(false);
 
                 if (isDemoMode) {
@@ -163,7 +172,9 @@ export default function MoodSelector({
                 }
 
                 onMeditationReady(liveVideoUrl);
-              }, 4000);
+              };
+              const timer = setTimeout(proceed, 8000);
+              registerSkip?.(proceed);
             }}
           >
             Continue

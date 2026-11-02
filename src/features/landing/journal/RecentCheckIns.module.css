@@ -1,0 +1,79 @@
+.journal {
+  margin: 28px 0 0 100px;
+  width: 280px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #fff;
+  animation: rise 700ms cubic-bezier(0.22, 1, 0.36, 1) 850ms backwards;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+.head {
+  margin: 0 0 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.streak {
+  font-size: 13px;
+  font-weight: 700;
+  color: #8be08f;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.row:first-child {
+  border-top: 0;
+}
+
+.faces {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 20px;
+}
+
+.arrow {
+  font-size: 14px;
+  color: #8be08f;
+}
+
+.when {
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+@media (max-width: 768px) {
+  .journal {
+    margin: 22px auto 0;
+    width: min(320px, 90vw);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .journal { animation: none; }
+}

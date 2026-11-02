@@ -2,6 +2,7 @@ import styles from "./MeditationPage.module.css";
 import type { MeditationPageProps } from "../model/meditation.types";
 import { BackButton } from "shared/ui/BackButton/BackButton";
 import DemoMeditation from "features/landing/demoMeditation/ui/DemoMeditation";
+import CheckOut from "features/landing/journal/CheckOut";
 import { BreathingPanda } from "features/landing/demoMeditation/ui/BreathingPanda/BreathingPanda";
 
 export default function MeditationPage({
@@ -12,6 +13,7 @@ export default function MeditationPage({
   onBackToMood,
   onDemoModeChange,
   onAnimationChange,
+  checkIn,
 }: MeditationPageProps) {
   const videoUrl = (meditationContent ?? "").toString().trim();
   const hasVideo = videoUrl.length > 0;
@@ -37,6 +39,7 @@ export default function MeditationPage({
                 Your browser does not support the video tag.
               </video>
             </div>
+            <CheckOut checkIn={checkIn ?? null} />
           </>
         )}
 
@@ -45,6 +48,7 @@ export default function MeditationPage({
             category={category}
             isLoading={isLoading}
             onBack={onBackToMood}
+            checkIn={checkIn}
           />
         )}
 

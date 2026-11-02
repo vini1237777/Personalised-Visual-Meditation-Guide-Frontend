@@ -1,5 +1,3 @@
-import { LANDING_TEXT } from "../landing.text";
-import { formatUserName } from "../../../shared/lib/formatUserName";
 import { HeroSection } from "./HeroSection";
 import { useLandingState } from "../hooks/useLandingState";
 import { BG_VIDEOS } from "../../../assets/bg-videos/videoUrls";
@@ -10,14 +8,24 @@ import MeditationPage from "../meditation/ui/MeditationPage";
 import { HERO_ITEMS } from "../config/hero.config";
 import { useAuth } from "app/providers/AuthProvider";
 import Loader from "shared/ui/Loader";
+import { useRef, useState } from "react";
+import RecentCheckIns from "../journal/RecentCheckIns";
+import { CheckIn, startCheckIn } from "../journal/journal";
+import { EMOJI_MAP } from "../mood/config/emoji.config";
 
 export default function LandingPage() {
   const { user, isLoggedIn, setUser } = useAuth();
   const { state, dispatch } = useLandingState();
   const { videoRef, ready } = useVideoBackground(BG_VIDEOS.bg1);
+  const [checkIn, setCheckIn] = useState<CheckIn | null>(null);
+  const skipRef = useRef<(() => void) | null>(null);
+  // The feeling picked today decides which session plays
+  const [sessionMood, setSessionMood] = useState<string | null>(null);
 
   const showHero = isLoggedIn && Boolean(user) && state.view === "hero";
-  const displayName = formatUserName(user);
+  // No name here: the demo account is shared, so a friendly "hey there" fits everyone.
+  const hour = new Date().getHours();
+  const greeting = `Hey there, good ${hour < 12 ? "morning" : hour < 17 ? "afternoon" : "evening"}`;
 
   return (
     <div className={styles.landingPage}>
@@ -33,10 +41,7 @@ export default function LandingPage() {
       <div className={styles.overlay} />
 
       {!state.showAnimation && !state.isDemoMode && showHero && (
-        <div className={styles.welcomeText}>
-          {LANDING_TEXT.welcome}
-          {displayName && ` ${displayName}`}
-        </div>
+        <div className={styles.welcomeText}>{greeting}</div>
       )}
 
       {showHero && (
@@ -45,6 +50,8 @@ export default function LandingPage() {
           onStart={() => dispatch({ type: "OPEN_MOOD" })}
         />
       )}
+
+      {showHero && !state.showAnimation && !state.isDemoMode && <RecentCheckIns />}
 
       {state.view === "mood" && (
         <MoodSelector
@@ -68,6 +75,13 @@ export default function LandingPage() {
             dispatch({ type: "OPEN_DEMO_MEDITATION" })
           }
           onClose={() => dispatch({ type: "CLOSE_MOOD" })}
+          onCheckIn={(before) => {
+            setSessionMood(EMOJI_MAP[before.emojis[0]]?.category ?? null);
+            setCheckIn(startCheckIn(before));
+          }}
+          registerSkip={(fn) => {
+            skipRef.current = fn;
+          }}
         />
       )}
 
@@ -75,8 +89,9 @@ export default function LandingPage() {
         <MeditationPage
           meditationContent={state.meditationVideoUrl}
           isLoading={state.isLoading}
-          category={user?.category ?? ""}
+          category={sessionMood ?? user?.category ?? ""}
           showAnimation={state.showAnimation}
+          checkIn={checkIn}
           onBackToMood={() => dispatch({ type: "BACK_TO_MOOD" })}
           onDemoModeChange={(v: boolean) =>
             dispatch({ type: "SET_DEMO_MODE", value: v })
@@ -90,7 +105,9 @@ export default function LandingPage() {
         />
       )}
 
-      {state.isLoading && <Loader />}
+      {state.isLoading && (
+        <Loader breath onSkip={() => skipRef.current?.()} />
+      )}
     </div>
   );
 }

@@ -28,4 +28,6 @@ export type MoodSelectorProps = {
   onClose: () => void;
   onOpenDemoMeditation: () => void;
   meditationContent: any;
+  onCheckIn?: (before: { emojis: string[]; feelings: string[] }) => void;
+  registerSkip?: (skip: (() => void) | null) => void;
 };

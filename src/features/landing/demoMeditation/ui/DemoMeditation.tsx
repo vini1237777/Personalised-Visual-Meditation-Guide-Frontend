@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { BackButton } from "shared/ui/BackButton/BackButton";
 import type { DemoMeditationProps } from "../../meditation/model/meditation.types";
 import styles from "./DemoMeditation.module.css";
+import CheckOut from "../../journal/CheckOut";
 import { BreathingPanda } from "./BreathingPanda/BreathingPanda";
 
 import video_6bzzjltmlliyu from "../../../../assets/videos/6bzzjltmllyu-download.mp4";
@@ -63,6 +64,7 @@ export default function DemoMeditation({
   category,
   isLoading = false,
   onBack,
+  checkIn,
 }: DemoMeditationProps) {
   const pool = useMemo(() => getPool(category), [category]);
 
@@ -134,6 +136,8 @@ export default function DemoMeditation({
           Shuffle another calm clip
         </button>
       </div>
+
+      <CheckOut checkIn={checkIn ?? null} />
     </div>
   );
 }
