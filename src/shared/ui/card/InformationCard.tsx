@@ -59,8 +59,8 @@ export default function SoulSyncInfoCard({
             <div className={styles.item}>
               <p className={styles.itemTitle}>AI Integration</p>
               <p className={styles.itemBody}>
-                Gemini API — structured prompting with mood-aware context for
-                personalized session generation
+                OpenAI writes a short script from your moods, then Veo through
+                the Gemini API turns it into a video
               </p>
             </div>
           </div>
@@ -70,41 +70,39 @@ export default function SoulSyncInfoCard({
             <div className={styles.item}>
               <p className={styles.itemTitle}>JWT Authentication</p>
               <p className={styles.itemBody}>
-                Token-based auth with role-based access control — different
-                permissions per user role.
+                Token based auth, with a role check on account updates.
               </p>
             </div>
             <div className={styles.item}>
               <p className={styles.itemTitle}>Data Protection</p>
               <p className={styles.itemBody}>
-                bcrypt password hashing, domain-restricted CORS, and request
-                validation on every endpoint.
+                bcrypt password hashing, CORS limited to this site, and request
+                validation on sign up and log in.
               </p>
             </div>
           </div>
 
           <div>
-            <p className={styles.sectionTitle}>AI-Powered Sessions</p>
+            <p className={styles.sectionTitle}>AI Powered Sessions</p>
             <div className={styles.item}>
-              <p className={styles.itemTitle}>Mood-Aware Generation</p>
+              <p className={styles.itemTitle}>Mood Based Generation</p>
               <p className={styles.itemBody}>
-                Gemini reads your mood and session history before generating —
-                no two sessions are the same.
+                The feelings you pick shape the script, so the video starts
+                from how you feel today.
               </p>
             </div>
             <div className={styles.item}>
-              <p className={styles.itemTitle}>Context-Aware Prompting</p>
+              <p className={styles.itemTitle}>Structured Prompting</p>
               <p className={styles.itemBody}>
-                Each API call includes user mood, session history, and
-                preferences — building a rich prompt context for tailored
-                responses.
+                Your selected feelings and moods go into a fixed prompt with
+                clear rules for length, tone and imagery.
               </p>
             </div>
             <div className={styles.item}>
-              <p className={styles.itemTitle}>Structured Output</p>
+              <p className={styles.itemTitle}>Private Key Handling</p>
               <p className={styles.itemBody}>
-                Every AI response is validated and parsed before reaching the
-                client — no raw LLM output in the UI.
+                Videos stream through the API, so the Gemini key stays on the
+                server.
               </p>
             </div>
           </div>
@@ -114,15 +112,14 @@ export default function SoulSyncInfoCard({
             <div className={styles.item}>
               <p className={styles.itemTitle}>CI/CD Pipeline</p>
               <p className={styles.itemBody}>
-                GitHub Actions — automated deploy on every push to main. Zero
-                manual steps to production.
+                GitHub Actions deploys automatically on every push to main.
               </p>
             </div>
             <div className={styles.item}>
               <p className={styles.itemTitle}>Production Hosting</p>
               <p className={styles.itemBody}>
                 AWS EC2 with Nginx as reverse proxy and PM2 for process
-                management — stable, zero-downtime serving.
+                management. Videos are served through CloudFront.
               </p>
             </div>
             <div className={styles.item}>
