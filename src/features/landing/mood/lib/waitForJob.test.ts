@@ -55,3 +55,11 @@ test("gives up on a job that never finishes", async () => {
     waitForJob("j1", check, { pollMs: 1, giveUpMs: 20 }),
   ).rejects.toThrow("took too long");
 });
+
+test("stops checking once told to stop", async () => {
+  const check = answers(running);
+  await expect(
+    waitForJob("j1", check, { ...fast, isStopped: () => true }),
+  ).rejects.toThrow("Stopped waiting");
+  expect(check).not.toHaveBeenCalled();
+});
