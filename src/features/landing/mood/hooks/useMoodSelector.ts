@@ -5,6 +5,7 @@ import { EMOJI_MAP } from "../config/emoji.config";
 import { User } from "../../../user/model/user.types";
 import { LANDING_CONSTANTS } from "../../constants/landing.constants";
 import { UserService } from "../../../../services/userServices";
+import { waitForJob } from "../lib/waitForJob";
 
 type UseMoodSelectorArgs = {
   user: User | null;
@@ -93,16 +94,13 @@ export function useMoodSelector({
         email,
       });
 
-      if (response?.status !== 200) {
+      if (response?.status !== 202) {
         throw new Error(`Unexpected status: ${response?.status}`);
       }
 
-      const data = response.data as {
-        generatedScripts?: string;
-        videoUrl?: string;
-        email?: string;
-        fullName?: string;
-      };
+      const data = await waitForJob(response.data.jobId, (jobId) =>
+        UserService.getScriptJob(jobId).then((res) => res.data),
+      );
 
       const videoUrl = (data.videoUrl ?? "").toString().trim();
       const hasVideo = videoUrl.length > 0;
