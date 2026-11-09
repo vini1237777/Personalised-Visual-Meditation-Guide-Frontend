@@ -3,8 +3,8 @@ import styles from "./InformationCard.module.css";
 
 const GUIDE_STEPS = [
   {
-    title: "Log in",
-    body: "The demo account is already filled in on the login page. Press Log in.",
+    title: "Log in or sign up",
+    body: "Press Log in with the demo account already filled in. Have an invite? Sign up with that email first, then log in.",
   },
   {
     title: "Start from the home page",
@@ -91,7 +91,9 @@ export default function SoulSyncInfoCard({
           </ol>
           <p className={styles.guideNote}>
             AI generated videos are open to invited accounts for now, so the demo
-            account plays a calm session picked for your mood.
+            account plays a calm session picked for your mood. The AI model makes
+            clips of up to 8 seconds, so each video repeats while you breathe
+            along.
           </p>
         </section>
 
