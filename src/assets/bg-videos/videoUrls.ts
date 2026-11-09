@@ -1,4 +1,5 @@
-const CDN = "https://dcfmv8k1hpguy.cloudfront.net";
+const CDN =
+  process.env.REACT_APP_CDN_URL || "https://dcfmv8k1hpguy.cloudfront.net";
 
 export const BG_VIDEOS = {
   bg1: `${CDN}/bg1-small.mp4`,
