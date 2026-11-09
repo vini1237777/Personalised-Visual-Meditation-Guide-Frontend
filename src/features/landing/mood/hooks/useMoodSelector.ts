@@ -1,30 +1,19 @@
 import { useMemo, useState } from "react";
-import toast from "react-hot-toast";
 import type { Emoji } from "../model/mood.types";
 import { EMOJI_MAP } from "../config/emoji.config";
 import { User } from "../../../user/model/user.types";
-import { LANDING_CONSTANTS } from "../../constants/landing.constants";
 import { UserService } from "../../../../services/userServices";
+import { startLiveJob } from "../lib/startLiveJob";
 import { waitForJob } from "../lib/waitForJob";
 
 type UseMoodSelectorArgs = {
   user: User | null;
-  setUser: any;
-
   isDemoMode: boolean;
-
-  onLoadingChange: (v: boolean) => void;
-  onAnimationChange: (v: boolean) => void;
-  onMeditationReady: (videoUrl: string) => void;
 };
 
 export function useMoodSelector({
   user,
-  setUser,
   isDemoMode,
-  onLoadingChange,
-  onAnimationChange,
-  onMeditationReady,
 }: UseMoodSelectorArgs) {
   const [selectedEmojis, setSelectedEmojis] = useState<Emoji[]>([]);
   const [activeEmoji, setActiveEmoji] = useState<Emoji | null>(null);
@@ -67,68 +56,21 @@ export function useMoodSelector({
     }
   };
 
-  const handleContinue = async () => {
-    onLoadingChange(true);
-
-    if (isDemoMode) {
-      await new Promise((r) => setTimeout(r, LANDING_CONSTANTS.demoDelayMs));
-      onLoadingChange(false);
-      onAnimationChange(false);
-      return;
-    }
-
+  // Null means this session plays the demo, including on any error starting a job.
+  const requestLiveJob = () => {
     const email = getEmail();
-    if (!email) {
-      toast.error("Email is required.");
-      onLoadingChange(false);
-      onAnimationChange(false);
-      return;
-    }
-
-    try {
-      await new Promise((r) => setTimeout(r, LANDING_CONSTANTS.demoDelayMs));
-
-      const response = await UserService.getScript({
-        selectedFeelings,
-        selectedEmojis,
-        email,
-      });
-
-      if (response?.status !== 202) {
-        throw new Error(`Unexpected status: ${response?.status}`);
-      }
-
-      const data = await waitForJob(response.data.jobId, (jobId) =>
-        UserService.getScriptJob(jobId).then((res) => res.data),
-      );
-
-      const videoUrl = (data.videoUrl ?? "").toString().trim();
-      const hasVideo = videoUrl.length > 0;
-
-      if (!hasVideo) {
-        toast.error("No video received. Please try again.");
-        return;
-      }
-
-      setUser((prev: User) => ({
-        ...prev,
-        email: data.email ?? email ?? prev.email,
-        fullName: data.fullName ?? prev.fullName,
-      }));
-
-      if (data.reused) {
-        toast("Live AI is paused, so this is your closest saved session.");
-      } else {
-        toast.success("Successfully generated meditation session");
-      }
-      onMeditationReady(videoUrl);
-    } catch {
-      toast("🌿 Live AI is paused, showing curated session. Click SEE DEMO");
-    } finally {
-      onLoadingChange(false);
-      setTimeout(() => onAnimationChange(true), 0);
-    }
+    if (isDemoMode || !email) return Promise.resolve(null);
+    return startLiveJob(() =>
+      UserService.getScript({ selectedFeelings, selectedEmojis, email }),
+    );
   };
+
+  const waitForVideo = (jobId: string, isStopped: () => boolean) =>
+    waitForJob(
+      jobId,
+      (id) => UserService.getScriptJob(id).then((res) => res.data),
+      { isStopped },
+    );
 
   return {
     selectedEmojis,
@@ -141,6 +83,7 @@ export function useMoodSelector({
 
     toggleEmoji,
     toggleFeeling,
-    handleContinue,
+    requestLiveJob,
+    waitForVideo,
   };
 }

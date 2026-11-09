@@ -1,4 +1,5 @@
 import styles from "./MoodSelector.module.css";
+import { useEffect, useRef } from "react";
 import toast from "react-hot-toast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
@@ -20,17 +21,26 @@ const CATEGORY_CLASS: Record<string, string> = {
 
 export default function MoodSelector({
   user,
-  setUser,
   isDemoMode,
   onLoadingChange,
-  onAnimationChange,
   onMeditationReady,
   onClose,
   onOpenDemoMeditation,
   meditationContent,
   onCheckIn,
   registerSkip,
+  onWaitingForVideo,
 }: MoodSelectorProps) {
+  const starting = useRef(false);
+  const stoppedWaiting = useRef(false);
+
+  useEffect(() => {
+    stoppedWaiting.current = false;
+    return () => {
+      stoppedWaiting.current = true;
+    };
+  }, []);
+
   const {
     selectedEmojis,
     selectedFeelings,
@@ -39,14 +49,38 @@ export default function MoodSelector({
     setIsCollapsed,
     toggleEmoji,
     toggleFeeling,
-  } = useMoodSelector({
-    user,
-    setUser,
-    isDemoMode,
-    onLoadingChange,
-    onAnimationChange,
-    onMeditationReady,
-  });
+    requestLiveJob,
+    waitForVideo,
+  } = useMoodSelector({ user, isDemoMode });
+
+  const playLiveSession = async (jobId: string) => {
+    const finish = () => {
+      registerSkip?.(null);
+      onWaitingForVideo?.(false);
+      onLoadingChange(false);
+    };
+    const openDemo = () => {
+      stoppedWaiting.current = true;
+      finish();
+      onOpenDemoMeditation();
+    };
+
+    onWaitingForVideo?.(true);
+    registerSkip?.(openDemo);
+    try {
+      const job = await waitForVideo(jobId, () => stoppedWaiting.current);
+      if (stoppedWaiting.current) return;
+      const videoUrl = (job.videoUrl ?? "").trim();
+      if (!videoUrl) throw new Error("No video");
+      finish();
+      if (job.reused) toast("Here is your closest saved session.");
+      onMeditationReady(videoUrl);
+    } catch {
+      if (stoppedWaiting.current) return;
+      toast("Your video could not be made, so here is a calm session instead.");
+      openDemo();
+    }
+  };
 
   return (
     <div className={styles.card}>
@@ -141,14 +175,23 @@ export default function MoodSelector({
           <button
             type="button"
             className={styles.continueButton}
-            onClick={() => {
+            onClick={async () => {
               if (selectedFeelings.length === 0 && !isDemoMode) {
                 toast("🙂 Select at least one feeling to continue.");
                 return;
               }
+              if (starting.current) return;
+              starting.current = true;
 
               onCheckIn?.({ emojis: selectedEmojis, feelings: selectedFeelings });
               onLoadingChange(true);
+
+              const jobId = await requestLiveJob();
+              starting.current = false;
+              if (jobId) {
+                await playLiveSession(jobId);
+                return;
+              }
 
               const liveVideoUrl = (meditationContent ?? "").trim();
 

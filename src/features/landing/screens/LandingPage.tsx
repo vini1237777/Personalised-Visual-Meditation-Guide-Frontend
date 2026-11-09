@@ -14,11 +14,12 @@ import { CheckIn, loadJournal, startCheckIn } from "../journal/journal";
 import { EMOJI_MAP } from "../mood/config/emoji.config";
 
 export default function LandingPage() {
-  const { user, isLoggedIn, setUser } = useAuth();
+  const { user, isLoggedIn } = useAuth();
   const { state, dispatch } = useLandingState();
   const { videoRef, ready } = useVideoBackground(BG_VIDEOS.bg1);
   const [checkIn, setCheckIn] = useState<CheckIn | null>(null);
   const skipRef = useRef<(() => void) | null>(null);
+  const [waitingForVideo, setWaitingForVideo] = useState(false);
   // The feeling picked today decides which session plays
   const [sessionMood, setSessionMood] = useState<string | null>(null);
 
@@ -56,14 +57,10 @@ export default function LandingPage() {
       {state.view === "mood" && (
         <MoodSelector
           user={user}
-          setUser={setUser}
           meditationContent={state.meditationVideoUrl}
           isDemoMode={state.isDemoMode}
           onLoadingChange={(v: boolean) =>
             dispatch({ type: v ? "START_LOADING" : "STOP_LOADING" })
-          }
-          onAnimationChange={(v: boolean) =>
-            dispatch({ type: "SET_ANIMATION", value: v })
           }
           onDemoModeChange={(v: boolean) =>
             dispatch({ type: "SET_DEMO_MODE", value: v })
@@ -82,6 +79,7 @@ export default function LandingPage() {
           registerSkip={(fn) => {
             skipRef.current = fn;
           }}
+          onWaitingForVideo={setWaitingForVideo}
         />
       )}
 
@@ -106,7 +104,11 @@ export default function LandingPage() {
       )}
 
       {state.isLoading && (
-        <Loader breath onSkip={() => skipRef.current?.()} />
+        <Loader
+          breath
+          waitingForVideo={waitingForVideo}
+          onSkip={() => skipRef.current?.()}
+        />
       )}
     </div>
   );
