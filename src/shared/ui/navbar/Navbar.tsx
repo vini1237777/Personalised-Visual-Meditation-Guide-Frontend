@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../../../app/providers/AuthProvider";
 import styles from "./Navbar.module.css";
 import SoulSyncInfoCard from "../card/InformationCard";
+import VisitorCount from "../visitorCount/VisitorCount";
 import { tokenStore } from "services/storage/tokenStore";
 
 export default function Navbar() {
@@ -128,13 +129,16 @@ export default function Navbar() {
 
       <header ref={headerRef} className={styles.header}>
         <div className={styles.container}>
-          <NavLink
-            to={isLoggedIn ? "/" : "/auth/login"}
-            className={styles.brand}
-            onClick={handleBrandClick}
-          >
-            SoulSync
-          </NavLink>
+          <div className={styles.identity}>
+            <NavLink
+              to={isLoggedIn ? "/" : "/auth/login"}
+              className={styles.brand}
+              onClick={handleBrandClick}
+            >
+              SoulSync
+            </NavLink>
+            <VisitorCount />
+          </div>
 
           <nav className={styles.nav}>
             {showHome && (

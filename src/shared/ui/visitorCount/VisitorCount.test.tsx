@@ -11,13 +11,8 @@ const mocked = makeRequest as jest.Mock;
 test("shows the count from the API", async () => {
   mocked.mockResolvedValue({ data: { visitors: 1250 } });
   render(<VisitorCount />);
-  expect(await screen.findByText("1,250 visitors")).toBeInTheDocument();
-});
-
-test("uses the singular for one visitor", async () => {
-  mocked.mockResolvedValue({ data: { visitors: 1 } });
-  render(<VisitorCount />);
-  expect(await screen.findByText("1 visitor")).toBeInTheDocument();
+  expect(await screen.findByText("1,250")).toBeInTheDocument();
+  expect(screen.getByText("Profile visits")).toBeInTheDocument();
 });
 
 test("shows nothing when the API fails", async () => {

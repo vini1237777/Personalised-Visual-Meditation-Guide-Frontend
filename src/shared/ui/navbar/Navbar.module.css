@@ -38,10 +38,29 @@
   letter-spacing: 0;
 }
 
+.identity {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+
 .nav {
   display: flex;
   align-items: center;
   gap: 18px;
+}
+
+@media (max-width: 1240px) {
+  .identity .brand::after {
+    content: "";
+  }
+}
+
+@media (max-width: 720px) {
+  .identity {
+    gap: 10px;
+  }
 }
 
 .link {
