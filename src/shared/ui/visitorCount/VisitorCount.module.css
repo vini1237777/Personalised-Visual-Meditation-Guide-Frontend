@@ -1,0 +1,13 @@
+.count {
+  position: fixed;
+  right: 14px;
+  bottom: 12px;
+  z-index: 900;
+  padding: 4px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  background: black;
+  color: #e9d5ff;
+  font-size: 12px;
+  pointer-events: none;
+}
