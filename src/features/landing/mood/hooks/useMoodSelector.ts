@@ -116,7 +116,11 @@ export function useMoodSelector({
         fullName: data.fullName ?? prev.fullName,
       }));
 
-      toast.success("Successfully generated meditation session");
+      if (data.reused) {
+        toast("Live AI is paused, so this is your closest saved session.");
+      } else {
+        toast.success("Successfully generated meditation session");
+      }
       onMeditationReady(videoUrl);
     } catch {
       toast("🌿 Live AI is paused, showing curated session. Click SEE DEMO");
