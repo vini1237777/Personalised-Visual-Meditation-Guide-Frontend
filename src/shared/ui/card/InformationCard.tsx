@@ -1,6 +1,37 @@
 import { useEffect } from "react";
 import styles from "./InformationCard.module.css";
 
+const GUIDE_STEPS = [
+  {
+    title: "Log in",
+    body: "The demo account is already filled in on the login page. Press Log in.",
+  },
+  {
+    title: "Start from the home page",
+    body: "Under \"What's on your mind?\", press the button to share your mood.",
+  },
+  {
+    title: "Choose how you feel",
+    body: "Tap the face closest to your mood, then tap the words that fit.",
+  },
+  {
+    title: "Take one slow breath",
+    body: "Press Continue and breathe with the panda. Press Skip if you are ready sooner.",
+  },
+  {
+    title: "Watch your session",
+    body: "A calm session picked for your mood opens. Press play and follow along.",
+  },
+  {
+    title: "Check out",
+    body: "When you finish, tap the face that shows how you feel now. You can add a note too.",
+  },
+  {
+    title: "Open your journal",
+    body: "Choose Journal in the menu to see your sessions. It is saved in this browser.",
+  },
+];
+
 export default function SoulSyncInfoCard({
   open = true,
   setIsOpen,
@@ -41,6 +72,30 @@ export default function SoulSyncInfoCard({
       </div>
 
       <div className={styles.body}>
+        <section className={styles.guide} aria-labelledby="how-to-use">
+          <h2 id="how-to-use" className={styles.guideTitle}>
+            How to use SoulSync
+          </h2>
+          <ol className={styles.steps}>
+            {GUIDE_STEPS.map((step, index) => (
+              <li key={step.title} className={styles.step}>
+                <span className={styles.stepNumber} aria-hidden="true">
+                  {index + 1}
+                </span>
+                <div>
+                  <p className={styles.itemTitle}>{step.title}</p>
+                  <p className={styles.itemBody}>{step.body}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+          <p className={styles.guideNote}>
+            AI generated videos are open to invited accounts for now, so the demo
+            account plays a calm session picked for your mood.
+          </p>
+        </section>
+
+        <h2 className={styles.guideTitle}>How it is built</h2>
         <div className={styles.grid}>
           <div>
             <p className={styles.sectionTitle}>Technology Stack</p>
