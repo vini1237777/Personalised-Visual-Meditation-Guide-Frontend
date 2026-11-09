@@ -47,10 +47,10 @@ export default function UserSignup() {
   const { videoRef, ready } = useVideoBackground(BG_VIDEOS.bg4);
 
   const [form, setForm] = useState<SignupForm>({
-    fullName: "Vinisha Yadav",
-    email: "v@gmail.com",
-    password: "v@123456",
-    confirmPassword: "v@123456",
+    fullName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
 
   const [errors, setErrors] = useState<FieldErrors>({});
