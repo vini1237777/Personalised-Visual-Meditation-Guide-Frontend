@@ -15,8 +15,10 @@ export default function VisitorCount() {
   if (visitors === null) return null;
 
   return (
-    <div className={styles.count}>
-      {visitors.toLocaleString("en-IN")} {visitors === 1 ? "visitor" : "visitors"}
-    </div>
+    <p className={styles.visits}>
+      <span className={styles.breath} aria-hidden="true" />
+      <span className={styles.label}>Profile visits</span>
+      <span className={styles.count}>{visitors.toLocaleString("en-IN")}</span>
+    </p>
   );
 }

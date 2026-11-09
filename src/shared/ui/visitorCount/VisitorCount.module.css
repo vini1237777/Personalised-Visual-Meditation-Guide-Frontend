@@ -1,13 +1,85 @@
+.visits {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding-left: 16px;
+  border-left: 1px solid rgba(255, 255, 255, 0.14);
+  white-space: nowrap;
+  animation: visitsIn 600ms ease both;
+}
+
+.label {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 14px;
+  font-weight: 500;
+}
+
 .count {
-  position: fixed;
-  right: 14px;
-  bottom: 12px;
-  z-index: 900;
-  padding: 4px 10px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 999px;
-  background: black;
   color: #e9d5ff;
-  font-size: 12px;
-  pointer-events: none;
+  font-size: 18px;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Paced like a slow breath, in and out over 6 seconds. */
+.breath {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e9d5ff;
+  animation: breathe 6s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(0.8);
+    box-shadow: 0 0 0 0 rgba(233, 213, 255, 0.35);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 0 5px rgba(233, 213, 255, 0);
+  }
+}
+
+@keyframes visitsIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* The full menu fills this width, so the count waits for the phone layout. */
+@media (min-width: 721px) and (max-width: 900px) {
+  .visits {
+    display: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .visits {
+    padding-left: 10px;
+    gap: 6px;
+  }
+  .label {
+    font-size: 12px;
+  }
+  .count {
+    font-size: 15px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .visits,
+  .breath {
+    animation: none;
+  }
+  .breath {
+    opacity: 0.8;
+  }
 }
