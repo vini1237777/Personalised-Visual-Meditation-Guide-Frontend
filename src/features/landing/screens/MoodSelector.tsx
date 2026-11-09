@@ -73,7 +73,12 @@ export default function MoodSelector({
       const videoUrl = (job.videoUrl ?? "").trim();
       if (!videoUrl) throw new Error("No video");
       finish();
-      if (job.reused) toast("Here is your closest saved session.");
+      toast(
+        job.reused
+          ? "Here is your closest saved session."
+          : "Your video is ready. AI clips run up to 8 seconds, so it repeats.",
+        { duration: 6000 },
+      );
       onMeditationReady(videoUrl);
     } catch {
       if (stoppedWaiting.current) return;
