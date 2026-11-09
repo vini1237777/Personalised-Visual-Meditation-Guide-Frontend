@@ -18,11 +18,9 @@ export type MoodSelection = {
 
 export type MoodSelectorProps = {
   user: User | null | any;
-  setUser: (user: User | null | any) => void;
   isDemoMode: boolean;
 
   onLoadingChange: (isLoading: boolean) => void;
-  onAnimationChange: (show: boolean) => void;
   onDemoModeChange: (isDemo: boolean) => void;
   onMeditationReady: (videoUrl: string) => void;
   onClose: () => void;
@@ -30,4 +28,5 @@ export type MoodSelectorProps = {
   meditationContent: any;
   onCheckIn?: (before: { emojis: string[]; feelings: string[] }) => void;
   registerSkip?: (skip: (() => void) | null) => void;
+  onWaitingForVideo?: (waiting: boolean) => void;
 };

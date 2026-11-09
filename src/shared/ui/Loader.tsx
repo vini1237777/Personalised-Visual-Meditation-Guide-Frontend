@@ -14,6 +14,7 @@ type LoaderProps = {
   // Guide one slow breath (in 4s, out 4s) instead of rotating messages.
   breath?: boolean;
   onSkip?: () => void;
+  waitingForVideo?: boolean;
 };
 
 const VOICE_KEY = "soulsync.pandaVoice";
@@ -91,24 +92,41 @@ function breathSound(kind: "in" | "out", seconds = 4) {
 
 const canSpeak = typeof window !== "undefined" && "speechSynthesis" in window;
 
-function BreathGuide({ onSkip }: { onSkip?: () => void }) {
+function BreathGuide({
+  onSkip,
+  waitingForVideo = false,
+}: {
+  onSkip?: () => void;
+  waitingForVideo?: boolean;
+}) {
   const [phase, setPhase] = useState<"ready" | "in" | "out">("ready");
   const [voiceOn, setVoiceOn] = useState(voiceSaved);
 
   useEffect(() => {
     const start = requestAnimationFrame(() => setPhase("in"));
-    const toOut = setTimeout(() => setPhase("out"), 4000);
-    return () => {
-      cancelAnimationFrame(start);
-      clearTimeout(toOut);
-    };
+    return () => cancelAnimationFrame(start);
   }, []);
 
   useEffect(() => {
-    if (!voiceOn || phase === "ready") return;
+    if (!waitingForVideo) {
+      const toOut = setTimeout(() => setPhase("out"), 4000);
+      return () => clearTimeout(toOut);
+    }
+    // A video takes minutes, so the breath keeps going, quietly, until it is ready.
+    if (canSpeak) window.speechSynthesis.cancel();
+    void audio?.suspend();
+    const id = setInterval(
+      () => setPhase((p) => (p === "in" ? "out" : "in")),
+      4000,
+    );
+    return () => clearInterval(id);
+  }, [waitingForVideo]);
+
+  useEffect(() => {
+    if (waitingForVideo || !voiceOn || phase === "ready") return;
     breathSound(phase);
     if (canSpeak) speak(phase === "in" ? "Breathe in slowly" : "And breathe out");
-  }, [phase, voiceOn]);
+  }, [phase, voiceOn, waitingForVideo]);
 
   // Stop talking when the loader goes away.
   useEffect(() => () => {
@@ -129,7 +147,11 @@ function BreathGuide({ onSkip }: { onSkip?: () => void }) {
 
   return (
     <div className={styles.container} role="status" aria-live="polite">
-      <p className={styles.title}>Take one slow breath while your session gets ready</p>
+      <p className={styles.title}>
+        {waitingForVideo
+          ? "Your video is being made. This can take a few minutes."
+          : "Take one slow breath while your session gets ready"}
+      </p>
 
       <div className={styles.panda} aria-hidden="true">
         <BreathingPanda />
@@ -140,14 +162,14 @@ function BreathGuide({ onSkip }: { onSkip?: () => void }) {
       </p>
 
       <div className={styles.actions}>
-        {(
+        {!waitingForVideo && (
           <button type="button" className={styles.skip} onClick={toggleVoice} aria-pressed={voiceOn}>
             {voiceOn ? "🔊 Sound on" : "🔇 Sound off"}
           </button>
         )}
         {onSkip && (
           <button type="button" className={styles.skip} onClick={onSkip}>
-            Skip
+            {waitingForVideo ? "Play a calm session instead" : "Skip"}
           </button>
         )}
       </div>
@@ -155,7 +177,12 @@ function BreathGuide({ onSkip }: { onSkip?: () => void }) {
   );
 }
 
-export default function Loader({ title = "Preparing your session…", breath = false, onSkip }: LoaderProps) {
+export default function Loader({
+  title = "Preparing your session…",
+  breath = false,
+  onSkip,
+  waitingForVideo,
+}: LoaderProps) {
   const [i, setI] = useState(0);
   const [visible, setVisible] = useState(true);
 
@@ -173,7 +200,9 @@ export default function Loader({ title = "Preparing your session…", breath = f
     return () => clearInterval(id);
   }, [breath]);
 
-  if (breath) return <BreathGuide onSkip={onSkip} />;
+  if (breath) {
+    return <BreathGuide onSkip={onSkip} waitingForVideo={waitingForVideo} />;
+  }
 
   return (
     <div className={styles.container} role="status" aria-live="polite">

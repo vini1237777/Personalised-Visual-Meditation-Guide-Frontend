@@ -13,13 +13,18 @@ const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 export async function waitForJob(
   jobId: string,
   check: Check,
-  { pollMs = POLL_MS, giveUpMs = GIVE_UP_MS } = {},
+  {
+    pollMs = POLL_MS,
+    giveUpMs = GIVE_UP_MS,
+    isStopped = () => false,
+  }: { pollMs?: number; giveUpMs?: number; isStopped?: () => boolean } = {},
 ): Promise<JobStatusResponse> {
   const deadline = Date.now() + giveUpMs;
   let failedChecks = 0;
 
   while (Date.now() < deadline) {
     await wait(pollMs);
+    if (isStopped()) throw new Error("Stopped waiting");
 
     let job: JobStatusResponse;
     try {
