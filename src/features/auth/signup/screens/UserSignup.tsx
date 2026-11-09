@@ -152,13 +152,17 @@ export default function UserSignup() {
             </p>
           </div>
 
+          <p className={styles.inviteNote}>
+            Sign up is invite only for now. To try SoulSync, use the demo
+            account on the login page.
+          </p>
+
           <div className={styles.form}>
             <Field
               label="Full Name"
               value={form.fullName}
               onChange={onChange("fullName")}
               error={errors.fullName}
-              isDisabled
             />
             <Field
               label="Email"
@@ -166,7 +170,6 @@ export default function UserSignup() {
               value={form.email}
               onChange={onChange("email")}
               error={errors.email}
-              isDisabled
             />
             <Field
               label="Password"
@@ -174,7 +177,6 @@ export default function UserSignup() {
               value={form.password}
               onChange={onChange("password")}
               error={errors.password}
-              isDisabled
             />
             <Field
               label="Confirm Password"
@@ -182,7 +184,6 @@ export default function UserSignup() {
               value={form.confirmPassword}
               onChange={onChange("confirmPassword")}
               error={errors.confirmPassword}
-              isDisabled
             />
 
             <div className={styles.row}>
@@ -192,13 +193,12 @@ export default function UserSignup() {
                   type="checkbox"
                   checked={showPassword}
                   onChange={() => setShowPassword((v) => !v)}
-                  disabled
                 />
                 Show password
               </label>
             </div>
 
-            <button className={styles.button} onClick={handleSignup} disabled>
+            <button className={styles.button} onClick={handleSignup} disabled={isSubmitting}>
               {isSubmitting ? "Creating..." : "Sign up"}
             </button>
           </div>
