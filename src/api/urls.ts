@@ -10,6 +10,7 @@ const url = {
   verifyEmail: "/api/auth/verify-email",
   sendVerificationEmail: "/api/auth/send-verification-email",
   getScript: "/api/script/post",
+  visits: "/api/visits",
   getScriptJob: "/api/script/jobs",
 };
 
