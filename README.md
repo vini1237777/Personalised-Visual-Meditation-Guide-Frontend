@@ -1,93 +1,60 @@
-# SoulSync — AI-Enabled Meditation Platform (Frontend)
+# SoulSync Frontend
 
-SoulSync is a personalized meditation platform that uses AI to generate guided meditation sessions tailored to your mood, goals, and experience level.
+SoulSync is a meditation app. You pick how you feel on a mood wheel, and it plays a calming video made for that mood, then lets you check out and keep a journal of your sessions.
 
-**Live:** [meditateaurelia.fit](https://www.meditateaurelia.fit)  
+**Live:** [meditateaurelia.fit](https://www.meditateaurelia.fit)
 **Backend repo:** [Personalised-Visual-Meditation-Guide-Backend](https://github.com/vini1237777/Personalised-Visual-Meditation-Guide-Backend)
 
----
-
-## Tech Stack
+## Tech stack
 
 | Layer | Technology |
 |-------|-----------|
-| Framework | React.js, TypeScript |
-| Build Tool | Vite |
-| Styling | CSS |
-| State | Context API |
-| Auth | JWT-based (handled by backend) |
+| Framework | React 19, TypeScript, Create React App |
+| Styling | CSS Modules |
+| Auth | JWT issued by the backend |
+| Media | CloudFront |
 | CI/CD | GitHub Actions |
-| Hosting | AWS EC2 (Nginx + PM2) |
-| Media CDN | AWS S3 + CloudFront |
-
----
+| Hosting | AWS EC2 with Nginx |
 
 ## Features
 
-- **AI-powered meditation sessions** — personalized guided meditations generated via Gemini APIs
-- **Visual meditation guides** — immersive audio-visual meditation experiences
-- **User authentication** — JWT-based login/signup with role-based access control
-- **Responsive design** — optimized for mobile and desktop
-- **Fast media delivery** — page loads cut from 5s+ to under 1s using S3 + CloudFront with lazy loading
-
----
+- Mood selector with original faces and an emotion wheel
+- Generated sessions: the backend writes a script with OpenAI and makes the video with Veo through the Gemini API
+- A demo mode that plays saved clips matched to your mood while live generation is paused
+- Check out reflections and a journal with list, card and calendar views, stored in the browser
+- Log in and sign up with JWT
 
 ## Architecture
 
 ```
-┌─────────────┐     ┌──────────────┐     ┌─────────────┐
-│   React UI  │────▶│  Express API │────▶│   MongoDB   │
-│  (Vite/TS)  │     │  (Node.js)   │     │             │
-└─────────────┘     └──────┬───────┘     └─────────────┘
-                           │
-                    ┌──────▼───────┐
-                    │  Gemini API  │
-                    │  (LangChain) │
-                    └──────────────┘
+React app -> Express API -> MongoDB
+                |
+                +-> OpenAI (script)
+                +-> Gemini API, Veo (video)
 
-Media: AWS S3 → CloudFront CDN → Client
+Background and demo videos: CloudFront -> React app
 ```
 
----
-
-## Performance
-
-| Metric | Before | After |
-|--------|--------|-------|
-| Page load (media) | ~5s | < 1s |
-
-Achieved via S3 + CloudFront CDN, video compression, and lazy loading.
-
----
-
-## Local Setup
+## Local setup
 
 ```bash
-git clone https://github.com/vini1237777/Personalised-Visual-Meditation-Guide-Frontend.git
-cd Personalised-Visual-Meditation-Guide-Frontend
 npm install
+npm start
 ```
 
-Create a `.env` file:
-```
-VITE_API_URL=http://localhost:5000
-```
+Create a `.env.local` file:
 
-```bash
-npm run dev
 ```
-
----
+REACT_APP_API=http://localhost:3000
+```
 
 ## Deployment
 
-Deployed on **AWS EC2** with Nginx reverse proxy and PM2 process manager. CI/CD pipeline via **GitHub Actions** automatically builds and deploys on push to `main`.
-
----
+A push to `main` runs GitHub Actions, which builds the app and copies it to EC2, where Nginx serves it.
 
 ## Related
 
-- [SoulSync Backend](https://github.com/vini1237777/Personalised-Visual-Meditation-Guide-Backend)
+[SoulSync Backend](https://github.com/vini1237777/Personalised-Visual-Meditation-Guide-Backend)
 
 ## License
 
