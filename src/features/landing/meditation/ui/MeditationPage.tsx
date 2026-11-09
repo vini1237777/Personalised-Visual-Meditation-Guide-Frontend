@@ -32,6 +32,8 @@ export default function MeditationPage({
               <video
                 className={styles.video}
                 controls
+                controlsList="nodownload"
+                onContextMenu={(e) => e.preventDefault()}
                 loop
                 preload="metadata"
                 key={videoUrl}
