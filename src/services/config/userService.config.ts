@@ -35,3 +35,10 @@ export type GetScriptResponse = {
   email?: string;
   fullName?: string;
 };
+
+export type StartJobResponse = { jobId: string };
+
+export type JobStatusResponse = GetScriptResponse & {
+  status: "queued" | "running" | "done" | "failed";
+  reused?: boolean;
+};

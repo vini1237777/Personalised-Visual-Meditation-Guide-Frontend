@@ -10,6 +10,7 @@ const url = {
   verifyEmail: "/api/auth/verify-email",
   sendVerificationEmail: "/api/auth/send-verification-email",
   getScript: "/api/script/post",
+  getScriptJob: "/api/script/jobs",
 };
 
 export default url;

@@ -4,10 +4,11 @@ import type { User } from "../features/user/model/user.types";
 import {
   ApiResponse,
   GetScriptRequest,
-  GetScriptResponse,
+  JobStatusResponse,
   LoginRequest,
   LoginResponse,
   RegisterRequest,
+  StartJobResponse,
   UpdateUserRequest,
 } from "./config/userService.config";
 
@@ -42,7 +43,13 @@ export class UserService {
 
   static async getScript(payload: GetScriptRequest) {
     return makeRequest(url.getScript, "post", payload) as Promise<
-      ApiResponse<GetScriptResponse>
+      ApiResponse<StartJobResponse>
+    >;
+  }
+
+  static async getScriptJob(jobId: string) {
+    return makeRequest(`${url.getScriptJob}/${jobId}`, "get") as Promise<
+      ApiResponse<JobStatusResponse>
     >;
   }
 }
