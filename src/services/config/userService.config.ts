@@ -17,6 +17,7 @@ export type LoginRequest = {
 };
 
 export type LoginResponse = Partial<User> & {
+  token?: string;
   name?: string;
 };
 
@@ -33,4 +34,11 @@ export type GetScriptResponse = {
   videoUrl?: string;
   email?: string;
   fullName?: string;
+};
+
+export type StartJobResponse = { jobId: string };
+
+export type JobStatusResponse = GetScriptResponse & {
+  status: "queued" | "running" | "done" | "failed";
+  reused?: boolean;
 };

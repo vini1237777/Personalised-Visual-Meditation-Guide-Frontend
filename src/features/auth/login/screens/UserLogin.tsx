@@ -9,6 +9,7 @@ import type { User } from "../../../user/model/user.types";
 import { UserService } from "../../../../services/userServices";
 import { ApiError } from "../../../../shared/api/http";
 import { BG_VIDEOS } from "../../../../assets/bg-videos/videoUrls";
+import { tokenStore } from "../../../../services/storage/tokenStore";
 import { useVideoBackground } from "../../../../shared/custom-hooks/Usevideobackground";
 
 type LoginForm = {
@@ -96,6 +97,7 @@ export default function UserLogin() {
           return;
         }
         const data = res?.data ?? {};
+        if (data.token) tokenStore.set(data.token);
         const loggedInUser: User = {
           email: data.email ?? form.email,
           fullName: data.fullName ?? data.name ?? "",

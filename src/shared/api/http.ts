@@ -6,6 +6,8 @@ import type {
   RequestConfig,
 } from "./http.types";
 
+import { tokenStore } from "../../services/storage/tokenStore";
+
 const API_BASE_URL = process.env.REACT_APP_API;
 
 export const http = axios.create({
@@ -14,10 +16,10 @@ export const http = axios.create({
 });
 
 http.interceptors.request.use((config) => {
-  const token = sessionStorage.getItem("auth-Key");
+  const token = tokenStore.get();
   if (token) {
     config.headers = config.headers ?? {};
-    config.headers.Authorization = token;
+    config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });

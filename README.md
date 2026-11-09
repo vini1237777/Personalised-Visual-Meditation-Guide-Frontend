@@ -48,6 +48,14 @@ Create a `.env.local` file:
 REACT_APP_API=http://localhost:3000
 ```
 
+## Benchmarks & Architecture Verification
+
+| Claim | Code | Evidence |
+|---|---|---|
+| Waiting for long running generation jobs | [waitForJob.ts](src/features/landing/mood/lib/waitForJob.ts) | [unit tests](src/features/landing/mood/lib/waitForJob.test.ts) |
+| Background video through CloudFront | [videoUrls.ts](src/assets/bg-videos/videoUrls.ts) | Set the address with `REACT_APP_CDN_URL` |
+| GitHub Actions build and deploy | [deploy-frontend.yml](.github/workflows/deploy-frontend.yml) | Workflow runs on this repo |
+
 ## Deployment
 
 A push to `main` runs GitHub Actions, which builds the app and copies it to EC2, where Nginx serves it.
