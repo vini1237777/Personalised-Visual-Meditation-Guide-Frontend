@@ -129,6 +129,8 @@ export default function DemoMeditation({
                   key={videoUrl}
                   className={styles.video}
                   controls
+                  controlsList="nodownload"
+                  onContextMenu={(e) => e.preventDefault()}
                   preload="metadata"
                   onError={handleVideoError}
                 >
