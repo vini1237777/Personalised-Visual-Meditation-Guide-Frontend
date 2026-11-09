@@ -149,7 +149,7 @@ function BreathGuide({
     <div className={styles.container} role="status" aria-live="polite">
       <p className={styles.title}>
         {waitingForVideo
-          ? "Your video is being made. This can take a few minutes."
+          ? "Your 8 second video is being made. This can take a few minutes."
           : "Take one slow breath while your session gets ready"}
       </p>
 

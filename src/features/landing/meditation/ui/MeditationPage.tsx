@@ -32,12 +32,18 @@ export default function MeditationPage({
               <video
                 className={styles.video}
                 controls
+                loop
                 preload="metadata"
                 key={videoUrl}
               >
                 <source src={videoUrl} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
+              <p className={styles.videoNote}>
+                Made just for you. The AI video model creates clips of up to 8
+                seconds, so this one repeats. Breathe along for as long as you
+                like.
+              </p>
             </div>
             <CheckOut checkIn={checkIn ?? null} />
           </>

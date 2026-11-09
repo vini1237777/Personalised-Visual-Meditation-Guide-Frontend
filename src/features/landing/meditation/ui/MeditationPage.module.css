@@ -181,3 +181,12 @@
   width: 100%;
   align-items: stretch;
 }
+
+.videoNote {
+  margin: 0;
+  max-width: 52ch;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.82);
+}
