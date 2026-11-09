@@ -17,6 +17,7 @@ export type LoginRequest = {
 };
 
 export type LoginResponse = Partial<User> & {
+  token?: string;
   name?: string;
 };
 

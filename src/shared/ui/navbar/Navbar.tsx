@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../../../app/providers/AuthProvider";
 import styles from "./Navbar.module.css";
 import SoulSyncInfoCard from "../card/InformationCard";
+import { tokenStore } from "services/storage/tokenStore";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ export default function Navbar() {
   const showHome = isLoggedIn;
 
   const handleLogout = () => {
+    tokenStore.clear();
     setUser(null);
     toast.success("Logged out");
     navigate("/auth/login");
