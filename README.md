@@ -54,7 +54,23 @@ REACT_APP_API=http://localhost:3000
 |---|---|---|
 | Waiting for long running generation jobs | [waitForJob.ts](src/features/landing/mood/lib/waitForJob.ts) | [unit tests](src/features/landing/mood/lib/waitForJob.test.ts) |
 | Background video through CloudFront | [videoUrls.ts](src/assets/bg-videos/videoUrls.ts) | Set the address with `REACT_APP_CDN_URL` |
+| 1080p background videos, 72% smaller with no playback freezes | [encode.sh](perf/background-video/encode.sh) | [measure.mjs](perf/background-video/measure.mjs), [raw results](perf/background-video/results-10mbps.json), table below |
 | GitHub Actions build and deploy | [deploy-frontend.yml](.github/workflows/deploy-frontend.yml) | Workflow runs on this repo |
+
+### Background video
+
+The four background videos are 1080p H.264 with the index at the front of each file, made with [encode.sh](perf/background-video/encode.sh). Together they weigh 85.4 MB, down from 301.5 MB for the 4K files they replace.
+
+[measure.mjs](perf/background-video/measure.mjs) plays each file in Chrome from a local server paced to 10 Mbps with a 60 ms round trip, 3 runs per file, and records the median. "Frozen" is how much longer than its own length the clip took to finish after its first frame.
+
+| Video | Clip | 4K file | 1080p file | First frame, 4K to 1080p | Frozen, 4K to 1080p |
+|---|---|---|---|---|---|
+| bg1 | 14.5 s | 82.8 MB | 15.2 MB | 947 ms to 497 ms | 51.2 s to 0.05 s |
+| bg2 | 12.3 s | 23.6 MB | 2.0 MB | 640 ms to 203 ms | 6.3 s to 0.01 s |
+| bg3 | 49.2 s | 130.6 MB | 49.9 MB | 1,057 ms to 706 ms | 54.8 s to 0.09 s |
+| bg4 | 48.4 s | 64.5 MB | 18.3 MB | 478 ms to 249 ms | 4.6 s to 0.03 s |
+
+Quality was checked with SSIM over the first 10 seconds, against the 4K files scaled to 1080p: 0.97 for bg2, 0.97 for bg3, 0.96 for bg4 and 0.93 for bg1, whose fast river was also compared by eye on crops of the water. These are local numbers on an Apple M2; real networks vary.
 
 ## Deployment
 
