@@ -1,0 +1,293 @@
+{
+  "date": "2026-11-10T05:54:38.979Z",
+  "network": {
+    "mbps": 10,
+    "rttMs": 60,
+    "pacedBy": "local server, one shared link"
+  },
+  "browser": "Chrome 158.0.8127.18",
+  "runsPerFile": 3,
+  "summary": [
+    {
+      "file": "bg2-original.mp4",
+      "megabytes": 32.9,
+      "clipSeconds": 12.3,
+      "medianFirstFrameMs": 779,
+      "medianFrozenMs": 13598
+    },
+    {
+      "file": "bg2-small.mp4",
+      "megabytes": 23.6,
+      "clipSeconds": 12.3,
+      "medianFirstFrameMs": 640,
+      "medianFrozenMs": 6304
+    },
+    {
+      "file": "bg2-1080p.mp4",
+      "megabytes": 2,
+      "clipSeconds": 12.3,
+      "medianFirstFrameMs": 203,
+      "medianFrozenMs": 12
+    },
+    {
+      "file": "bg1-small.mp4",
+      "megabytes": 82.8,
+      "clipSeconds": 14.5,
+      "medianFirstFrameMs": 947,
+      "medianFrozenMs": 51159
+    },
+    {
+      "file": "bg1-1080p-v2.mp4",
+      "megabytes": 15.2,
+      "clipSeconds": 14.5,
+      "medianFirstFrameMs": 497,
+      "medianFrozenMs": 52
+    },
+    {
+      "file": "bg3-small.mp4",
+      "megabytes": 130.6,
+      "clipSeconds": 49.2,
+      "medianFirstFrameMs": 1057,
+      "medianFrozenMs": 54836
+    },
+    {
+      "file": "bg3-1080p-v2.mp4",
+      "megabytes": 49.9,
+      "clipSeconds": 49.2,
+      "medianFirstFrameMs": 706,
+      "medianFrozenMs": 94
+    },
+    {
+      "file": "bg4-small.mp4",
+      "megabytes": 64.5,
+      "clipSeconds": 48.4,
+      "medianFirstFrameMs": 478,
+      "medianFrozenMs": 4613
+    },
+    {
+      "file": "bg4-1080p.mp4",
+      "megabytes": 18.3,
+      "clipSeconds": 48.4,
+      "medianFirstFrameMs": 249,
+      "medianFrozenMs": 25
+    }
+  ],
+  "runs": [
+    {
+      "file": "bg2-original.mp4",
+      "run": 1,
+      "bytes": 32859484,
+      "firstFrameMs": 870,
+      "frozenMs": 13550,
+      "clipMs": 12329
+    },
+    {
+      "file": "bg2-small.mp4",
+      "run": 1,
+      "bytes": 23567370,
+      "firstFrameMs": 640,
+      "frozenMs": 6304,
+      "clipMs": 12329
+    },
+    {
+      "file": "bg2-1080p.mp4",
+      "run": 1,
+      "bytes": 1992443,
+      "firstFrameMs": 205,
+      "frozenMs": 12,
+      "clipMs": 12329
+    },
+    {
+      "file": "bg1-small.mp4",
+      "run": 1,
+      "bytes": 82812216,
+      "firstFrameMs": 947,
+      "frozenMs": 51151,
+      "clipMs": 14464
+    },
+    {
+      "file": "bg1-1080p-v2.mp4",
+      "run": 1,
+      "bytes": 15165561,
+      "firstFrameMs": 497,
+      "frozenMs": 51,
+      "clipMs": 14464
+    },
+    {
+      "file": "bg3-small.mp4",
+      "run": 1,
+      "bytes": 130622396,
+      "firstFrameMs": 1040,
+      "frozenMs": 54837,
+      "clipMs": 49233
+    },
+    {
+      "file": "bg3-1080p-v2.mp4",
+      "run": 1,
+      "bytes": 49920171,
+      "firstFrameMs": 696,
+      "frozenMs": 101,
+      "clipMs": 49233
+    },
+    {
+      "file": "bg4-small.mp4",
+      "run": 1,
+      "bytes": 64498309,
+      "firstFrameMs": 478,
+      "frozenMs": 4613,
+      "clipMs": 48433
+    },
+    {
+      "file": "bg4-1080p.mp4",
+      "run": 1,
+      "bytes": 18317710,
+      "firstFrameMs": 219,
+      "frozenMs": 25,
+      "clipMs": 48433
+    },
+    {
+      "file": "bg2-original.mp4",
+      "run": 2,
+      "bytes": 32859484,
+      "firstFrameMs": 779,
+      "frozenMs": 13629,
+      "clipMs": 12329
+    },
+    {
+      "file": "bg2-small.mp4",
+      "run": 2,
+      "bytes": 23567370,
+      "firstFrameMs": 716,
+      "frozenMs": 6299,
+      "clipMs": 12329
+    },
+    {
+      "file": "bg2-1080p.mp4",
+      "run": 2,
+      "bytes": 1992443,
+      "firstFrameMs": 203,
+      "frozenMs": 8,
+      "clipMs": 12329
+    },
+    {
+      "file": "bg1-small.mp4",
+      "run": 2,
+      "bytes": 82812216,
+      "firstFrameMs": 950,
+      "frozenMs": 51159,
+      "clipMs": 14464
+    },
+    {
+      "file": "bg1-1080p-v2.mp4",
+      "run": 2,
+      "bytes": 15165561,
+      "firstFrameMs": 496,
+      "frozenMs": 52,
+      "clipMs": 14464
+    },
+    {
+      "file": "bg3-small.mp4",
+      "run": 2,
+      "bytes": 130622396,
+      "firstFrameMs": 1074,
+      "frozenMs": 54836,
+      "clipMs": 49233
+    },
+    {
+      "file": "bg3-1080p-v2.mp4",
+      "run": 2,
+      "bytes": 49920171,
+      "firstFrameMs": 706,
+      "frozenMs": 88,
+      "clipMs": 49233
+    },
+    {
+      "file": "bg4-small.mp4",
+      "run": 2,
+      "bytes": 64498309,
+      "firstFrameMs": 555,
+      "frozenMs": 4613,
+      "clipMs": 48433
+    },
+    {
+      "file": "bg4-1080p.mp4",
+      "run": 2,
+      "bytes": 18317710,
+      "firstFrameMs": 284,
+      "frozenMs": 31,
+      "clipMs": 48433
+    },
+    {
+      "file": "bg2-original.mp4",
+      "run": 3,
+      "bytes": 32859484,
+      "firstFrameMs": 736,
+      "frozenMs": 13598,
+      "clipMs": 12329
+    },
+    {
+      "file": "bg2-small.mp4",
+      "run": 3,
+      "bytes": 23567370,
+      "firstFrameMs": 615,
+      "frozenMs": 6311,
+      "clipMs": 12329
+    },
+    {
+      "file": "bg2-1080p.mp4",
+      "run": 3,
+      "bytes": 1992443,
+      "firstFrameMs": 180,
+      "frozenMs": 21,
+      "clipMs": 12329
+    },
+    {
+      "file": "bg1-small.mp4",
+      "run": 3,
+      "bytes": 82812216,
+      "firstFrameMs": 931,
+      "frozenMs": 51171,
+      "clipMs": 14464
+    },
+    {
+      "file": "bg1-1080p-v2.mp4",
+      "run": 3,
+      "bytes": 15165561,
+      "firstFrameMs": 502,
+      "frozenMs": 55,
+      "clipMs": 14464
+    },
+    {
+      "file": "bg3-small.mp4",
+      "run": 3,
+      "bytes": 130622396,
+      "firstFrameMs": 1057,
+      "frozenMs": 54832,
+      "clipMs": 49233
+    },
+    {
+      "file": "bg3-1080p-v2.mp4",
+      "run": 3,
+      "bytes": 49920171,
+      "firstFrameMs": 716,
+      "frozenMs": 94,
+      "clipMs": 49233
+    },
+    {
+      "file": "bg4-small.mp4",
+      "run": 3,
+      "bytes": 64498309,
+      "firstFrameMs": 473,
+      "frozenMs": 4697,
+      "clipMs": 48433
+    },
+    {
+      "file": "bg4-1080p.mp4",
+      "run": 3,
+      "bytes": 18317710,
+      "firstFrameMs": 249,
+      "frozenMs": 21,
+      "clipMs": 48433
+    }
+  ]
+}
