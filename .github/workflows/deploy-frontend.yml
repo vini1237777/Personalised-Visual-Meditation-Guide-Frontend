@@ -9,6 +9,11 @@ permissions:
   id-token: write
   contents: read
 
+# One deploy at a time; a newer push waits for the running one to finish.
+concurrency:
+  group: deploy-frontend
+  cancel-in-progress: false
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -67,9 +72,24 @@ jobs:
            chmod 700 ~/.ssh && \
            chmod 600 ~/.ssh/authorized_keys"
 
-      - name: Upload build folder to EC2
+      - name: Check free disk on EC2
+        timeout-minutes: 1
         run: |
-          scp -r build/ ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:"/var/www/meditation-frontend/Personalised-Visual-Meditation-Guide-Frontend/"
+          used=$(ssh ${{ env.EC2_USER }}@${{ env.EC2_HOST }} "df --output=pcent / | tail -1 | tr -dc 0-9")
+          echo "EC2 disk is ${used}% full"
+          if [ "$used" -gt 90 ]; then
+            echo "::error::EC2 disk is ${used}% full. Free some space before deploying."
+            exit 1
+          fi
+
+      # rsync sends only changed files, and --delete-after removes files the new
+      # build no longer has, once the upload is complete, so the folder Nginx
+      # serves always matches this build.
+      - name: Upload build folder to EC2
+        timeout-minutes: 5
+        run: |
+          rsync -az --delete-after --stats build/ \
+            ${{ env.EC2_USER }}@${{ env.EC2_HOST }}:"${{ env.REMOTE_PATH }}build/"
 
       - name: Restart Nginx on EC2
         run: |
