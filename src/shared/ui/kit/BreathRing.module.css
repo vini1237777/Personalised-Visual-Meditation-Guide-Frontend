@@ -1,0 +1,73 @@
+.ring {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(400px, 72vw);
+  aspect-ratio: 1;
+}
+
+.svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  transform: rotate(-90deg);
+}
+
+.track {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.28);
+  stroke-width: 1;
+}
+
+/* The trail grows behind the dot and resets at the top of each breath. */
+.trail {
+  fill: none;
+  stroke: rgba(234, 223, 253, 0.75);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-dasharray: 0 100;
+  animation: trail var(--breath) linear infinite;
+}
+
+.orbit {
+  transform-origin: 200px 200px;
+  transform: rotate(90deg);
+  animation: orbit var(--breath) linear infinite;
+}
+
+.bead {
+  fill: #ffffff;
+  filter: drop-shadow(0 0 6px #eadffd) drop-shadow(0 0 16px rgba(234, 223, 253, 0.8));
+}
+
+.inner {
+  position: relative;
+  text-align: center;
+}
+
+@keyframes orbit {
+  from {
+    transform: rotate(90deg);
+  }
+  to {
+    transform: rotate(450deg);
+  }
+}
+
+@keyframes trail {
+  from {
+    stroke-dasharray: 0 100;
+  }
+  to {
+    stroke-dasharray: 100 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orbit,
+  .trail {
+    animation: none;
+  }
+}

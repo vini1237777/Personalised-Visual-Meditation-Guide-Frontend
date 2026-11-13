@@ -1,0 +1,102 @@
+/* Step 02: one slow breath over the background video while the session loads. */
+.screen {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 96px var(--gutter) 40px;
+  background: rgba(var(--night), 0.42);
+  text-align: center;
+  color: var(--ink);
+}
+
+.steps {
+  margin-bottom: 40px;
+}
+
+.phase {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(34px, 4vw, 46px);
+  letter-spacing: -0.01em;
+  animation: fade 600ms var(--ease);
+}
+
+.count {
+  margin: 6px 0 0;
+  color: var(--ink-soft);
+  font: 400 13px var(--font-mono);
+}
+
+.status {
+  margin: 36px 0 0;
+  color: var(--ink-soft);
+  font-size: 14.5px;
+}
+
+.status strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.skip {
+  height: 48px;
+  padding: 0 24px;
+  border-radius: 999px;
+  border: 1px solid var(--glass-edge);
+  background: var(--glass-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: var(--ink);
+  font: 500 15px var(--font-body);
+  cursor: pointer;
+}
+
+.skip:hover {
+  border-color: rgba(255, 255, 255, 0.42);
+}
+
+.sound {
+  padding: 4px 8px;
+  border: 0;
+  background: none;
+  color: var(--ink-soft);
+  font: 400 13px var(--font-body);
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 255, 255, 0.4);
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 700px) {
+  .screen {
+    justify-content: flex-start;
+    padding-top: calc(76px + 4vh);
+  }
+
+  .steps {
+    margin-bottom: 48px;
+  }
+}

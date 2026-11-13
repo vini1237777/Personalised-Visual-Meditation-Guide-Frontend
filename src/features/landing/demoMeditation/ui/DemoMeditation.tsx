@@ -1,10 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { BackButton } from "shared/ui/BackButton/BackButton";
 import type { DemoMeditationProps } from "../../meditation/model/meditation.types";
-import styles from "./DemoMeditation.module.css";
-import CheckOut from "../../journal/CheckOut";
-import { BUBBLE, SESSION_NAME } from "../../journal/journal";
-import { BreathingPanda } from "./BreathingPanda/BreathingPanda";
+import { SESSION_NAME, describeBefore } from "../../journal/journal";
+import SessionStage from "../../meditation/ui/SessionStage";
 
 import video_6bzzjltmlliyu from "../../../../assets/videos/6bzzjltmllyu-download.mp4";
 import video_8a2h0gds3bim from "../../../../assets/videos/8a2h0gds3bim-download.mp4";
@@ -64,8 +61,8 @@ function getPool(category?: string | null): readonly VideoUrl[] {
 export default function DemoMeditation({
   category,
   isLoading = false,
-  onBack,
   checkIn,
+  onCheckOut,
 }: DemoMeditationProps) {
   const pool = useMemo(() => getPool(category), [category]);
 
@@ -98,63 +95,16 @@ export default function DemoMeditation({
   }, [failCount, videoUrl]);
 
   const showVideo = !isLoading && failCount < 3;
-
-  const mood = category ?? "";
-  const sessionName = SESSION_NAME[mood] ?? "Calm session";
+  const sessionName = SESSION_NAME[category ?? ""] ?? "Calm session";
 
   return (
-    <div className={styles.wrapper}>
-      <BackButton label="Back to Mood Selector" onClick={onBack} />
-
-      <div className={styles.inner}>
-        <header className={styles.head}>
-          <div className={styles.titleRow}>
-            <h2 className={styles.title}>{sessionName}</h2>
-            {!!mood && (
-              <span className={styles.bubble} style={{ background: BUBBLE[mood] }}>
-                {mood}
-              </span>
-            )}
-          </div>
-          <p className={styles.text}>
-            Live AI is resting right now, so here is a calm clip picked for how you feel.
-          </p>
-        </header>
-
-        <div className={styles.layout}>
-          <section className={styles.card} aria-label="Your session">
-            <div className={styles.demoBox}>
-              {showVideo ? (
-                <video
-                  key={videoUrl}
-                  className={styles.video}
-                  controls
-                  controlsList="nodownload"
-                  onContextMenu={(e) => e.preventDefault()}
-                  preload="metadata"
-                  onError={handleVideoError}
-                >
-                  <source src={videoUrl} type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
-              ) : (
-                <div className={styles.panda}>
-                  <BreathingPanda />
-                </div>
-              )}
-            </div>
-
-            <div className={styles.cardFoot}>
-              <span className={styles.hint}>Press play, sit back and breathe slowly.</span>
-              <button type="button" className={styles.shuffleButton} onClick={shuffle}>
-                Try another clip
-              </button>
-            </div>
-          </section>
-
-          <CheckOut checkIn={checkIn ?? null} className={styles.checkout} />
-        </div>
-      </div>
-    </div>
+    <SessionStage
+      videoUrl={showVideo ? videoUrl : null}
+      sessionName={sessionName}
+      chosenFor={checkIn ? describeBefore(checkIn.before) : ""}
+      onAnotherClip={shuffle}
+      onCheckOut={onCheckOut}
+      onVideoError={handleVideoError}
+    />
   );
 }

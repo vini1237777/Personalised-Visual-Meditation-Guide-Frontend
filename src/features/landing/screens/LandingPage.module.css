@@ -1,141 +1,59 @@
 .poster {
   position: fixed;
   inset: 0;
-  background: url("../../../assets/images/bg2.webp") center / cover no-repeat;
   z-index: -3;
+  background: url("../../../assets/images/bg2.webp") center / cover no-repeat;
 }
 
 .videoBg {
   position: fixed;
   inset: 0;
+  z-index: -2;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  z-index: -2;
-}
-
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  z-index: -1;
-  pointer-events: none;
 }
 
 .landingPage {
-  display: flex;
-  flex-direction: column;
-  width: 100vw;
-  height: 100vh;
-  align-items: flex-start;
-  justify-content: center;
-  position: fixed;
-  left: 0;
-  top: 10px;
-  color: white;
-  font-weight: bolder;
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  color: var(--ink);
+  text-align: left;
 }
 
-.landingPage > *:not(.poster):not(.videoBg):not(.overlay) {
-  z-index: 2;
-}
-
-.welcomeText {
-  font-size: 48px;
-  padding-left: 100px;
-  margin-top: 100px;
-}
-
-.heading {
-  font-size: 20px;
-  padding-left: 100px;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-}
-
-@media (max-width: 768px) {
-  .landingPage {
-    width: 100%;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .welcomeText {
-    font-size: clamp(1.6rem, 5vw, 32px);
-    text-align: center;
-    color: #45a049;
-    padding-left: 3px;
-    margin-top: -100px;
-  }
-
-  .heading {
-    font-size: clamp(0.9rem, 3.5vw, 16px);
-    padding-left: 0;
-    text-align: center;
-  }
-}
-
-/* Home in two columns: greeting and button on the left, journal on the right */
-.homeGrid {
-  width: 100%;
-  box-sizing: border-box;
-  padding-right: 100px;
+/* Feeling step on the left, recent check ins on the right. */
+.layout {
+  position: relative;
+  z-index: 1;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 440px;
-  gap: 60px;
-  align-items: center;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  column-gap: 60px;
+  align-items: end;
+  max-width: 1320px;
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: 120px var(--gutter) 56px;
+  box-sizing: border-box;
 }
 
-.homeGrid.single {
+.layout[hidden] {
+  display: none;
+}
+
+.single {
   grid-template-columns: minmax(0, 1fr);
 }
 
-.homeLeft {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  min-width: 0;
-}
-
-.homeGrid .welcomeText {
-  margin-top: 0;
-}
-
-@media (max-width: 900px) {
-  .homeGrid {
-    grid-template-columns: minmax(0, 1fr);
-    padding: 0 16px;
-    gap: 24px;
-    justify-items: center;
+@media (max-width: 860px) {
+  .layout {
+    display: block;
+    padding: calc(76px + 4vh) var(--gutter) 24px;
   }
 
-  .homeLeft {
-    align-items: center;
-  }
-
-  .homeGrid .welcomeText {
-    padding-left: 0;
-    text-align: center;
-  }
-}
-
-/* Motion: greeting drifts in after the video settles */
-@keyframes greetIn {
-  from { opacity: 0; transform: translateY(18px); letter-spacing: 0.04em; }
-  to { opacity: 1; transform: none; letter-spacing: normal; }
-}
-
-.welcomeText {
-  animation: greetIn 900ms cubic-bezier(0.22, 1, 0.36, 1) 150ms backwards;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation: none !important;
-    transition: none !important;
+  /* Recent check ins live in the journal on a phone. */
+  .layout > aside {
+    display: none;
   }
 }
