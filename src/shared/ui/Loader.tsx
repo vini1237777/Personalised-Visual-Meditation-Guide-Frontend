@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { BreathingPanda } from "features/landing/demoMeditation/ui/BreathingPanda/BreathingPanda";
+import { BreathRing, StepBar } from "shared/ui/kit";
 import styles from "./Loader.module.css";
+import breath from "./BreathStep.module.css";
 
 const messages = [
   "Breathe in… and out.",
@@ -15,6 +16,8 @@ type LoaderProps = {
   breath?: boolean;
   onSkip?: () => void;
   waitingForVideo?: boolean;
+  /** Shown as "Getting your grounding session ready". */
+  sessionName?: string;
 };
 
 const VOICE_KEY = "soulsync.pandaVoice";
@@ -29,13 +32,17 @@ function voiceSaved(): boolean {
 
 // The panda talks you through the breath with the browser's own voice.
 function speak(text: string) {
-  const synth = typeof window !== "undefined" ? window.speechSynthesis : undefined;
+  const synth =
+    typeof window !== "undefined" ? window.speechSynthesis : undefined;
   if (!synth) return;
   synth.cancel();
   const line = new SpeechSynthesisUtterance(text);
   const voices = synth.getVoices().filter((v) => v.lang.startsWith("en"));
-  const soft = voices.find((v) => /samantha|karen|moira|female|zira|google uk english female/i.test(v.name));
-  if (soft ?? voices[0]) line.voice = (soft ?? voices[0]) as SpeechSynthesisVoice;
+  const soft = voices.find((v) =>
+    /samantha|karen|moira|female|zira|google uk english female/i.test(v.name),
+  );
+  if (soft ?? voices[0])
+    line.voice = (soft ?? voices[0]) as SpeechSynthesisVoice;
   line.rate = 0.8;
   line.pitch = 1.1;
   line.volume = 0.9;
@@ -46,7 +53,10 @@ function speak(text: string) {
 let audio: AudioContext | null = null;
 
 function breathSound(kind: "in" | "out", seconds = 4) {
-  const Ctx = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+  const Ctx =
+    window.AudioContext ||
+    (window as unknown as { webkitAudioContext?: typeof AudioContext })
+      .webkitAudioContext;
   if (!Ctx) return;
   audio = audio ?? new Ctx();
   const ctx = audio;
@@ -95,9 +105,11 @@ const canSpeak = typeof window !== "undefined" && "speechSynthesis" in window;
 function BreathGuide({
   onSkip,
   waitingForVideo = false,
+  sessionName = "calm session",
 }: {
   onSkip?: () => void;
   waitingForVideo?: boolean;
+  sessionName?: string;
 }) {
   const [phase, setPhase] = useState<"ready" | "in" | "out">("ready");
   const [voiceOn, setVoiceOn] = useState(voiceSaved);
@@ -125,14 +137,18 @@ function BreathGuide({
   useEffect(() => {
     if (waitingForVideo || !voiceOn || phase === "ready") return;
     breathSound(phase);
-    if (canSpeak) speak(phase === "in" ? "Breathe in slowly" : "And breathe out");
+    if (canSpeak)
+      speak(phase === "in" ? "Breathe in slowly" : "And breathe out");
   }, [phase, voiceOn, waitingForVideo]);
 
   // Stop talking when the loader goes away.
-  useEffect(() => () => {
-    if (canSpeak) window.speechSynthesis.cancel();
-    void audio?.suspend();
-  }, []);
+  useEffect(
+    () => () => {
+      if (canSpeak) window.speechSynthesis.cancel();
+      void audio?.suspend();
+    },
+    [],
+  );
 
   const toggleVoice = () => {
     const next = !voiceOn;
@@ -146,30 +162,44 @@ function BreathGuide({
   };
 
   return (
-    <div className={styles.container} role="status" aria-live="polite">
-      <p className={styles.title}>
-        {waitingForVideo
-          ? "Your 8 second video is being made. This can take a few minutes."
-          : "Take one slow breath while your session gets ready"}
+    <div className={breath.screen} role="status" aria-live="polite">
+      <StepBar current={1} className={breath.steps} />
+
+      <BreathRing>
+        <p className={breath.phase} key={phase}>
+          {phase === "out" ? "Breathe out" : "Breathe in"}
+        </p>
+        <p className={breath.count}>
+          {phase === "out" ? "out for four" : "in for four"}
+        </p>
+      </BreathRing>
+
+      <p className={breath.status}>
+        {waitingForVideo ? (
+          "Your 8 second video is being made. This can take a few minutes."
+        ) : (
+          <>
+            Getting your <strong>{sessionName.toLowerCase()}</strong> ready
+          </>
+        )}
       </p>
 
-      <div className={styles.panda} aria-hidden="true">
-        <BreathingPanda />
-      </div>
-
-      <p className={styles.phase} key={phase}>
-        {phase === "out" ? "Breathe out" : "Breathe in"}
-      </p>
-
-      <div className={styles.actions}>
-        {!waitingForVideo && (
-          <button type="button" className={styles.skip} onClick={toggleVoice} aria-pressed={voiceOn}>
-            {voiceOn ? "🔊 Sound on" : "🔇 Sound off"}
+      <div className={breath.actions}>
+        {onSkip && (
+          <button type="button" className={breath.skip} onClick={onSkip}>
+            {waitingForVideo
+              ? "Play a calm session instead"
+              : "Skip, I am ready"}
           </button>
         )}
-        {onSkip && (
-          <button type="button" className={styles.skip} onClick={onSkip}>
-            {waitingForVideo ? "Play a calm session instead" : "Skip"}
+        {!waitingForVideo && (
+          <button
+            type="button"
+            className={breath.sound}
+            onClick={toggleVoice}
+            aria-pressed={voiceOn}
+          >
+            {voiceOn ? "Sound on" : "Sound off"}
           </button>
         )}
       </div>
@@ -182,6 +212,7 @@ export default function Loader({
   breath = false,
   onSkip,
   waitingForVideo,
+  sessionName,
 }: LoaderProps) {
   const [i, setI] = useState(0);
   const [visible, setVisible] = useState(true);
@@ -201,7 +232,13 @@ export default function Loader({
   }, [breath]);
 
   if (breath) {
-    return <BreathGuide onSkip={onSkip} waitingForVideo={waitingForVideo} />;
+    return (
+      <BreathGuide
+        onSkip={onSkip}
+        waitingForVideo={waitingForVideo}
+        sessionName={sessionName}
+      />
+    );
   }
 
   return (
