@@ -1,0 +1,69 @@
+.shade {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.shade::before,
+.shade::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+/* Top band keeps the navigation readable on bright sky. */
+.shade::before {
+  background: linear-gradient(
+    to bottom,
+    rgba(var(--night), 0.66) 0,
+    rgba(var(--night), 0.28) 150px,
+    rgba(var(--night), 0.22) 40%,
+    rgba(var(--night), 0.6) 72%,
+    rgba(var(--night), 0.9) 100%
+  );
+}
+
+.shade[data-tone="left"]::after {
+  background: linear-gradient(
+    90deg,
+    rgba(var(--night), 0.6) 0%,
+    rgba(var(--night), 0.5) 34%,
+    rgba(var(--night), 0.2) 60%,
+    rgba(var(--night), 0) 78%
+  );
+}
+
+.shade[data-tone="even"]::after {
+  background: rgba(var(--night), 0.4);
+}
+
+.shade[data-tone="top"]::after {
+  background: linear-gradient(
+    180deg,
+    rgba(var(--night), 0.5) 0%,
+    rgba(var(--night), 0.34) 45%,
+    rgba(var(--night), 0.2) 100%
+  );
+}
+
+@media (max-width: 700px) {
+  .shade::before {
+    background: linear-gradient(
+      to bottom,
+      rgba(var(--night), 0.66) 0,
+      rgba(var(--night), 0.3) 130px,
+      rgba(var(--night), 0.3) 34%,
+      rgba(var(--night), 0.72) 60%,
+      rgba(var(--night), 0.92) 100%
+    );
+  }
+
+  .shade[data-tone]::after {
+    background: rgba(var(--night), 0.36);
+  }
+
+  .shade[data-tone="even"]::after {
+    background: rgba(var(--night), 0.4);
+  }
+}

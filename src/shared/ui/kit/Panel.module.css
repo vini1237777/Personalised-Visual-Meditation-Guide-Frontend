@@ -1,0 +1,15 @@
+/* Shared surfaces. Import and compose: className={panel.panel} */
+.panel {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-edge);
+  border-radius: var(--radius-panel);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-edge);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}

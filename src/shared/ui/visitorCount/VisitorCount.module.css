@@ -10,15 +10,14 @@
 }
 
 .label {
-  color: rgba(255, 255, 255, 0.55);
-  font-size: 14px;
-  font-weight: 500;
+  color: var(--ink-quiet);
+  font-size: 13px;
+  font-weight: 400;
 }
 
 .count {
-  color: #e9d5ff;
-  font-size: 18px;
-  font-weight: 900;
+  color: var(--ink);
+  font: 400 13px var(--font-mono);
   font-variant-numeric: tabular-nums;
 }
 
