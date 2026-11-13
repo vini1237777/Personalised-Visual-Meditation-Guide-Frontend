@@ -84,7 +84,7 @@ export default function Navbar() {
           setGithubOpen((v) => !v);
         }}
       >
-        Github
+        GitHub
       </NavLink>
 
       <div
@@ -93,7 +93,7 @@ export default function Navbar() {
         }`}
       >
         <div className={styles.githubSection}>
-          <p className={styles.githubTitle}>Frontend Repo</p>
+          <p className={styles.githubTitle}>Frontend</p>
           <a
             className={styles.githubItem}
             href="https://github.com/vini1237777/Personalised-Visual-Meditation-Guide-Frontend"
@@ -101,12 +101,12 @@ export default function Navbar() {
             rel="noreferrer"
             onClick={(e) => e.stopPropagation()}
           >
-            Frontend
+            View the code
           </a>
         </div>
         <div className={styles.githubDivider} />
         <div className={styles.githubSection}>
-          <p className={styles.githubTitle}>Backend Repo</p>
+          <p className={styles.githubTitle}>Backend</p>
           <a
             className={styles.githubItem}
             href="https://github.com/vini1237777/Personalised-Visual-Meditation-Guide-Backend"
@@ -114,7 +114,7 @@ export default function Navbar() {
             rel="noreferrer"
             onClick={(e) => e.stopPropagation()}
           >
-            Backend
+            View the code
           </a>
         </div>
       </div>
@@ -205,13 +205,11 @@ export default function Navbar() {
                   className={styles.link}
                   onClick={onNavClick}
                 >
-                  Login
+                  Log in
                 </NavLink>
                 <NavLink
                   to="/auth/register"
-                  className={({ isActive }) =>
-                    isActive ? `${styles.link} ${styles.active}` : styles.link
-                  }
+                  className={`${styles.link} ${styles.pill}`}
                   onClick={onNavClick}
                 >
                   Sign up
@@ -220,14 +218,14 @@ export default function Navbar() {
             ) : (
               <NavLink
                 to="#"
-                className={styles.link}
+                className={`${styles.link} ${styles.pill}`}
                 onClick={(e) => {
                   e.preventDefault();
                   closeMenus();
                   handleLogout();
                 }}
               >
-                Logout
+                Log out
               </NavLink>
             )}
           </nav>
@@ -318,7 +316,7 @@ export default function Navbar() {
               setGithubOpen((v) => !v);
             }}
           >
-            Github
+            GitHub
           </NavLink>
 
           <div
@@ -333,7 +331,7 @@ export default function Navbar() {
               rel="noreferrer"
               onClick={closeMenus}
             >
-              Frontend Repo →
+              Frontend code
             </a>
             <a
               className={styles.mobileGithubItem}
@@ -342,7 +340,7 @@ export default function Navbar() {
               rel="noreferrer"
               onClick={closeMenus}
             >
-              Backend Repo →
+              Backend code
             </a>
           </div>
 
@@ -369,7 +367,7 @@ export default function Navbar() {
                 }
                 onClick={onNavClick}
               >
-                Login
+                Log in
               </NavLink>
               <NavLink
                 to="/auth/register"
@@ -393,7 +391,7 @@ export default function Navbar() {
                 handleLogout();
               }}
             >
-              Logout
+              Log out
             </NavLink>
           )}
         </div>
