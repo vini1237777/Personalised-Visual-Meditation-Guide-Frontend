@@ -29,4 +29,5 @@ export type MoodSelectorProps = {
   onCheckIn?: (before: { emojis: string[]; feelings: string[] }) => void;
   registerSkip?: (skip: (() => void) | null) => void;
   onWaitingForVideo?: (waiting: boolean) => void;
+  initialEmoji?: Emoji | null;
 };
