@@ -1,70 +1,54 @@
 import { Link } from "react-router-dom";
+import { panel } from "shared/ui/kit";
 import styles from "./RecentCheckIns.module.css";
-import { capitalize, lastSevenDays, loadJournal, moodWord, streakDays, whenLabel } from "./journal";
+import { feelingLabel } from "../mood/config/feelings.config";
+import { loadJournal, whenLabel } from "./journal";
 
-// A quiet record on the home page: the last week at a glance and how the
-// latest sessions changed your mood.
-export default function RecentCheckIns({ side = false }: { side?: boolean }) {
+// A quiet record beside the feeling step: the last few sessions, before and after.
+export default function RecentCheckIns(_props: { side?: boolean }) {
   const list = loadJournal();
   if (list.length === 0) return null;
 
-  const streak = streakDays(list);
-  const week = lastSevenDays(list);
   const recent = list.slice(0, 3);
-  const lastNote = list.find((c) => c.note)?.note;
 
   return (
-    <aside className={`${styles.journal} ${side ? styles.side : ""}`} aria-label="Your journal">
-      <p className={styles.head}>
-        Your journal
-        {streak >= 2 && <span className={styles.streak}>{streak} days in a row</span>}
-      </p>
-
-      <ol className={styles.week} aria-label="The last seven days">
-        {week.map((d) => (
-          <li key={d.key} className={styles.day}>
-            <span
-              className={`${styles.dot} ${d.emoji ? "" : styles.empty} ${d.isToday ? styles.today : ""}`}
-              aria-label={d.emoji ? `${d.label}: ${moodWord(d.emoji)}` : `${d.label}: no check in`}
-            >
-              {d.emoji}
-            </span>
-            <span className={styles.dayLabel}>{d.label}</span>
-          </li>
-        ))}
-      </ol>
+    <aside
+      className={`${panel.panel} ${styles.recent}`}
+      aria-label="Your last check ins"
+    >
+      <h2 className={styles.head}>
+        <span>Your last check ins</span>
+        <Link to="/journal" className={styles.open}>
+          Journal
+        </Link>
+      </h2>
 
       <ul className={styles.list}>
-        {recent.map((c) => (
-          <li key={c.id} className={styles.row}>
-            <span className={styles.faces}>
-              {c.before.emojis[0]}
-              {c.after && (
-                <>
-                  <span className={styles.arrow}>→</span>
-                  {c.after}
-                </>
-              )}
-              <span className={styles.words}>
-                {c.after && moodWord(c.after) === moodWord(c.before.emojis[0])
-                  ? `Still ${moodWord(c.after)}`
-                  : `${capitalize(moodWord(c.before.emojis[0]))}${c.after ? ` to ${moodWord(c.after)}` : ""}`}
+        {recent.map((c) => {
+          const before = feelingLabel(c.before.emojis[0] ?? "");
+          const after = c.after ? feelingLabel(c.after) : "";
+          return (
+            <li key={c.id} className={styles.row}>
+              <span className={styles.change}>
+                {before}
+                {after && (
+                  <>
+                    <span className={styles.arrow} aria-label="to">
+                      {" "}
+                      →{" "}
+                    </span>
+                    {after}
+                  </>
+                )}
               </span>
-            </span>
-            <span className={styles.when}>{whenLabel(c.at)}</span>
-          </li>
-        ))}
+              <span className={styles.when}>{whenLabel(c.at)}</span>
+              <small className={styles.note}>
+                {c.note ?? (c.before.feelings.join(", ") || "No note")}
+              </small>
+            </li>
+          );
+        })}
       </ul>
-
-      {side && lastNote && (
-        <p className={styles.lastNote}>
-          “{lastNote}” <span>Your last note</span>
-        </p>
-      )}
-
-      <Link to="/journal" className={styles.open}>
-        Open my journal →
-      </Link>
     </aside>
   );
 }
