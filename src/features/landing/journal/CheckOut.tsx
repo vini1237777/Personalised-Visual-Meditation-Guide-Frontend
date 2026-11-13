@@ -1,115 +1,121 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { CtaButton, FeelingChip, Shade, StepBar, panel } from "shared/ui/kit";
 import styles from "./CheckOut.module.css";
-import { EMOJI_MAP } from "../mood/config/emoji.config";
-import {
-  CheckIn,
-  GOOD_MOODS,
-  describeBefore,
-  finishCheckIn,
-  moodOf,
-  moodWord,
-  saveNote,
-} from "./journal";
+import { FEELINGS, feelingLabel } from "../mood/config/feelings.config";
+import { CheckIn, finishCheckIn, saveNote } from "./journal";
 
-// Shown under a session: "How do you feel now?" and the shift since you came in.
-export default function CheckOut({ checkIn, className = "" }: { checkIn: CheckIn | null; className?: string }) {
+type CheckOutProps = {
+  checkIn: CheckIn | null;
+  sessionName: string;
+  /** Go back to step 01 for another session. */
+  onAnotherSession?: () => void;
+};
+
+/** Step 04: how do you feel now, and an optional line for the journal. */
+export default function CheckOut({
+  checkIn,
+  sessionName,
+  onAnotherSession,
+}: CheckOutProps) {
   const [after, setAfter] = useState<string | null>(checkIn?.after ?? null);
   const [note, setNote] = useState(checkIn?.note ?? "");
-  const [noteSaved, setNoteSaved] = useState(Boolean(checkIn?.note));
+  const [saved, setSaved] = useState(false);
   if (!checkIn) return null;
 
-  const keepNote = () => {
-    saveNote(checkIn.id, note);
-    setNoteSaved(true);
-  };
-
-  const before = describeBefore(checkIn.before);
+  const before = feelingLabel(checkIn.before.emojis[0] ?? "").toLowerCase();
 
   const pick = (emoji: string) => {
     setAfter(emoji);
+    setSaved(false);
     finishCheckIn(checkIn.id, emoji);
   };
 
+  const save = () => {
+    saveNote(checkIn.id, note);
+    setSaved(true);
+  };
+
   return (
-    <section className={`${styles.card} ${className}`} aria-live="polite">
-      {!after ? (
-        <>
-          <h3 className={styles.title}>When you are done, how do you feel now?</h3>
+    <div className={styles.screen}>
+      <Shade tone="left" />
+      <div className={styles.layout}>
+        <section className={styles.main} aria-labelledby="checkout-title">
+          <StepBar current={3} />
+          <h1 id="checkout-title" className={styles.title}>
+            How do you feel <em>now?</em>
+          </h1>
           {before && (
-            <p className={styles.sub}>
-              You came in feeling <strong>{before}</strong>.
+            <p className={styles.before}>
+              You started your {sessionName.toLowerCase()} feeling{" "}
+              <b>{before}</b>.
             </p>
           )}
-        </>
-      ) : (
-        <>
-          <p className={styles.shift} aria-hidden="true">
-            <span>{checkIn.before.emojis[0]}</span>
-            <span className={styles.arrow}>→</span>
-            <span className={styles.afterEmoji}>{after}</span>
-          </p>
-          <h3 className={styles.title}>
-            {GOOD_MOODS.has(moodOf(after)) ? "That is a lovely shift." : "Thank you for being honest."}
-          </h3>
-          <p className={styles.sub}>
-            You came in feeling <strong>{before}</strong> and you are leaving{" "}
-            <strong>{moodWord(after)}</strong>.{" "}
-            {GOOD_MOODS.has(moodOf(after))
-              ? "Saved to your journal."
-              : "Come back whenever you need another pause. It is saved to your journal."}
-          </p>
-        </>
-      )}
-
-      <div className={styles.faces} role="group" aria-label="How do you feel now">
-        {Object.keys(EMOJI_MAP).map((emoji) => (
-          <button
-            key={emoji}
-            type="button"
-            className={`${styles.face} ${after === emoji ? styles.faceActive : ""}`}
-            onClick={() => pick(emoji)}
-            aria-pressed={after === emoji}
-            aria-label={EMOJI_MAP[emoji].category}
-            title={EMOJI_MAP[emoji].category}
+          <div
+            className={styles.feelings}
+            role="group"
+            aria-label="How you feel now"
           >
-            {emoji}
-          </button>
-        ))}
-      </div>
-
-      {after && (
-        <div className={styles.noteBox}>
-          <label htmlFor={`note-${checkIn.id}`} className={styles.noteLabel}>
-            Anything you want to remember? <span>(optional)</span>
-          </label>
-          <textarea
-            id={`note-${checkIn.id}`}
-            className={styles.note}
-            rows={3}
-            maxLength={500}
-            value={note}
-            placeholder="A thought, a feeling, what helped..."
-            onChange={(e) => {
-              setNote(e.target.value);
-              setNoteSaved(false);
-            }}
-          />
-          <div className={styles.noteActions}>
-            <button
-              type="button"
-              className={styles.saveButton}
-              onClick={keepNote}
-              disabled={noteSaved || !note.trim()}
-            >
-              {noteSaved ? "Saved to my journal" : "Save to my journal"}
-            </button>
-            <Link to="/journal" className={styles.journalLink}>
-              Open my journal →
-            </Link>
+            {FEELINGS.map((f) => (
+              <FeelingChip
+                key={f.emoji}
+                label={f.label}
+                dot={f.dot}
+                selected={after === f.emoji}
+                onClick={() => pick(f.emoji)}
+              />
+            ))}
           </div>
+        </section>
+
+        <div className={`${panel.panel} ${styles.note}`}>
+          {saved ? (
+            <div className={styles.done} role="status">
+              <p className={styles.doneTitle}>Saved to your journal.</p>
+              <p className={styles.doneText}>
+                {before && after
+                  ? `You came in ${before} and left ${feelingLabel(after).toLowerCase()}.`
+                  : "Come back whenever you need another pause."}
+              </p>
+              <div className={styles.doneActions}>
+                <Link to="/journal" className={styles.link}>
+                  Open my journal
+                </Link>
+                {onAnotherSession && (
+                  <button
+                    type="button"
+                    className={styles.link}
+                    onClick={onAnotherSession}
+                  >
+                    Start another session
+                  </button>
+                )}
+              </div>
+            </div>
+          ) : (
+            <>
+              <label htmlFor={`note-${checkIn.id}`} className={styles.label}>
+                A note for your journal, if you like
+              </label>
+              <textarea
+                id={`note-${checkIn.id}`}
+                className={styles.area}
+                rows={4}
+                maxLength={500}
+                value={note}
+                placeholder="A thought, a feeling, what helped"
+                onChange={(e) => setNote(e.target.value)}
+              />
+              <CtaButton block onClick={save} disabled={!after}>
+                Save to my journal
+              </CtaButton>
+              {!after && (
+                <p className={styles.hint}>Pick how you feel now to save.</p>
+              )}
+            </>
+          )}
         </div>
-      )}
-    </section>
+      </div>
+    </div>
   );
 }
