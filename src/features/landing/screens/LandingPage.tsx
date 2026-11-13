@@ -8,14 +8,20 @@ import MeditationPage from "../meditation/ui/MeditationPage";
 import { HERO_ITEMS } from "../config/hero.config";
 import { useAuth } from "app/providers/AuthProvider";
 import Loader from "shared/ui/Loader";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import RecentCheckIns from "../journal/RecentCheckIns";
 import { CheckIn, loadJournal, startCheckIn } from "../journal/journal";
 import { EMOJI_MAP } from "../mood/config/emoji.config";
+import { takePendingFeeling } from "../mood/lib/pendingFeeling";
 
 export default function LandingPage() {
   const { user, isLoggedIn } = useAuth();
   const { state, dispatch } = useLandingState();
+  // A feeling picked on the login screen opens the feeling step with it selected.
+  const [pendingFeeling] = useState(takePendingFeeling);
+  useEffect(() => {
+    if (pendingFeeling) dispatch({ type: "OPEN_MOOD" });
+  }, [pendingFeeling, dispatch]);
   const { videoRef, ready } = useVideoBackground(BG_VIDEOS.bg1);
   const [checkIn, setCheckIn] = useState<CheckIn | null>(null);
   const skipRef = useRef<(() => void) | null>(null);
@@ -80,6 +86,7 @@ export default function LandingPage() {
             skipRef.current = fn;
           }}
           onWaitingForVideo={setWaitingForVideo}
+          initialEmoji={pendingFeeling}
         />
       )}
 

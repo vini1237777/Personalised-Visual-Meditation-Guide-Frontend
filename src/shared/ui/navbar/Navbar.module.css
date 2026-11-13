@@ -19,6 +19,7 @@
   max-width: 1320px;
   margin: 0 auto;
   padding: 20px var(--gutter);
+  box-sizing: border-box;
 }
 
 .identity {

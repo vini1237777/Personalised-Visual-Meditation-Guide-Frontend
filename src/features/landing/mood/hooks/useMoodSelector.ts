@@ -9,14 +9,19 @@ import { waitForJob } from "../lib/waitForJob";
 type UseMoodSelectorArgs = {
   user: User | null;
   isDemoMode: boolean;
+  /** Feeling picked before login, shown as already selected. */
+  initialEmoji?: Emoji | null;
 };
 
 export function useMoodSelector({
   user,
   isDemoMode,
+  initialEmoji = null,
 }: UseMoodSelectorArgs) {
-  const [selectedEmojis, setSelectedEmojis] = useState<Emoji[]>([]);
-  const [activeEmoji, setActiveEmoji] = useState<Emoji | null>(null);
+  const [selectedEmojis, setSelectedEmojis] = useState<Emoji[]>(
+    initialEmoji ? [initialEmoji] : [],
+  );
+  const [activeEmoji, setActiveEmoji] = useState<Emoji | null>(initialEmoji);
   const [selectedFeelings, setSelectedFeelings] = useState<string[]>([]);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
