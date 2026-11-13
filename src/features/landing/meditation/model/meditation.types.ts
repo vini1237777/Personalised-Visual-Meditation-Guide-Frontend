@@ -17,4 +17,5 @@ export type DemoMeditationProps = {
   isLoading: boolean;
   onBack: () => void;
   checkIn?: CheckIn | null;
+  onCheckOut: () => void;
 };
