@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 
 import AuthIntro from "shared/ui/AuthIntro/AuthIntro";
+import OverviewVideo from "shared/ui/OverviewVideo/OverviewVideo";
 import styles from "./UserLogin.module.css";
 import { useAuth } from "../../../../app/providers/AuthProvider";
 import type { User } from "../../../user/model/user.types";
@@ -48,6 +49,7 @@ export default function UserLogin() {
 
   const [errors, setErrors] = useState<FieldErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showOverview, setShowOverview] = useState(false);
 
   const canSubmit = useMemo(() => {
     return (
@@ -139,7 +141,21 @@ export default function UserLogin() {
       <AuthIntro
         title="SoulSync"
         subtitle="Meditation that starts with how you feel."
-        footer="The demo account is already filled in. Just press Log in to try it."
+        footer={
+          <>
+            The demo account is already filled in. Just press Log in to try it.
+            <button
+              type="button"
+              className={styles.overviewPill}
+              onClick={() => setShowOverview(true)}
+            >
+              <span className={styles.overviewPlay} aria-hidden="true">
+                ▶
+              </span>
+              What is SoulSync? A 19 second overview
+            </button>
+          </>
+        }
       />
 
       <form
@@ -215,6 +231,17 @@ export default function UserLogin() {
         </button>
       </form>
       </div>
+
+      {showOverview && (
+        <OverviewVideo
+          onClose={() => setShowOverview(false)}
+          demoDisabled={!canSubmit}
+          onTryDemo={() => {
+            setShowOverview(false);
+            handleSubmit();
+          }}
+        />
+      )}
     </div>
   );
 }

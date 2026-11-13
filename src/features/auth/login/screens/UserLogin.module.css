@@ -260,3 +260,37 @@
   .page { overflow-y: auto; align-items: flex-start; }
   .split { grid-template-columns: minmax(0, 1fr); gap: 24px; justify-items: center; }
 }
+
+.overviewPill {
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  min-height: 44px;
+  padding: 6px 18px 6px 6px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(0, 0, 0, 0.42);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.overviewPill:hover {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.overviewPlay {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #6db06a;
+  font-size: 12px;
+}
