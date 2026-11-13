@@ -30,6 +30,7 @@ export default function MoodSelector({
   onCheckIn,
   registerSkip,
   onWaitingForVideo,
+  initialEmoji,
 }: MoodSelectorProps) {
   const starting = useRef(false);
   const stoppedWaiting = useRef(false);
@@ -51,7 +52,7 @@ export default function MoodSelector({
     toggleFeeling,
     requestLiveJob,
     waitForVideo,
-  } = useMoodSelector({ user, isDemoMode });
+  } = useMoodSelector({ user, isDemoMode, initialEmoji });
 
   const playLiveSession = async (jobId: string) => {
     const finish = () => {
