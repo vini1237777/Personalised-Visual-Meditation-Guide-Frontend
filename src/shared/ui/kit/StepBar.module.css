@@ -1,0 +1,59 @@
+.bar {
+  display: inline-flex;
+  width: max-content;
+  gap: 8px;
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+  border-radius: 999px;
+  background: rgba(8, 12, 10, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  font-size: 13px;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.step[data-state="done"] {
+  color: var(--ink);
+}
+
+.step[data-state="on"] {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.num {
+  font: 400 11px var(--font-mono);
+  opacity: 0.85;
+}
+
+@media (max-width: 700px) {
+  .bar {
+    gap: 4px;
+    padding: 3px;
+    font-size: 12px;
+  }
+
+  .step {
+    padding: 6px 11px;
+  }
+
+  /* Only the current step keeps its name on a phone. */
+  .step:not([data-state="on"]) .label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+}
