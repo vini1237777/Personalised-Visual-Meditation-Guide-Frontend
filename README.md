@@ -1,6 +1,6 @@
 # SoulSync Frontend
 
-SoulSync is a meditation app. You pick how you feel on a mood wheel, and it plays a calming video made for that mood, then lets you check out and keep a journal of your sessions.
+SoulSync is a meditation app that starts with how you feel. You pick a feeling and the words that fit it, take a slow breath while your session gets ready, watch a calm video made for that feeling, then check out and save how you feel now to your journal.
 
 **Live:** [meditateaurelia.fit](https://www.meditateaurelia.fit)
 **Backend repo:** [Personalised-Visual-Meditation-Guide-Backend](https://github.com/vini1237777/Personalised-Visual-Meditation-Guide-Backend)
@@ -18,11 +18,16 @@ SoulSync is a meditation app. You pick how you feel on a mood wheel, and it play
 
 ## Features
 
-- Mood selector with original faces and an emotion wheel
-- Generated sessions: the backend writes a script with OpenAI and makes the video with Veo through the Gemini API
-- A demo mode that plays saved clips matched to your mood while live generation is paused
-- Check out reflections and a journal with list, card and calendar views, stored in the browser
-- Log in and sign up with JWT
+- **Start from the login page:** pick how you feel and start a session with the shared demo account, no sign up needed. The feeling you picked carries over after login.
+- **Feeling step:** choose one of eight feelings, then the words that fit it. Your last three check ins sit beside it.
+- **Breathing step:** a thin ring with a light that travels once per breath, with an optional voice and soft sound, while the session is prepared. You can skip it.
+- **Session:** the video plays full screen with one bar of controls for play, pause, another clip and check out.
+- **Generated sessions:** the backend writes a script with OpenAI and makes the video with Veo through the Gemini API.
+- **Demo mode:** plays saved clips matched to your feeling while live generation is paused.
+- **Check out:** pick how you feel now and add a note. It shows how you came in and how you left.
+- **Journal:** every check in with list, card and calendar views, stored in the browser.
+- **Accounts:** log in and sign up with JWT.
+- **Overview:** a 19 second video on the login page shows the whole flow.
 
 ## Architecture
 
